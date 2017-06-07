@@ -52,7 +52,8 @@ function foo(x) {
 
 在 step 2中, `x / 2` 的结果是 `8`， 这个结果以参数的形式传递到 `foo(...)` 并运行。同样的，在 step 3中， `x / 2` 的结果是 `4`，这个结果以参数的形式传递到另一个 `foo(...)` 并运行。希望这部分内容够简单。
 
-But where someone may often get tripped up is what happens in step 4. Once we've satisifed the base condition where `x` (value `4`) is `< 5`, we no longer make any more recursive calls, and just (effectively) do `return 4`. Specifically the dotted line return of `4` in this figure simplifies what's happening there, so let's dig into that last step and visualize it as these three sub-steps:
+但是一些人经常会在 step 4中卡壳。一旦我们满足了基本条件 `x` (值为4) 是 `<5` 的，我们将不再调用递归函数，只是(有效的)执行了 `return 4`。
+Specifically the dotted line return of `4` in this figure simplifies what's happening there, so let's dig into that last step and visualize it as these three sub-steps:
 
 <p align="center">
 	<img src="fig14.png" width="850">
