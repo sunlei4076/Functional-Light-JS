@@ -1,13 +1,13 @@
 # 轻量函数式 JavaScript
 # 第 8 章: 列表操作
 
-Did you have fun down our little closures/objects rabbit hole in the previous chapter? Welcome back!
+你是否还沉迷于上一节介绍的闭包 ／ 对象之中？ 欢迎回来！
 
-> If you can do something awesome, keep doing it repeatedly.
+> 如果你能做一些令人惊叹的事情， 请持续保持下去。
 
-We've already seen several brief references earlier in the text to some utilities that we now want to take a very close look at, namely `map(..)`, `filter(..)`, and `reduce(..)`. In JavaScript, these utilities are typically used as methods on the array (aka, "list") prototype, so we would naturally refer to them as array or list operations.
+本文之前已经简要的提及了一些功能函数：`map(..)`, `filter(..)`, 和 `reduce(..)`，现在深入了解一下。在Javascript中，这些功能函数通常被用于Array（即“list”）的原型上。因此可以很自然的将这些功能函数和数组或列表操作联系起来。
 
-Before we talk about the specific array methods, we want to examine conceptually what these operations are used for. It's equally important in this chapter that you understand *why* list operations are important as it is to understand *how* list operations work. Make sure you approach this chapter with that detail in mind.
+曾经我们谈及数组的这些方法， 我们希望概念性地清楚这些操作的用途。在这章中，弄明白为何有这些列表操作和这些操作如何工作同等重要。请保持跟上文章的内容。
 
 The vast majority of common illustrations of these operations, both outside of this book and here in this chapter, depict trivial tasks performed on lists of values (like doubling each number in an array); it's a cheap and easy way to get the point across.
 
