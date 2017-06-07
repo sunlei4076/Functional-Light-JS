@@ -25,11 +25,11 @@
 
 我知道，这个笑话弱爆了 :)
 
-Recursion is one of those programming techniques that most developers admit can be very powerful, but also most of them don't like to use it. I'd put it in the same category as regular expressions, in that sense. Powerful, but confusing, and thus seen as *not worth the effort*.
+大部分的开发人员都承认递归是一门非常强大的编程技术，但他们并不喜欢去使用它。在这个意义上，我把它放在与正则表达式相同的类别中。强大但又令人困惑，因此被视为 *不值得的努力*。
 
-I'm a big fan of recursion, and you can, too! My goal in this chapter is to convince you that recursion is an important tool that you should bring with you in your FP approach to code. When used properly, recursion is powerfully declarative for complex problems.
+我是递归编程的超级粉丝，你，也可以的！在这一章节中我的目标就是说服你，递归是一个重要的工具，你应该带着它在你的FP方法中编码。当正确使用时，递归编程可以轻松的描述复杂问题。
 
-## Definition
+## 定义
 
 Recursion is when a function calls itself, and that call does the same, and this cycle continues until a base condition is satisfied and the call loop unwinds.
 
