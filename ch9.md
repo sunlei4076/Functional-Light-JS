@@ -35,7 +35,7 @@
 
 **注意：** 如果你不能确保基本条件是递归的 *终结者* ，递归将会一直执行下去，并且会把你的项目损坏或锁死；基本条件没毛病是非常重要的！
 
-But... that definition is too confusing in its written form. We can do better. Consider this recursive function:
+但是... 这个书面形式的定义太乱了。我们可以做的更好些。思考下这个递归函数：
 
 ```js
 function foo(x) {
@@ -44,7 +44,7 @@ function foo(x) {
 }
 ```
 
-Let's visualize what happens with this function when we call `foo( 16 )`:
+设想一下，如果我们调用 `foo(16)` 将会发生什么：
 
 <p align="center">
 	<img src="fig13.png" width="850">
