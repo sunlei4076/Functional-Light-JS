@@ -21,7 +21,7 @@
 
 **注意** 相比前面几张，为了代码片段更加简练，我们将采用ES6的箭头函数。然而第二章中对于箭头函数的建议依旧适用于一般编码中。
 
-## Non-FP List Processing
+## 非函数式编程列表处理
 
 As a quick preamble to our discussion in this chapter, I want to call out a few operations which may seem related to JavaScript arrays and FP list operations, but which aren't. These operations will not be covered here, because they are not consistent with general FP best practices:
 
