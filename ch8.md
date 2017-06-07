@@ -23,8 +23,7 @@
 
 ## 非函数式编程列表处理
 
-
-As a quick preamble to our discussion in this chapter, I want to call out a few operations which may seem related to JavaScript arrays and FP list operations, but which aren't. These operations will not be covered here, because they are not consistent with general FP best practices:
+作为本章讨论的快速预览，我想调用一些看上去可能和Javascript列表和函数式编程的列表操作相关联的操作，但这些操作不是。这些不会在这里讨论，因为它们与一般的FP最佳实践不一致：
 
 * `forEach(..)`
 * `some(..)`
