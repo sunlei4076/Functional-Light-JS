@@ -1,5 +1,5 @@
-# Functional-Light JavaScript
-# Chapter 8: List Operations
+# 轻量函数式 JavaScript
+# 第 8 章: 列表操作
 
 Did you have fun down our little closures/objects rabbit hole in the previous chapter? Welcome back!
 
