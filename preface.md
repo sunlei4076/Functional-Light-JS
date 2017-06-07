@@ -1,14 +1,15 @@
 # Functional-Light JavaScript
-# 轻函数JavaScript
+# 轻函数式JavaScript
 # Preface
 # 前言
 
 > A monad is just a monoid in the category of endofunctors.
+
 > 在范畴学中一个monad就是一个monoid。
 
 Did I just lose you? Don't worry, I'd be lost, too! All those terms that only mean something to the already-initiated in Functional Programming&trade; (FP) are just jumbled nonsense to many of the rest of us.
 
-我有让你晕头转向吗？不要担心，我自己也被绕晕了！对于那些已经了解函数式编程的人来说，这些专业术语才有意义，然而对于大部分人，这些专业术语没有任何意义。
+有晕头转向吗？不要担心，我自己也被绕晕了！对于那些已经了解函数式编程的人来说，这些专业术语才有意义，然而对于大部分人，它们没有任何意义。
 
 This book is not going to teach you what those words mean. If that's what you're looking for, keep looking. In fact, there's already plenty of great books that teach FP the *right way*, from the top-down. Those words have important meanings and if you formally study FP in-depth, you'll absolutely want to get familiar with them.
 
