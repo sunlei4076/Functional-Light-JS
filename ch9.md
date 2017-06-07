@@ -75,8 +75,7 @@ function isPrime(num,divisor = 2){
 	return true;
 }
 ```
-
-This prime checking basically works by trying each integer from `2` up to the square root of the `num` being checked, to see if any of them divide evenly (`%` mod returning `0`) into the number. If any do, it's not a prime. Otherwise, it must be prime. The `divisor + 1` uses the recursion to iterate through each possible `divisor` value.
+这个质数的判断主要是通过验证，从2到 `num` 的平方根之间的每个整数，看是否存在某一整数可以整除 `num` (`%` 求余结果为 `0`)。如果存在这样的整数，那么 `num` 不是质数。反之，是质数。`divisor + 1` 使用递归来遍历每个可能的 `divisor` 值。
 
 递归的最着名的例子之一是计算斐波那契数，它的数列如下所示：
 
