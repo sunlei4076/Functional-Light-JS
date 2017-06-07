@@ -33,7 +33,7 @@
 
 所谓递归，是当一个函数调用自身，并且该调用做了同样的事情，这个循环持续到基本条件满足时，调用循环返回。
 
-**注意：** 如果你不能确保基本条件是递归的 *终结者* ，递归将会一直执行下去，并且会把你的项目损坏或锁死；基本条件没毛病是非常重要的！
+**警告：** 如果你不能确保基本条件是递归的 *终结者* ，递归将会一直执行下去，并且会把你的项目损坏或锁死；基本条件没毛病是非常重要的！
 
 但是... 这个书面形式的定义太乱了。我们可以做的更好些。思考下这个递归函数：
 
@@ -59,9 +59,9 @@ function foo(x) {
 	<img src="fig14.png" width="850">
 </p>
 
-Once the base condition is satisified, the returned value cascades back through all of the calls (and thus `return`s) in the call stack, eventually `return`ing the final result out.
+一旦满足了基本条件，返回值将会通过一堆的回调并逐级返回到其相应的回调函数中，而最终的一次 `return` 就是最后的结果。
 
-Another recursion example:
+另外一个递归实例：
 
 ```js
 function isPrime(num,divisor = 2){
@@ -78,7 +78,7 @@ function isPrime(num,divisor = 2){
 
 This prime checking basically works by trying each integer from `2` up to the square root of the `num` being checked, to see if any of them divide evenly (`%` mod returning `0`) into the number. If any do, it's not a prime. Otherwise, it must be prime. The `divisor + 1` uses the recursion to iterate through each possible `divisor` value.
 
-One of the most famous examples of recursion is calculating a Fibonacci number, where the sequence is defined as:
+递归的最着名的例子之一是计算斐波那契数，它的数列如下所示：
 
 ```
 fib( 0 ): 0
@@ -87,7 +87,7 @@ fib( n ):
 	fib( n - 2 ) + fib( n - 1 )
 ```
 
-**Note:** The first several numbers of this sequence are: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, ... Each number is the addition of the previous two numbers in the sequence.
+**注意:** The first several numbers of this sequence are: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, ... Each number is the addition of the previous two numbers in the sequence.
 
 The definition of fibonacci expressed directly in code:
 
