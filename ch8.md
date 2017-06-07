@@ -7,19 +7,19 @@
 
 本文之前已经简要的提及了一些功能函数：`map(..)`, `filter(..)`, 和 `reduce(..)`，现在深入了解一下。在Javascript中，这些功能函数通常被用于Array（即“list”）的原型上。因此可以很自然的将这些功能函数和数组或列表操作联系起来。
 
-曾经我们谈及数组的这些方法， 我们希望概念性地清楚这些操作的用途。在这章中，弄明白为何有这些列表操作和这些操作如何工作同等重要。请保持跟上文章的内容。
+曾经我们谈及数组的这些方法， 我们希望概念性地清楚这些操作的用途。在这章中，弄明白为何有这些列表操作和这些操作如何工作同等重要。请跟上文章的节奏。
 
-The vast majority of common illustrations of these operations, both outside of this book and here in this chapter, depict trivial tasks performed on lists of values (like doubling each number in an array); it's a cheap and easy way to get the point across.
+在本章内外，有大量的插图通过细小的任务（如将数组中的每一个数组加倍）来描述这些列表操作。这种方式通俗易懂。
 
-But don't just gloss over these simple examples and miss the deeper point. Some of the most important FP value in understanding list operations comes from being able to model a sequence of tasks -- a series of statements that wouldn't otherwise *look* like a list -- as a list operation instead of performing them individually.
+但是别停留在这些简单示例的表面，而错过了更深的知识。通过对一系列任务建模来理解一些非常重要的函数式编程在列表操作中的价值。- 一些看起来不像列表的语句 - 作为列表操作，而不是单独执行。
 
-This isn't just a trick to write more terse code. What we're after is to move from imperative to declarative style, to make the code patterns more readily recognizable and thus more readable.
+这不仅仅是编写许多简练代码的技巧。 我们所要做的是，从命令式转变为声明式风格，使代码模式更容易辨认，从而更容易阅读。
 
-But there's something **even more important to grasp**. With imperative code, each intermediate result in a set of calculations is stored in variable(s) through assignment. The more of these imperative patterns your code relies on, the harder it is to verify that there aren't mistakes -- in the logic, accidental mutation of values, or hidden side causes/effects lurking.
+但**要抓住更重要的**事情。 在命令式代码中，一组计算的中间结果都是通过赋值来存储的。代码中依赖的命令模式越多，代码中存在的错误就越难被验证 - 在逻辑上，值的意外突变，或隐藏的潜在原因／影响。
 
-By chaining and/or composing list operations together, the intermediate results are tracked implicitly and largely protected from these hazards.
+同构链接且／或组合列表操作，中间结果被隐式地跟踪，并在很大程度上避免了这些风险。
 
-**Note:** More than previous chapters, to keep the many following code snippets as brief as possible, we'll rely heavily on the ES6 `=>` form. However, my advice on `=>` from Chapter 2 still applies for general coding.
+**注意** 相比前面几张，为了代码片段更加简练，我们将采用ES6的箭头函数。然而第二章中对于箭头函数的建议依旧适用于一般编码中。
 
 ## Non-FP List Processing
 
