@@ -31,9 +31,9 @@
 
 ## 定义
 
-Recursion is when a function calls itself, and that call does the same, and this cycle continues until a base condition is satisfied and the call loop unwinds.
+所谓递归，是当一个函数调用自身，并且该调用做了同样的事情，这个循环持续到基本条件满足时，调用循环返回。
 
-**Warning:** If you don't ensure that a base condition is *eventually* met, recursion will run forever, and crash or lock up your program; the base condition is pretty important to get right!
+**注意：** 如果你不能确保基本条件是递归的 *终结者* ，递归将会一直执行下去，并且会把你的项目损坏或锁死；基本条件没毛病是非常重要的！
 
 But... that definition is too confusing in its written form. We can do better. Consider this recursive function:
 
