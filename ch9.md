@@ -50,10 +50,10 @@ function foo(x) {
 	<img src="fig13.png" width="850">
 </p>
 
-在 step 2中, `x / 2` 的结果是 `8`， 这个结果以参数的形式传递到 `foo(...)` 并运行。同样的，在 step 3中， `x / 2` 的结果是 `4`，这个结果以参数的形式传递到另一个 `foo(...)` 并运行。希望这部分内容够简单。
+在 step 2 中, `x / 2` 的结果是 `8`， 这个结果以参数的形式传递到 `foo(...)` 并运行。同样的，在 step 3 中， `x / 2` 的结果是 `4`，这个结果以参数的形式传递到另一个 `foo(...)` 并运行。希望这部分内容够简单。
 
-但是一些人经常会在 step 4中卡壳。一旦我们满足了基本条件 `x` (值为4) 是 `<5` 的，我们将不再调用递归函数，只是(有效的)执行了 `return 4`。
-Specifically the dotted line return of `4` in this figure simplifies what's happening there, so let's dig into that last step and visualize it as these three sub-steps:
+但是一些人经常会在 step 4 中卡壳。一旦我们满足了基本条件 `x` (值为4) 是 `<5` 的，我们将不再调用递归函数，只是(有效的)执行了 `return 4`。
+特别是图中返回 `4` 的虚线那块，它简化了那里的过程，因此我们来深入了解最后一步，并把它折分为三个子步骤：
 
 <p align="center">
 	<img src="fig14.png" width="850">
