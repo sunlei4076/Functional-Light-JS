@@ -1,11 +1,11 @@
 # Functional-Light JavaScript
-# Chapter 9: Recursion
+# 第9章：递归
 
-On the next page, we're going to jump into the topic of recursion.
+下面，我们将进入到递归的论题。
 
 <hr>
 
-*(rest of the page intentionally left blank)*
+*(部分页面故意留白)*
 
 <p>&nbsp;</p>
 <p>&nbsp;</p>
@@ -21,9 +21,9 @@ On the next page, we're going to jump into the topic of recursion.
 
 <div style="page-break-after: always;"></div>
 
-Let's talk about recursion. Before we dive in, consult the previous page for the formal definition.
+我们来谈谈递归吧。在我们下水之前，请查阅上一页的正式定义。
 
-Weak joke, I know. :)
+我知道，这个笑话弱爆了 :)
 
 Recursion is one of those programming techniques that most developers admit can be very powerful, but also most of them don't like to use it. I'd put it in the same category as regular expressions, in that sense. Powerful, but confusing, and thus seen as *not worth the effort*.
 
