@@ -5,9 +5,9 @@
 
 > 如果你能做一些令人惊叹的事情， 请持续保持下去。
 
-本文之前已经简要的提及了一些功能函数：`map(..)`, `filter(..)`, 和 `reduce(..)`，现在深入了解一下。在Javascript中，这些功能函数通常被用于Array（即“list”）的原型上。因此可以很自然的将这些功能函数和数组或列表操作联系起来。
+本文之前已经简要的提及了一些功能函数：`map(..)`, `filter(..)`, 和 `reduce(..)`，现在深入了解一下。在Javascript中，这些功能函数通常被用于Array（即“list”）的原型上。因此可以很自然的将这些功能函数和数组或列表操作联系起来。
 
-曾经我们谈及数组的这些方法， 我们希望概念性地清楚这些操作的用途。在这章中，弄明白为何有这些列表操作和这些操作如何工作同等重要。请保持跟上文章的内容。
+曾经我们谈及数组的这些方法， 我们希望概念性地清楚这些操作的用途。在这章中，弄明白为何有这些列表操作和这些操作如何工作同等重要。请保持跟上文章的内容。
 
 The vast majority of common illustrations of these operations, both outside of this book and here in this chapter, depict trivial tasks performed on lists of values (like doubling each number in an array); it's a cheap and easy way to get the point across.
 
