@@ -86,14 +86,17 @@ function map(mapperFn,arr) {
 `mapperFn(..)`函数按照列表的每一项做映射／转换，在映射／转换时也可以按照`idx` 和 `arr`。 这样做，可以和内置的数组的`map(..)`保持一致。在某些情况下，这些额外的细小的信息非常有用。
 
 但是，在其他场景中，使用`mapperFn(..)`函数的时候，只想传递列表项参数。因为额外的参数可能会改变它的行为。
- In "All For One" in Chapter 3, we introduced `unary(..)`, which limits a function to only accept a single argument (no matter how many are passed).
 
-Recall the example from Chapter 3 about limiting `parseInt(..)` to a single argument to be used safely as a `mapperFn(..)`:
+在第三章的“共同目的（All for one）”中，我们介绍了仅限接受单个参数（不管传入了多少参数）的 `unary(..)`函数。
+
+在`mapperFn(..)`函数中，传入第三章中的限制 `parseInt(..)`函数，可以被安全地反复调用， 代码如下：
 
 ```js
 map( ["1","2","3"], unary( parseInt ) );
 // [1,2,3]
 ```
+
+Javascript 提供了内建的数组操作方法`map(..)`，
 
 JavaScript provides the `map(..)` utility built-in on arrays, making it very convenient to use as part of a chain of operations on a list.
 
