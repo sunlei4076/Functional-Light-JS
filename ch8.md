@@ -35,30 +35,29 @@
 
 ## Map
 
-We'll start our exploration of FP list operations with one of the most basic and fundamental: `map(..)`.
+我们将于最基础和最基本的操作`map(..)`来开启函数式编程列表操作的探索。
 
-A mapping is a transformation from one value to another value. For example, if you start with the number `2` and you multiply it by `3`, you have mapped it to `6`. It's important to note that we're not talking about mapping transformation as implying *in-place* mutation or reassignment; rather mapping transformation projects a new value from one location to the other.
+映射是将一个值转换为另一个值。例如，如果你将`2`乘以`3`，你讲得到转换的结果`6`。 需要重点注意的是，我们并不是在讨论映射转换，因为函数时编程中的映射暗示了“就地” 改变或重新赋值。而映射转换则是将一个值从一个地方映射到另一个新的地方。
 
-In other words:
+换句话说
 
 ```js
 var x = 2, y;
 
-// transformation / projection
+// 转换 / 投影
 y = x * 3;
 
-// mutation / reassignment
+// 变换 / 重新赋值
 x = x * 3;
 ```
-
-If we define a function for this multiplying by `3`, that function acts as a mapping (transformer) function:
+如果我们定义了乘`3`这样的函数，这个函数扮演了映射（转换）的角色。
 
 ```js
 var multipleBy3 = v => v * 3;
 
 var x = 2, y;
 
-// transformation / projection
+// 转换 / 投影
 y = multiplyBy3( x );
 ```
 
