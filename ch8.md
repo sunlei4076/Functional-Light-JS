@@ -29,9 +29,9 @@
 * `some(..)`
 * `every(..)`
 
-`forEach(..)` is an iteration helper, but it's designed for each function call to operate with side effects; you can probably guess why that's not an endorsed FP list operation for our discussion!
+`forEach(..)` 是迭代器辅助函数, 但是它有被设计为每个函数调用的副作用; 你会许已经猜测到了它为什么不是我们正在讨论的函数式编程列表操作！
 
-`some(..)` and `every(..)` do encourage the use of pure functions (specifically, predicate functions like `filter(..)` does), but they inevitably reduce a list to a `true` / `false` result, essentially like a search or matching. These two utilities don't really fit the mold of how we want to model our code with FP, so we're going to skip covering them here.
+`some(..)` 和 `every(..)` 鼓励使用纯函数 (具体来说，就像`filter(..)`这样的谓词函数), 但是它们不可避免地将列表化简为`true` 或 `false`的值,本质上就像搜索和匹配. 这两个工具函数并不适合用函数式编程来建模, 因此，这里也不再讨论它们。
 
 ## Map
 
