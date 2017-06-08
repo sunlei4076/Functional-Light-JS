@@ -86,9 +86,9 @@ fib( n ):
 	fib( n - 2 ) + fib( n - 1 )
 ```
 
-**注意:** The first several numbers of this sequence are: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, ... Each number is the addition of the previous two numbers in the sequence.
+**注意:** 数列的前几个数值是： 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, ... 每一个数字都是数列中前两个数字之和。
 
-The definition of fibonacci expressed directly in code:
+直接用代码来定义斐波那契：
 
 ```js
 function fib(n) {
