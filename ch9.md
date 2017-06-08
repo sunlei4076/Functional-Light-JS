@@ -97,9 +97,9 @@ function fib(n) {
 }
 ```
 
-`fib(..)` calls itself recursively twice, which is typically referred to as binary recursion. We'll talk more about binary recursion later.
+函数 `fib(..)` 对自身进行了两次递归调用，这通常叫作二分递归查找。后面我们将会更多的讨论二分递归查找。
 
-We'll use `fib(..)` variously throughout this chapter to illustrate ideas around recursion, but one downside to this particular form is that there's an awful lot of duplicated work. `fib(n-1)` and `fib(n-2)` don't share any of their work with each other, but overlap with each other almost entirely, over the entire integer space down to `0`.
+在整个章节中，我们将会用不同形式的 `fib(...)` 来说明关于递归的想法，但不太好的地方就是，这种特殊的方式会造成很多重复性的工作。 `fib(n-1)` 和 `fib(n-2)` 运行时候两者之间并没有任何的共享，却几乎又完全相互重叠，直到整个整数空间(译者注：形参 `n`)降到 `0` 。
 
 We briefly touched on memoization in the "Performance Effects" section of Chapter 5. Here, memoization would allow the `fib(..)` of any given number to be computed only once, instead of being recomputed many times. We won't go further into that topic here, but that performance caveat is important to keep in mind with any algorithm, recursive or not.
 
