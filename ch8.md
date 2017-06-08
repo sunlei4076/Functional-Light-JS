@@ -60,14 +60,13 @@ var x = 2, y;
 // 转换 / 投影
 y = multiplyBy3( x );
 ```
-
-We can naturally extend mapping from a single value transformation to a collection of values. `map(..)` is an operation that transforms all the values of a list as it projects them to a new list:
+我们可以自然的将单个值扩展到值的集合。 map(..)操作将列表中的所有值转换为新列表，如下图所示：
 
 <p align="center">
 	<img src="fig9.png" width="400">
 </p>
 
-To implement `map(..)`:
+实现 `map(..)`的代码如下:
 
 ```js
 function map(mapperFn,arr) {
@@ -82,12 +81,12 @@ function map(mapperFn,arr) {
 	return newList;
 }
 ```
+**注意** `mapperFn, arr`的参数顺序，初一看像是倒退。但是这种方式是函数式编程的常规做法。因为这样做，可以使得这些功能函数更容易被组合。
 
-**Note:** The parameter order `mapperFn, arr` may feel backwards at first, but this convention is much more common in FP libraries because it makes these utilities easier to compose (with currying).
+`mapperFn(..)`函数按照列表的每一项做映射／转换，在映射／转换时也可以按照`idx` 和 `arr`。 这样做，可以和内置的数组的`map(..)`保持一致。在某些情况下，这些额外的细小的信息非常有用。
 
-The `mapperFn(..)` is naturally passed the list item to map/transform, but also an `idx` and `arr`. We're doing that to keep consistency with the built-in array `map(..)`. These extra pieces of information can be very useful in some cases.
-
-But in other cases, you may want to use a `mapperFn(..)` that only the list item should be passed to, because the extra arguments might change its behavior. In "All For One" in Chapter 3, we introduced `unary(..)`, which limits a function to only accept a single argument (no matter how many are passed).
+但是，在其他场景中，使用`mapperFn(..)`函数的时候，只想传递列表项参数。因为额外的参数可能会改变它的行为。
+ In "All For One" in Chapter 3, we introduced `unary(..)`, which limits a function to only accept a single argument (no matter how many are passed).
 
 Recall the example from Chapter 3 about limiting `parseInt(..)` to a single argument to be used safely as a `mapperFn(..)`:
 
