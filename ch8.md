@@ -96,13 +96,11 @@ map( ["1","2","3"], unary( parseInt ) );
 // [1,2,3]
 ```
 
-Javascript 提供了内建的数组操作方法`map(..)`，
+Javascript 提供了内建的数组操作方法`map(..)`，这个方法是的列表中的链式操作更为便利。
 
-JavaScript provides the `map(..)` utility built-in on arrays, making it very convenient to use as part of a chain of operations on a list.
+**注意** Javascript数组中的原型中定义的 操作(`map(..)`, `filter(..)`, 和 `reduce(..)`)的最后一个可选参数可以被用于绑定“this”到当前函数。我们在第二章中曾经讨论过“什么是this”，以及在函数式编程的最佳实践中应该避免使用`this`。基于这个原因，在这章中的示例中，我们不采用`this`绑定。
 
-**Note:** The JavaScript array prototype operations (`map(..)`, `filter(..)`, and `reduce(..)`) all accept an optional last argument to use for `this` binding of the function. As we discussed in "What's This?" in Chapter 2, `this`-based coding should generally be avoided wherever possible in terms of being consistent with the best practices of FP. As such, our example implementations in this chapter do not support such a `this`-binding feature.
-
-Beyond the obvious numeric or string operations you could perform against a list of those respective value types, here's some other examples of mapping operations. We can use `map(..)` to transform a list of functions into a list of their return values:
+除了明显的字符和数字操作外，你可以对列表中的这些值类型进行操作。我们可以采用`map(..)`方法来通过函数列表转换得到这些函数返回的值，示例代码如下:
 
 ```js
 var one = () => 1;
@@ -112,8 +110,7 @@ var three = () => 3;
 [one,two,three].map( fn => fn() );
 // [1,2,3]
 ```
-
-Or we can first transform a list of functions by composing each of them with another function, and then execute them:
+我们也可以先将函数放在列表中，然后组合列表中的每一个函数，最后执行它们，代码如下：
 
 ```js
 var increment = v => ++v;
@@ -128,17 +125,17 @@ var double = v => v * 2;
 // [7,5,36]
 ```
 
-Something interesting to observe about `map(..)`: we typically would assume that the list is processed left-to-right, but there's nothing about the concept of `map(..)` that really requires that. Each transformation is supposed to be independent of every other transformation.
+我们注意到关于`map(..)`的一些有趣的事情：我们通常假定列表是从左往右执行的，但`map(..)`并不需要在意这些次序。每一个转换应该独立于其他的转换，彼此没有关联。
 
-Mapping in a general sense could even been parallelized in an environment that supports that, which for a large list could drastically improve performance. We don't see JavaScript actually doing that because there's nothing that requires you to pass a pure function as `mapperFn(..)`, even though you **really ought to**. If you were to pass an impure function and JS were to run different calls in different orders, it would quickly cause havoc.
+映射普遍使用于并行处理的场景中，尤其在处理大列表时可以提升性能。但是在Javascript中，我们并没有看到这样的场景。因为这里不需要你传入诸如`mapperFn(..)`这样的纯函数，即便你**应当这样做**。 在无序执行回调时，如果传入了非纯函数，这将会是一个灾难。
 
-Even though theoretically, individual mapping operations are independent, JS has to assume that they're not. That's a bummer.
+尽管从理论上讲，单独的映射操作时独立的，JS不得不假设它们不是独立的。这是令人讨厌的。
 
 ### Sync vs Async
 
-The list operations we're discussing in this chapter all operate synchronously on a list of values that are all already present; `map(..)` as conceived here is an eager operation. But another way of thinking about the mapper function is as an event handler which is invoked for each new value encountered in the list.
+在这篇文章中，因为列表中的值都已存在，讨论的列表操作都是运行在同步模式下。`map(..)`函数在这里立即执行列表操作。但是映射还有另一种用法是将其当作事件处理函数使用，在迭代执行列表中的每一个元素触发执行该函数。
 
-Imagine something fictional like this:
+想象一下这样的场景：
 
 ```js
 var newArr = arr.map();
@@ -146,36 +143,34 @@ var newArr = arr.map();
 arr.addEventListener( "value", multiplyBy3 );
 ```
 
-Now, any time a value is added to `arr`, the `multiplyBy3(..)` event handler -- mapper function -- is called with the value, and its transformation is added to `newArr`.
+现在，每一个值加入到`arr`中的时候，`multiplyBy3(..)`事件处理函数会被执行——映射函数——将加入的值当映射函数的参数执行，将执行结果加入到`newArr`。
 
-What we're hinting at is that arrays, and the array operations we perform on them, are the eager synchronous versions, whereas these same operations can also be modeled on a "lazy list" (aka, stream) that receives its values over time. We'll dive into this topic in Chapter 10.
+我们所暗示的是数组，以及在数组上执行的操作，这些都是同步执行，然后这些相同的操作也可以作用在“延迟列表”（即流）模型上。流会一直接受它的值，我们将在第十章中深入讨论它。
 
 ### Mapping vs Eaching
 
-Some advocate using `map(..)` as a general form of `forEach(..)`-iteration, where essentially the value received is passed through untouched, but then some side-effect can be performed:
+有些人提倡在迭代的时候采用`map(..)`替代`forEach(..)`，本质上结束到的值在传递的时候没有修改，但随后会产生一些副作用：
 
 ```js
 [1,2,3,4,5]
 .map( function mapperFn(v){
-	console.log( v );			// side effect!
+	console.log( v );			// 副作用!
 	return v;
 } )
 ..
 ```
+这种技术似乎又用的原因是`map(..)`返回数组，这样你可以在它之后继续执行更多的操作。而`forEach(..)`执行后返回的的值是`undefined`。然后，我认为你应当避免这样使用 However,`map(..)`。因为这是一种明显用非函数式编程的方式操作核心的函数式编程操作，这样容易引起混乱。
 
-The reason this technique can seem useful is that the `map(..)` returns the array so you can keep chaining more operations after it; the return value of `forEach(..)` is `undefined`. However, I think you should avoid using `map(..)` in this way, because it's a net confusion to use a core FP operation in a decidedly un-FP way.
+你应该听过一句老话，用合适的工具做合适的事———锤子配钉子，螺丝刀配螺丝等等，对吗？这里有些细微的不同：指的是采用**恰当的方式**使用合适的工具。
 
-You've heard the old addage about using the right tool for the right job, right? Hammer for a nail, screwdriver for a screw, etc. This is slightly different: it's use the right tool *in the right way*.
-
-A hammer is meant to be swung in your hand; if you instead hold it in your mouth and try to hammer the nail, you're not gonna be very effective. `map(..)` is intended to map values, not create side effects.
+锤子是挥动手敲的，如果你尝试采用嘴去钉钉子，效率会大打折扣。`map(..)`是用来映射值的，而不是带来副作用。
 
 ### A Word: Functors
 
-We've mostly tried to stay away from artificial invented terminology in FP as much as possible in this book. We have used official terms at times, but mostly when we can derive some sense of meaning from them in regular everyday conversation.
+在这本书中，我们尽可能避免使用人为创造的函数式编程术语。我们有时候会使用官方术语，但在大多数时候，采用日常用语来描述更加通俗易懂。这里之所以要讨论函子的原因是我们已经了解了它的作用，并且这个词在函数式编程文献中被大量使用。你不会被这个词吓到而带来副作用。
 
-I'm going to very briefly break that pattern and use a word that might be a little intimidating: functor. The reason I want to talk about functors here is because we now already understand what they do, and because that term is used heavily throughout the rest of FP literature; you being at least familiar with  and not scared by it will be beneficial.
+函子是采用运算函数有效用操作的值。
 
-A functor is a value that has a utility for using an operator function on that value.
 
 If the value in question is compound, meaning it's comprised of individual values -- as is the case with arrays, for example! -- a functor uses the operator function on each individual value. Moreover, the functor utility creates a new compound value holding the results of all the individual operator function calls.
 
