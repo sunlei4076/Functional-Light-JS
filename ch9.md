@@ -121,9 +121,9 @@ function isEven(v) {
 }
 ```
 
-Yes, this is a silly way to calculate if a number is odd or even. But it illustrates the idea that certain algorithms can be defined in terms of mutual recursion.
+是的，这个奇偶数的判断笨笨的。但也给我们提供了一些思路：某些算法可以根据相互递归来定义。
 
-Recall the binary recursive `fib(..)` from the previous section; we could instead have expressed it with mutual recursion:
+回顾下上节中的二分递归法 `fib(..)`；我们可以换成相互递归来表示：
 
 ```js
 function fib_(n) {
@@ -137,13 +137,13 @@ function fib(n) {
 }
 ```
 
-**Note:** This mutually recursive `fib(..)` implementation is adapted from research presented in "Fibonacci Numbers Using Mutual Recursion" (https://www.researchgate.net/publication/246180510_Fibonacci_Numbers_Using_Mutual_Recursion).
+**注意：** `fib(..)` 相互递归的实现方式改编自 "用相互递归来实现斐波纳契数列" 研究报告(https://www.researchgate.net/publication/246180510_Fibonacci_Numbers_Using_Mutual_Recursion)。
 
-While these mutual recursion examples shown are rather contrived, there are more complex use cases where mutual recursion can be very helpful.
+虽然这些相互递归的示例有点不切实际，但是在更复杂的使用场景下，相互递归是非常有用的。
 
-### Why Recursion?
+### 为什么选择递归？
 
-Now that we've defined and illustrated recursion, we should examine why recursion is useful.
+现在我们已经对递归进行了定义和说明，下面我们看下为什么说递归是有用的。
 
 The most commonly cited reason that recursion fits the spirit of FP is because it trades (much of) the explicit tracking of state with implicit state on the call stack. Typically, recursion is most useful when the problem requires conditional branching and back-tracking, and managing that kind of state in a purely iterative environment can be quite tricky; at a minimum, the code is highly imperative and harder to read and verify. But tracking each level of branching as its own scope on the call stack often significantly cleans up the readability of the code.
 
