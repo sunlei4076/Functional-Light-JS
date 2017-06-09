@@ -107,7 +107,7 @@ function fib(n) {
 
 当一个函数调用自身时，很明显，这叫作直接递归。比如前面部分我们谈到的 `foo(..)`，`isPrime(..)`以及 `fib(..)`。如果在一个递归循环中，出现两个及以上的函数相互调用，则称之为相互递归。
 
-These two functions are mutually recursive:
+这两个函数就是相互递归：
 
 ```js
 function isOdd(v) {
