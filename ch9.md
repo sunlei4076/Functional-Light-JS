@@ -101,11 +101,11 @@ function fib(n) {
 
 在整个章节中，我们将会用不同形式的 `fib(...)` 来说明关于递归的想法，但不太好的地方就是，这种特殊的方式会造成很多重复性的工作。 `fib(n-1)` 和 `fib(n-2)` 运行时候两者之间并没有任何的共享，却几乎又完全相互重叠，直到整个整数空间(译者注：形参 `n`)降到 `0` 。
 
-We briefly touched on memoization in the "Performance Effects" section of Chapter 5. Here, memoization would allow the `fib(..)` of any given number to be computed only once, instead of being recomputed many times. We won't go further into that topic here, but that performance caveat is important to keep in mind with any algorithm, recursive or not.
+在第五章的性能优化方面我们简单的谈到了记忆存储技术。本章中，记忆存储技术使得任意一个传入到 `fib(...)` 的数值只会被计算一次而不是多次。虽然我们不会在这里过多的讨论这个技术话题，但不论是递归或其它任何算法，我们都要谨记，性能优化是非常重要的。
 
-### Mutual Recursion
+### 相互递归
 
-When a function calls itself, specifically, this is referred to as direct recursion. That's what we saw in the previous section with `foo(..)`, `isPrime(..)`, and `fib(..)`. Two or more functions can call each other in a recursive cycle, and this is referred to as mutual recursion.
+当一个函数调用自身时，很明显，这叫作直接递归。比如前面部分我们谈到的 `foo(..)`，`isPrime(..)`以及 `fib(..)`。如果在一个递归循环中，出现两个及以上的函数相互调用，则称之为相互递归。
 
 These two functions are mutually recursive:
 
