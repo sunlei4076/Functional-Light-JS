@@ -145,19 +145,9 @@ function fib(n) {
 
 现在我们已经给出了递归的定义和说明，下面来看下，为什么说递归是有用的。
 
-我们经常说，递归深谙函数式编程之精髓，
-最常引用的原因
-The most commonly cited reason 
+递归深谙函数式编程之精髓，最被广泛引证的原因是，在回调堆栈中，递归把(大部分)显式状态跟踪换为了隐式状态。通常，当问题需要条件分支和回溯计算，这时候递归非常有用，并且在纯迭代环境中管理这种状态，是相当棘手的；最起码，这些代码是不可或缺且晦涩难懂。但是在堆栈上调用每一级的分支作为其自己的作用域，很明显，这通常会影响到代码的可读性。
 
-该递归符合FP的精神
-that recursion fits the spirit of FP 
-
-它在调用堆栈上交易（大部分）显式跟踪具有隐式状态的状态
-is because it trades (much of) the explicit tracking of state with implicit state on the call stack. 
-
-Typically, recursion is most useful when the problem requires conditional branching and back-tracking, and managing that kind of state in a purely iterative environment can be quite tricky; at a minimum, the code is highly imperative and harder to read and verify. But tracking each level of branching as its own scope on the call stack often significantly cleans up the readability of the code.
-
-Simple iterative algorithms can trivially be expressed as recursion:
+简单的迭代算法可以用递归来表达：
 
 ```js
 function sum(total,...nums) {
