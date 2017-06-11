@@ -27,7 +27,7 @@
 
 大部分的开发人员都承认递归是一门非常强大的编程技术，但他们并不喜欢去使用它。在这个意义上，我把它放在与正则表达式相同的类别中。强大但又令人困惑，因此被视为 *不值得的努力*。
 
-我是递归编程的超级粉丝，你，也可以的！在这一章节中我的目标就是说服你，递归是一个重要的工具，你应该带着它在你的FP方法中编码。当正确使用时，递归编程可以轻松的描述复杂问题。
+我是递归编程的超级粉丝，你，也可以的！在这一章节中我的目标就是说服你：递归是一个重要的工具，你应该带着它在你的函数式编程中编码。当正确使用时，递归编程可以轻松的描述复杂问题。
 
 ## 定义
 
@@ -143,9 +143,19 @@ function fib(n) {
 
 ### 为什么选择递归？
 
-现在我们已经对递归进行了定义和说明，下面我们看下为什么说递归是有用的。
+现在我们已经给出了递归的定义和说明，下面来看下，为什么说递归是有用的。
 
-The most commonly cited reason that recursion fits the spirit of FP is because it trades (much of) the explicit tracking of state with implicit state on the call stack. Typically, recursion is most useful when the problem requires conditional branching and back-tracking, and managing that kind of state in a purely iterative environment can be quite tricky; at a minimum, the code is highly imperative and harder to read and verify. But tracking each level of branching as its own scope on the call stack often significantly cleans up the readability of the code.
+我们经常说，递归深谙函数式编程之精髓，
+最常引用的原因
+The most commonly cited reason 
+
+该递归符合FP的精神
+that recursion fits the spirit of FP 
+
+它在调用堆栈上交易（大部分）显式跟踪具有隐式状态的状态
+is because it trades (much of) the explicit tracking of state with implicit state on the call stack. 
+
+Typically, recursion is most useful when the problem requires conditional branching and back-tracking, and managing that kind of state in a purely iterative environment can be quite tricky; at a minimum, the code is highly imperative and harder to read and verify. But tracking each level of branching as its own scope on the call stack often significantly cleans up the readability of the code.
 
 Simple iterative algorithms can trivially be expressed as recursion:
 
