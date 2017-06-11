@@ -166,11 +166,12 @@ function sum(num1,...nums) {
 }
 ```
 
-It's not just that the `for`-loop is eliminated in favor of the call stack, but that the incremental partial sums (the intermittent state of `total`) are tracked implicitly across the `return`s of the call stack instead of reassigning `total` each iteration. FPers will often prefer to avoid reassignment of local variables where it's possible to avoid.
+不仅仅是为了消除回调栈中的 `for` 循环，而是用 `return`s 的形式在回调栈中隐式的跟踪增量求和（ `total` 的间歇状态），而并非在每次迭代中重新分配 `total`。通常情况下，只要存在可能，函数式编程的程序员更倾向于避免重新分配局部变量。
 
-In a basic algorithm like this kind of summation, this difference is minor and nuanced. But the more sophisticated your algorithm, the more you will likely see the payoff of recursion instead of imperative state tracking.
+在我们总结的这种基本算法里面，这些差异是微乎其微的。但是，随着算法复杂度的提升，您很可能会看到递归带来的效果而不是命令状态跟踪。
+在像这种总结的基本算法中，这种差异是微不足道的。 但是，您的算法越复杂，越有可能看到递归的回报而不是命令状态跟踪。
 
-## Declarative Recursion
+## 声明式递归
 
 Mathematicians use the **Σ** symbol as a placeholder to represent the summation of a list of numbers. The primary reason they do that is because it's more cumbersome (and less readable!) if they're working with more complex formulas and they have to write out the summation manually, like `1 + 3 + 5 + 7 + 9 + ..`. Using the notation is declarative math!
 
