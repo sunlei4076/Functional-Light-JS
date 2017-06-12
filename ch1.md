@@ -1,5 +1,5 @@
-# Functional-Light JavaScript
-# Chapter 1: Why Functional Programming?
+# 轻量级函数式编程
+# 第一章：为什么使用函数式编程？
 
 > Functional programmer: (noun) One who names variables "x", names functions "f", and names code patterns "zygohistomorphic prepromorphism"
 >
@@ -7,39 +7,39 @@
 >
 > https://twitter.com/jamesiry/status/598547781515485184
 
-Functional Programming (FP) is not a new concept by any means. It's been around almost the entire history of programming. However -- and I'm not sure it's fair to say, but! -- it sure hasn't seemed like as mainstream of a concept in the overall developer world until perhaps the last few years. I think FP has more been the realm of academics.
+函数式编程（以下简称FP）不是一个新的概念，这个概念几乎贯穿了整个编程史。我不确定这么说是否合理，但是很确定的一点是：直到最近几年，FD才成为整个开发界的主流观念。所以我觉得FD更像学者的领域。
 
-But that's all changing. A groundswell of interest is growing around FP, not just at the languages level but even in libraries and frameworks. You very well might be reading this text because you've finally realized FP is something you can't ignore any longer. Or maybe you're like me and you've tried to learn FP many times before but struggled to wade through all the terms or mathematical notation.
+然而一切都在变。无论是语言，还是库和框架，都对FP的兴趣空前高涨。你也很可能在读相关内容，因为你终于意识到FP是不容忽视的东西。或者你跟我一样，已经很多次尝试着去学FP，但却很难理解所有的术语或数学符号。
 
-Whatever your reason for reading this book, welcome to the party!
+无论你出于何目的翻阅本书，欢迎加入我们！
 
-## Confidence
+## 置信度
 
-I have a very simple premise that sort of underlies everything I do as a teacher of software development (in JavaScript): code that you cannot trust is code that you do not understand. And furthermore, if you cannot trust or understand your code, then you can have no confidence whatsoever that the code you write is suitable to the task. You run the program and cross your fingers.
+我有一个非常简单的前提，这是我作为软件开发老师（JavaScript）中所做的一切的基础：你不能信任的代码是你不明白的代码。此外，对你不信任或不明白的代码，那么你就会对这样的代码不自信，并且会认为它不适合开发你的业务。当代码运行的时候也只能祈求好运。
 
-What do I mean by trust? I mean that you can verify, by reading, not just running, that you understand what a piece of code *will* do, not just relying on what it *should* do. Perhaps more often than we should, we tend to rely on verification of our program's correctness by running test suites. I don't mean to suggest tests are bad. But I do think we should aspire to be able to understand our code well enough that we know the test suite will pass before it runs.
+信任是什么意思？信任代表你通过读代码而不只是运行，你能证实你理解这段代码能干什么事，而不只是停留在它可能是干什么。也许我们不应该总倾向于通过运行测试程序，从而来验证我们的程序的正确性。我并不是说测试不好，而是说我们应该期待去能够很好地了解代码，这样我们在运行测试代码之前就会知道它肯定能跑通。
 
-I believe the techniques that form the foundation of FP are designed from the mindset of having far more confidence over our programs just by reading them. Someone who understands FP, and who diligently uses it in their programs, will write code that they can read and verify, by the principles they have already proven to be true, that the program will do what they want.
+通过读代码能对我们的程序有更多信心，我相信构成FP基础的技术，是本着心态设计的。 理解FP并在程序中用心实践的人，通过FP已经被证实的原则，能够写出他们可读性高和可验证的代码，来达到他们想要的目的。
 
-It is my hope that you will begin to develop more confidence in the code you write, and that these functional-light programming principles will begin your journey in that direction.
+我希望您能通过理解轻量级函数式编程的原则，对您编写的代码更有信心，并且能在之后的路上越走越好。
 
-## Communication
+## 交流渠道
 
-Why is functional programming important? To answer that, we need to take a bigger step back and talk about why programming itself is important.
+函数式编程为何重要？为了回答这个问题，我们先退一万步，来讨论一下编程本身的重要性。
 
-It may surprise you to hear this, but I don't believe that code is primarily a set of instructions for the computer. As a matter of fact, I think the fact that code instructs the computer is almost a happy accident.
+我认为代码不是构成电脑的说明，这么说你可能感到很奇怪。事实上，代码能指示电脑如何运行就是一个意外中的惊喜。
 
-I believe very deeply that the vastly more important role of code is as a means of communication with other human beings.
+作为与他人交流的一种手段，我深信代码的作用非常重要。
 
-You probably know by experience that an awful lot of your time spent "coding" is actually spent reading existing code. Very few of us are so privileged as to spend all or most of our time simply banging out all new code and never dealing with code that others (or our past selves) wrote.
+根据以往经验你可能知道，有时候花很多时间写代码其实是为了搞明白现有的代码。我们的大部分时间其实都是在维护别人的代码（或自己的老代码），只有少部分时间是在敲新代码。
 
-Did you know that researchers who've studied this topic say that 70% of the time we spend maintaining code is just spent reading it to understand it? I find that shocking. 70%. No wonder the global average for a programmer's lines of code written per day is around 5. We spend the other 7 hours and 30 minutes of the day just reading the code to figure out where those 5 lines should go!
+你知道研究过这个话题的研究人员说给出了怎样的数据吗？70％ 的时间我们花费维护代码只是花在阅读并理解代码。 也难怪全球程序员的平均代码行数是5行。 我们一天花了7个半小时才读懂代码，然后找出哪5行是奏效的。
 
-I think we should focus a lot -- a LOT! -- more on the readability of our code. Like, a lot more. And by the way, readability is not about least number of characters. Readability is actually most affected by familiarity (yes, that's been studied, too).
+我想我们应该更多的关注一下代码的可读性。可能的话，不妨多花点时间在可读性上。顺便提一句，可读性并不只是说代码量少，对代码的熟悉程度会影响代码的可读性（这一点也是被证实过的）。
 
-So, if we are going to spend more time concerned with making code that will be more readable and understandable, FP turns out to be a really handy pattern in that effort. The principles of FP are well established, deeply studied and vetted, and provably verifiable.
+因此，如果我们要花费更多的时间来关注编写代码的可读性和可理解性，所以FP就是这样一个非常方便的模式。FP的原则是完善的，经过了深入的研究和审查，并且可被证明和验证。
 
-If we use FP principles, I believe we will create code that is easier to reason about. Once we know these principles, they will be recognizable and familiar in the code, meaning we'll spend less time figuring that part out when we read a piece of code. Our focus will be spent on how all the well-known, established lego pieces are assembled, not on what those lego pieces mean.
+如果我们使用FP原则，我相信我们将创建更容易理解的代码。一旦我们知道这些原则，它们将在代码中被识别和熟悉，这意味着当我们读取一段代码时，我们将花费更少的时间来进行定位。我们的重点将在于如何组建所有已知的乐高片段，而不是这些乐高片段意味着什么。
 
 FP (at least, without all the terminology weighing it down) is one of the most effective tools for writing readable code. *That* is why it's so important.
 
