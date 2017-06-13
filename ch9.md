@@ -145,7 +145,7 @@ function fib(n) {
 
 现在我们已经给出了递归的定义和说明，下面来看下，为什么说递归是有用的。
 
-递归深谙函数式编程之精髓，最被广泛引证的原因是，在回调堆栈中，递归把(大部分)显式状态跟踪换为了隐式状态。通常，当问题需要条件分支和回溯计算，这时候递归非常有用，并且在纯迭代环境中管理这种状态，是相当棘手的；最起码，这些代码是不可或缺且晦涩难懂。但是在堆栈上调用每一级的分支作为其自己的作用域，很明显，这通常会影响到代码的可读性。
+递归深谙函数式编程之精髓，最被广泛引证的原因是，在调用栈中，递归把(大部分)显式状态跟踪换为了隐式状态。通常，当问题需要条件分支和回溯计算，这时候递归非常有用，并且在纯迭代环境中管理这种状态，是相当棘手的；最起码，这些代码是不可或缺且晦涩难懂。但是在堆栈上调用每一级的分支作为其自己的作用域，很明显，这通常会影响到代码的可读性。
 
 简单的迭代算法可以用递归来表达：
 
@@ -333,11 +333,11 @@ baz();
 **注意：** 如果这些函数间没有相互调用，而只是依次执行 -- 比如前一个函数运行结束后才开始调用下一个函数 `baz(); bar(); foo();` -- 则堆栈桢并没有产生；因为在下一个函数开始之前，上一个函数运行结束并把它的桢从堆栈里面移除了。
 
 所以，每一个函数运行时候，都会占用一些内存。对多数程序来说，这没什么大不了的，不是吗？但是，一旦你引用了递归，就有什么大不了咯。
-虽然你几乎肯定不会在一个调用堆栈中手动调用成千（或数百）次不同的函数，但你很容易看到产生数万个或更多递归调用的堆栈。
+虽然你几乎肯定不会在一个调用栈中手动调用成千（或数百）次不同的函数，但你很容易看到产生数万个或更多递归调用的堆栈。
 
-当引擎认为回调堆栈增加的太多并且应该停止增加时候，它会以任意的限制来阻止当前步骤，所以 `isOdd(..)` 或 `isEven(..)` 函数抛出了 `RangeError` 未知错误。这不太可能是内存接近零时候产生的限制，而是引擎的预测，因为如果这种程序持续运行下去，内存会爆掉的。由于引擎无法判断一个程序最终是否会停止，所以它必须做出确定的猜测。
+当引擎认为调用栈增加的太多并且应该停止增加时候，它会以任意的限制来阻止当前步骤，所以 `isOdd(..)` 或 `isEven(..)` 函数抛出了 `RangeError` 未知错误。这不太可能是内存接近零时候产生的限制，而是引擎的预测，因为如果这种程序持续运行下去，内存会爆掉的。由于引擎无法判断一个程序最终是否会停止，所以它必须做出确定的猜测。
 
-引擎的限制因情况而定。规范里面并没有任何说明，因此，它也不是 *必需的*。但如果没有限制的话，设备很容易遭到破坏或恶意代码攻击，故而几乎所有的JS引擎都有一个限制。不同的设备环境、不同的引擎，会有不同的限制，也就无法预测或保证函数回调堆栈能调用多少次。
+引擎的限制因情况而定。规范里面并没有任何说明，因此，它也不是 *必需的*。但如果没有限制的话，设备很容易遭到破坏或恶意代码攻击，故而几乎所有的JS引擎都有一个限制。不同的设备环境、不同的引擎，会有不同的限制，也就无法预测或保证函数调用栈能调用多少次。
 
 在处理大数据量时候，这个限制对于开发人员来说，会对递归的性能有一定的要求。我认为，这种限制也可能是造成开发人员不喜欢使用递归编程的最大原因。
 遗憾的是，递归编程是一种编程思想而不是主流的编程技术。
@@ -348,20 +348,21 @@ baz();
 
 幸运的是，在那个希望的原野上，进行了一个有力的观测。该技术称为 **尾调用**。
 
-它的思路是如果一个回调从函数 `baz()` 转到函数 `bar()` 时候，而回调是在函数 `baz()` 的最底部执行 -- 也就是尾回调 -- 那么 `baz()` 的堆栈桢就不再需要了。也就意谓着，内存可以被回收，或只需简单的执行 `bar()` 函数。 如图所示：
+它的思路是如果一个回调从函数 `baz()` 转到函数 `bar()` 时候，而回调是在函数 `baz()` 的最底部执行 -- 也就是尾调用 -- 那么 `baz()` 的堆栈桢就不再需要了。也就意谓着，内存可以被回收，或只需简单的执行 `bar()` 函数。 如图所示：
 
 <p align="center">
 	<img src="fig16.png" width="600">
 </p>
 
-Tail calls are not really directly related to recursion, per se; this notion holds for any function call. But your manual non-recursion call stacks are unlikely to go beyond maybe 10 levels deep in most cases, so the chances of tail calls impacting your program's memory footprint are pretty low.
+尾调用并不是递归特有的；它适用于任何函数调用。但是，在大多数情况下，你的手动非递归调用栈不太可能超过 10 级，因此尾调用对你程序内存的影响可能相当低。
 
-Tail calls really shine in the recursion case, because it means that a recursive stack could run "forever", and the only performance concern would be computation, not fixed memory limitations. Tail call recursion can run in `O(1)` fixed memory usage.
+在递归的情况下，尾调用作用很明显，因为这意味着递归堆栈可以“永远”运行下去，唯一的性能问题就是计算，而不再是固定的内存限制。在固定的内存中尾递归可以运行 `O(1)` （常数阶时间复杂度计算）。
 
-These sorts of techniques are often referred to as Tail Call Optimizations (TCO), but it's important to distinguish the ability to detect a tail call to run in fixed memory space, from the techniques that optimize this approach. Technically, tail calls themselves are not a performance optimization as most people would think, as they might actually run slower than normal calls. TCO is about optimizing tail calls to run more efficiently.
+这些技术通常被称为尾调用优化（TCO），但重点在于从优化技术中，区分出在固定内存空间中检测尾调用运行的能力。从技术上讲，尾调用并不像大多数人所想的那样，它们的运行速度可能比普通回调还慢。TCO 是关于把尾调用更加高效运行的一些优化技术。
 
-### Proper Tail Calls (PTC)
+### 正确的尾调用 (PTC)
 
+在 ES6 出来之前，JavaScript 从没要求（也没有禁用）尾调用。
 JavaScript has never required (nor forbidden) tail calls, until ES6. ES6 mandates recognition of tail calls, of a specific form referred to as Proper Tail Calls (PTC), and the guarantee that code in PTC form will run without unbounded stack memory growth. Practically speaking, this means we should not get `RangeError`s thrown if we adhere to PTC.
 
 First, PTC in JavaScript requires strict mode. You should already be using strict mode, but if you aren't, this is yet another reason you should already be using strict mode. Did I mention, yet, you should already be using strict mode!?
