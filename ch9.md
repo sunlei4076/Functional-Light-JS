@@ -344,11 +344,11 @@ baz();
 
 ### 尾调用
 
-Recursion far predates JS, and so do these memory limitations. Back in the 1960s, developers were wanting to use recursion and running up against hard limits of device memory of their powerful computers that were far lower than we have on our watches today.
+递归编程和内存限制都要比 JS 技术出现的早。追溯到上世纪 60 年代，当时开发人员想使用递归编程并希望运行在他们强大的计算机的设备，而所谓强大计算机的内存，尚远不如我们今天在手表上的内存。
 
-Fortunately, a powerful observation was made in those early days that still offers hope. The technique is called *tail calls*.
+幸运的是，在那个希望的原野上，进行了一个有力的观测。该技术称为 **尾调用**。
 
-The idea is that if a call from function `baz()` to function `bar()` happens at the very end of function `baz()`'s execution -- referred to as a tail call -- the stack frame for `baz()` isn't needed anymore. That means that either the memory can be reclaimed, or even better, simply reused to handle function `bar()`'s execution. Visualizing:
+它的思路是如果一个回调从函数 `baz()` 转到函数 `bar()` 时候，而回调是在函数 `baz()` 的最底部执行 -- 也就是尾回调 -- 那么 `baz()` 的堆栈桢就不再需要了。也就意谓着，内存可以被回收，或只需简单的执行 `bar()` 函数。 如图所示：
 
 <p align="center">
 	<img src="fig16.png" width="600">
