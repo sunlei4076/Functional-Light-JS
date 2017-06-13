@@ -33,7 +33,7 @@
 
 根据以往经验你可能知道，有时候花很多时间写代码其实是为了搞明白现有的代码。我们的大部分时间其实都是在维护别人的代码（或自己的老代码），只有少部分时间是在敲新代码。
 
-你知道研究过这个话题的研究人员说给出了怎样的数据吗？70％ 的时间我们花费维护代码只是花在阅读并理解代码。 也难怪全球程序员的平均代码行数是5行。 我们一天花了7个半小时才读懂代码，然后找出哪5行是奏效的。
+你知道研究过这个话题的研究人员说给出了怎样的数据吗？70％ 的时间我们花费维护代码只是花在阅读并理解代码。 也难怪全球程序员的平均代码行数是5行。 我们一天花了7个半小时才读懂代码，然后找出哪5行代码奏效。
 
 我想我们应该更多的关注一下代码的可读性。可能的话，不妨多花点时间在可读性上。顺便提一句，可读性并不只是说代码量少，对代码的熟悉程度会影响代码的可读性（这一点也是被证实过的）。
 
@@ -41,33 +41,33 @@
 
 如果我们使用FP原则，我相信我们将创建更容易理解的代码。一旦我们知道这些原则，它们将在代码中被识别和熟悉，这意味着当我们读取一段代码时，我们将花费更少的时间来进行定位。我们的重点将在于如何组建所有已知的乐高片段，而不是这些乐高片段意味着什么。
 
-FP (at least, without all the terminology weighing it down) is one of the most effective tools for writing readable code. *That* is why it's so important.
+FP是编写可读代码的最有效工具之一(可能还有其他)。这就是为什么FP如此重要。
 
-### Readability Curve
+### 可读性曲线
 
-It's really important I take a moment to call out a phenomena that has derailed and frustrated me many times over the years, and was especially acute while writing this book.
+很重要的是，我花了一年时间来讲述一种多年来让我感到困惑和沮丧的现象，在写这本书时特别尖锐。
 
-I also think it's probably something that many developers have a tendency to run into. You, dear reader, may just find yourself in this same boat as you work through this text. But take heart; if you stick this out, the curve comes back.
+这也可能是许多开发人员倾向于碰到的东西。亲爱的读者，当你读这篇文章的时候，你可能会发现自己也在这条船上。但是振作起来，如果坚持下去，陡峭的学习曲线总会过去。
 
 <p align="center">
 	<img src="fig17.png" width="600">
 </p>
 
-We'll cover this more in the next chapter, but imperative code is the code you probably already write, like `if` statements and `for`-loops. It's focused on precisely instructing the computer *how* to do something. Declarative code, and moreover the kind of code we'll be striving to learn to write that adheres to FP principles, is code that's more focused on describing the *what* outcome.
+我们将在下一章更深入的讨论这个问题。但是一些命令语句是已经用过的，像 if 语句和 for 循环这样的语句。这些语句旨在精确地指导计算机“如何”完成一件事情。声明式代码，以及我们将努力学习遵循FP原则编写的代码，是更专注于描述产出“什么”代码。
 
-Let me just clue you into a painful fact, one that I've been trying to swallow the whole time I've worked on this book: it takes a lot more effort, and often a lot more code, to improve the readability of your code and to minimize or eliminate most of the places where you might write bugs.
+还有个残酷的问题摆在眼前，这个问题花费了我在这本书上的很多时间：我需要花费更多的精力和更多的代码来提高代码的可读性，尽量减少或消除你可能编写错误的大部分地方。
 
-If you're hoping that your FP code refactoring will immediately make your code more graceful, elegant, clever, and concise, that's just not a realistic expectation -- at least not at first.
+如果你希望用FP重构过的代码能够立刻变得更美观、优雅、智能和简洁的话，这个有点不太现实，这个变化是需要一个过程的。
 
-FP is a very different way of thinking about how code should be structured, to make the flow of data much more obvious and to help your reader follow your thinking. This effort is eminently worthwhile, but it can be an arduous journey and the code you end up with will not seem more readable until you've spent a lot more time conditioning yourself to FP.
+FP的构思是很奇特的，代码应该如何基于它进行构造，使得数据流更加明显，并能让读者很快理解你的思想。这种努力是非常值得的，然而过程很艰辛，你可能需要花很多时间基于FP来调整代码直到代码可读性变得好一些。
 
-Also, my experience has been that it takes about a half dozen attempts at turning a snippet of imperative code into more declarative FP, before I end up with something that's clear enough for me to understand. For me, writing FP is more like a process than a binary flip from one paradigm to another.
+另外，我的经验是，将命令式代码转换为更偏向于声明式的FP之前，大约需要做六次尝试。对我来说，编写FP的代码更像是一个过程，而不是从一个范例到另一个范例的二进制转换。
 
-I also apply the "read it later" test to every piece of FP code I write. I write it, then leave the code alone for a few hours or a day, then come back and try to read it with fresh eyes. Usually, it's confusing as hell, so I tweak it and repeat.
+我也会经常对写过的代码进行再读。就是说，写完一段代码，过几个小时或一天再看就会有不一样的感觉。通常，重写的代码是比较混乱不堪，所以需要反复调整。
 
-Functional programming has not been for me achieving a single elegant brush stroke on the artist's canvas that leaves the audience in awe. Rather, it's a painstaking, detailed, sometimes treacherous hack through the weeds of a neglected field.
+函数式编程并没有让我在艺术家的画布上实现一个优雅的笔触，让观众敬畏。相反，它是一个艰苦的，详细的，有时是阴险的通过一个被忽视的领域杂草的破解。 函数式编程的过程并没有让我在艺术的画布上笔下生辉，让观众拍岸叫好。相反，编程的过程很艰辛，且历历在目，感觉像坐在一辆不知去向的马车穿过一片荒芜的灌木丛林。
 
-But I'm not trying to dampen your spirits. I really want you to hack through those weeds. I am glad I have. I can finally start to see the curve bending upward towards more readability. The effort has been worth it. I believe it will be for you, too.
+我不是试图打压你的激情，我真的希望你也可以在这个道路上披荆斩棘。过后我终于看到可读性曲线向上延伸，所有付出都是值得的，我相信你也将会有这样的感受。
 
 ## Take
 
