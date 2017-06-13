@@ -33,7 +33,7 @@
 
 `some(..)` 和 `every(..)` 鼓励使用纯函数 (具体来说，就像`filter(..)`这样的谓词函数), 但是它们不可避免地将列表化简为`true` 或 `false`的值,本质上就像搜索和匹配. 这两个工具函数并不适合用函数式编程来建模, 因此，这里也不再讨论它们。
 
-## Map
+## 映射
 
 我们将于最基础和最基本的操作`map(..)`来开启函数式编程列表操作的探索。
 
@@ -131,7 +131,7 @@ var double = v => v * 2;
 
 尽管从理论上讲，单独的映射操作时独立的，JS不得不假设它们不是独立的。这是令人讨厌的。
 
-### Sync vs Async
+### 同步 vs 异步
 
 在这篇文章中，因为列表中的值都已存在，讨论的列表操作都是运行在同步模式下。`map(..)`函数在这里立即执行列表操作。但是映射还有另一种用法是将其当作事件处理函数使用，在迭代执行列表中的每一个元素触发执行该函数。
 
@@ -147,7 +147,7 @@ arr.addEventListener( "value", multiplyBy3 );
 
 我们所暗示的是数组，以及在数组上执行的操作，这些都是同步执行，然后这些相同的操作也可以作用在“延迟列表”（即流）模型上。流会一直接受它的值，我们将在第十章中深入讨论它。
 
-### Mapping vs Eaching
+### 映射 vs Eaching
 
 有些人提倡在迭代的时候采用`map(..)`替代`forEach(..)`，本质上结束到的值在传递的时候没有修改，但随后会产生一些副作用：
 
@@ -165,18 +165,17 @@ arr.addEventListener( "value", multiplyBy3 );
 
 锤子是挥动手敲的，如果你尝试采用嘴去钉钉子，效率会大打折扣。`map(..)`是用来映射值的，而不是带来副作用。
 
-### A Word: Functors
+### 一个词: 函子
 
 在这本书中，我们尽可能避免使用人为创造的函数式编程术语。我们有时候会使用官方术语，但在大多数时候，采用日常用语来描述更加通俗易懂。这里之所以要讨论函子的原因是我们已经了解了它的作用，并且这个词在函数式编程文献中被大量使用。你不会被这个词吓到而带来副作用。
 
 函子是采用运算函数有效用操作的值。
 
+如果问题中的值时复合的，意味着它是由单个值组成，就像数组中的情况一样。例如，函子在每个值上执行操作符函数。函子创建的值是有所有单独操作函数返回的结果。
 
-If the value in question is compound, meaning it's comprised of individual values -- as is the case with arrays, for example! -- a functor uses the operator function on each individual value. Moreover, the functor utility creates a new compound value holding the results of all the individual operator function calls.
+这就是用`map(..)`来描述我们所看到东西的一种奇特方式。`map(..)`函数采用关联值（数组）和映射函数（操作函数），并为数组中的每个元素单独地执行映射函数。最后，它返回包含所有新映射值的新数组
 
-This is all a fancy way of describing what we just looked at with `map(..)`. The `map(..)` function takes its associated value (an array) and a mapping function (the operator function), and executes the mapping function for each individual value in the array. Finally, it returns a new array with all the newly mapped values in it.
-
-Another example: a string functor would be a string plus a utility that executes some operator function across all the characters in the string, returning a new string with the processed letters. Consider this highly-contrived example:
+另一个例子：字符串函子是一个字符串加上一个功能函数，这个功能函数在字符串的所有字符上执行某些函数操作，返回包含处理过的字符的字符串。参考如下特意写的例子：
 
 ```js
 function uppercaseLetter(c) {
@@ -199,18 +198,19 @@ stringMap( uppercaseLetter, "Hello World!" );
 // HELLO WORLD!
 ```
 
-`stringMap(..)` allows a string to be a functor. You can define a mapping function for any data structure; as long as the utility follows these rules, the data structure is a functor.
+`stringMap(..)`允许字符串作为它的函子。 你可以定义为任何数据结构定义一个映射函数。只要功能函数满足这些规则，这个数据结构就是一个函子。
 
-## Filter
+## 过滤器
 
-Imagine I bring an empty basket with me to the grocery store to visit the fruit section; there's a big display of fruit (apples, oranges, and bananas). I'm really hungry so I want to get as much fruit as they have available, but I really only prefer the round fruits (apples and oranges). So I sift through each fruit one-by-one, and I walk away with a basket full of just the apples and oranges.
+想象一下，我带着空篮子去逛食品杂货店的水果区。这里有很多水果（苹果，橙子和香蕉）。我真的很饿，因此我想要尽可能多的水果, 但是我真的更喜欢圆形的水果（苹果和香蕉）. 因此我逐一筛选每一个水果，然后带着装满苹果和橙子的篮子离开.
 
-Let's say we call this process *filtering*. Would you more naturally describe my shopping as starting with an empty basket and **filtering in** (selecting, including) only the apples and oranges, or starting with the full display of fruits and **filtering out** (skipping, excluding) the bananas as my basket is filled with fruit?
+我们将这个筛选的过程称为“过滤”。将这次购物描述为从空篮子开始，然后只过滤（挑选，包含）出苹果和橙子，或者从所有的水果中过滤掉（跳过，不包括）香蕉。这种描述不是更自然吗？
 
-If you cook spaghetti in a pot of water, and then pour it into a strainer (aka filter) over the sink, are you filtering in the spaghetti or filtering out the water? If you put coffee grounds into a filter and make a cup of coffee, did you filter in the coffee into your cup, or filter out the coffee grounds?
+如果你在一锅水里面做意大利面条，然后将这锅面条倒入滤网（过滤）中，你是不死过滤了意大利面条，或者过滤掉了水？ 如果你将咖啡渣放入过滤取中，然后泡一杯咖啡，你是不是将咖啡过滤到了杯子里，或将咖啡渣过滤掉？
 
-Does your view of filtering depend on whether the stuff you want is "kept" in the filter or passes through the filter?
+你有没有发现过滤的结果取决于你想要把什么保留在过滤器中，还是将其通过过滤器？
 
+那么在航空／酒店网站上如何指定过滤选项呢？
 What about on airline / hotel websites, when you specify options to "filter your results"? Are you filtering in the results that match your criteria, or are you filtering out everything that doesn't match? Think carefully: this example might have a different semantic than the previous ones.
 
 Depending on your perspective, filter is either exclusionary or inclusionary. This conceptual conflation is unfortunate.
