@@ -65,27 +65,27 @@ FP的构思是很奇特的，代码应该如何基于它进行构造，使得数
 
 我也会经常对写过的代码进行再读。就是说，写完一段代码，过几个小时或一天再看就会有不一样的感觉。通常，重写的代码是比较混乱不堪，所以需要反复调整。
 
-函数式编程并没有让我在艺术家的画布上实现一个优雅的笔触，让观众敬畏。相反，它是一个艰苦的，详细的，有时是阴险的通过一个被忽视的领域杂草的破解。 函数式编程的过程并没有让我在艺术的画布上笔下生辉，让观众拍岸叫好。相反，编程的过程很艰辛，且历历在目，感觉像坐在一辆不知去向的马车穿过一片荒芜的灌木丛林。
+函数式编程并没有让我在艺术家的画布上实现一个优雅的笔触，让观众敬畏。相反，它是一个艰苦的，详细的，有时是阴险的通过一个被忽视的领域杂草的破解。 函数式编程的过程并没有让我在艺术的画布上笔下生辉，让观众拍岸叫好。相反，编程的过程很艰辛且历历在目，感觉像坐在一辆不知去向的马车穿过一片荒芜的灌木丛林。
 
-我不是试图打压你的激情，我真的希望你也可以在这个道路上披荆斩棘。过后我终于看到可读性曲线向上延伸，所有付出都是值得的，我相信你也将会有这样的感受。
+我不是试图打压你的激情，真切希望你也能够一路披荆斩棘。过后我终于看到可读性曲线向上延伸，所有付出都是值得的，我相信你也将会有这样的感受。
 
 ## Take
 
-We're going to approach FP from the ground up, and uncover the basic foundational principles that I believe formal FPers would admit are the scaffolding for everything they do. But for the most part we'll stay arms length away from most of the intimidating terminology or mathematical notation that can so easily frustrate learners.
+我们要系统的学习FP，探索发现最基本的原则，我相信正规的FP用户会遵循这些原则并把它们作为开发的框架。但在大多数情况下，我们大都选择避开晦涩的术语或数学符号，否则很容易使学习者受挫。
 
-I believe it's less important what you call something and more important that you understand what it is and how it works. That's not to say there's no importance to shared terminology -- it undoubtedly eases communication among seasoned professionals. But for the learner, I've found it can be somewhat distracting.
+我觉得一项技术你怎么称呼它不重要，重要的是理解它是什么并且它是怎么工作的。这并不是说共享术语不重要，它无疑可以简化经验丰富的专业人士之间的交流。但对学习者来说，它有点分散人的注意力。
 
-So I hope this book can focus more on the base concepts and less on the fancy terminology. That's not to say there won't be terminology; there definitely will be. But don't get too wrapped up in the fancier words. Look beyond them to the ideas. That's what this book is trying to be about.
+所以我希望这本书能更多地关注基本概念而不是花哨的术语。这并不是说没有术语，肯定会有。但不要太沉迷于华丽的词藻，追寻其背后的含义，这正是本书的目的。
 
-I call the less formal practice herein "Functional-Light Programming" because I think where the formalism of true FP suffers is that it can be quite overwhelming if you're not already accustomed to formal thought. I'm not just guessing; this is my own personal story. Even after teaching FP and writing this book, I can still say that the formalism of terms and notation in FP is very, very diffcult for me to process. I've tried, and tried, and I can't seem to get through much of it.
+我把这种欠缺正轨实践的编程思想称为“轻量级函数编程”，因为我认为真正的FP的形式主义在于， 如果你还不习惯它主张的思想，你可能很难用它。这不仅仅只是猜测，而是我的亲身经历。即使在传教FP过程和完成这本书之后，我仍然可以说，FP中术语和符号的形式化对于我来说是非常非常困难的。我已经再三尝试，发现大部分都是很掌握的。
 
-I know many FPers who believe that the formalism itself helps learning. But I think there's clearly a cliff where that only becomes true once you reach a certain comfort with the formalism. If you happen to already have a math background or even some flavors of CS experience, this may come more naturally to you. But some of us don't, and no matter how hard we try, the formalism keeps getting in the way.
+我知道很多FP用户会认为形式主义本身有助于学习。但我认为这是一个坑，只有当你用形式主义获得某种安慰时，你就会踩坑。如果你碰巧已经有了数学背景，甚至有一些 CS 经验，这对你来说可能驾轻就熟。但是我们中的一些人不具备这些条件，不管我们怎么努力，形式主义总是阻碍我们前进。
 
-So this book introduces the concepts that I believe FP is built on, but comes at it by giving you a boost to climb up the cliff wall rather than throwing you straight at it to figure out how to climb as you go.
+因此，这本书介绍了一些我认为FP会涉及到的概念，虽然不能直接让你受益但可以帮你逐步理解FP整个过程。 
 
-## YAGNI
+## 你不需要它
 
-If you've been around programming for very long, chances are you've heard the phrase "YAGNI" before: "You Ain't Gonna Need It". This principle primarily comes from extreme programming, and stresses the high risk and cost of building a feature before it's needed.
+如果你规划一个项目花了很长时间，那么别人一定会告诉你“YAGNI”：“你不需要它”。这个原则主要来自极限编程，强调构建特性的高风险和成本，这个风险和成本源自于项目本身是否需要。
 
 Sometimes we guess we'll need a feature in the future, build it now believing it'll be easier to do as we build other stuff, then realize we guessed wrong and the feature wasn't needed, or needed to be quite different. Other times we guess right, but build a feature too early, and suck up time from the features that are genuinely needed now; we incur an opportunity cost in diluting our energy.
 
@@ -148,6 +148,6 @@ Here are a few popular FP libraries for JavaScript that are a great place to sta
 
 Appendix C illustrates some of these libraries using various examples from the text.
 
-## Summary
+## 总结
 
-This is Functional-Light JavaScript. The goal is to learn to communicate with our code but not suffocate under mountains of notation or terminology to get there. I hope this book jumpstarts your journey!
+这就是轻量式的 JavaScript。我们的目标是学会与代码交流，而不是在符号或术语的大山下被压的喘不过气。希望这本书能开启你的旅程！
