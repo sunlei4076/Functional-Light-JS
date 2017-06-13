@@ -210,12 +210,11 @@ stringMap( uppercaseLetter, "Hello World!" );
 
 你有没有发现过滤的结果取决于你想要把什么保留在过滤器中，还是将其通过过滤器？
 
-那么在航空／酒店网站上如何指定过滤选项呢？
-What about on airline / hotel websites, when you specify options to "filter your results"? Are you filtering in the results that match your criteria, or are you filtering out everything that doesn't match? Think carefully: this example might have a different semantic than the previous ones.
+那么在航空／酒店网站上如何指定过滤选项呢？你是按照你的标准过滤结果，还是将不符合标准的过滤掉？ 仔细想想，这个例子也许和前面有不相同的语意。
 
-Depending on your perspective, filter is either exclusionary or inclusionary. This conceptual conflation is unfortunate.
+取决于你的想法，过滤是排除的或者包含的，这种概念上的融合，使其难以理解。
 
-I think the most common interpretation of filtering -- outside of programming, anyway -- is that you filter out unwanted stuff. Unfortunately, in programming, we have essentially flipped this semantic to be more like filtering in wanted stuff.
+我认为最通常的理解过滤（在编程之外）过滤是剔除掉不需要的成员。不幸的是，在程序中我们基本上将这个语意转变为更像是过滤需要的成员。
 
 The `filter(..)` list operation takes a function to decide if each value in the original array should be in the new array or not. This function needs to return `true` if a value should make it, and `false` if it should be skipped. A function that returns `true` / `false` for this kind of decision making goes by the special name: predicate function.
 
