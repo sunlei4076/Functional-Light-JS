@@ -161,6 +161,7 @@ So the factory engineers contact an industrial machine vendor for help. They're 
 </p>
 
 Back to code land, let's consider a utility called `compose2(..)` that creates a composition of two functions automatically, exactly the same way we did manually:
+回到代码上，让我们定义一个工具函数叫做 `compose2(..)`，它能够自动创建两个函数的组合，和我们手动做的是一模一样。
 
 ```js
 function compose2(fn2,fn1) {
@@ -170,6 +171,7 @@ function compose2(fn2,fn1) {
 }
 
 // or the ES6 => form
+// ES6箭头函数形式写法
 var compose2 =
 	(fn2,fn1) =>
 		origValue =>
@@ -177,20 +179,26 @@ var compose2 =
 ```
 
 Did you notice that we defined the parameter order as `fn2,fn1`, and furthermore that it's the second function listed (aka `fn1` parameter name) that runs first, then the first function listed (`fn2`)? In other words, the functions compose from right-to-left.
+你是否注意到我们定义参数的顺序是 `fn2,fn1`，不仅如此，参数中列出的第二个函数（也被称作 `fn1`）会首先运行，然后参数中的第一个函数（`fn2`）？换句话说，这些函数是以从右往左的顺序组合的。
 
 That may seem like a strange choice, but there are some reasons for it. Most typical FP libraries define their `compose(..)` to work right-to-left in terms of ordering, so we're sticking with that convention.
+这看起来是种奇怪的实现，但这是有原因的。大部分传统的 FP 库为了顺序而将它们的 `compose(..)` 定义为从右往左的工作，所以我们沿袭了这种惯例。
 
 But why? I think the easiest explanation (but perhaps not the most historically accurate) is that we're listing them to match the order they are written if done manually, or rather the order we encounter them when reading from left-to-right.
+但是为什么这么做？我认为最简单的解释（但不一定符合真实的历史）就是我们在以手动执行的书写顺序来列出它们，或是与我们从左往右阅读这个列表时看到它们的顺序相符合。
 
 `unique(words(str))` lists the functions in the left-to-right order `unique, words`, so we make our `compose2(..)` utility accept them in that order, too. Now, the more efficient definition of the candy making machine is:
+`unique(words(str))` 以从左往右的顺序列出了 `unique, words` 函数，所以我们让 `compose2(..)` 工具也以这种顺序接收它们。现在，更高效的糖果制造机定义如下：
 
 ```js
 var uniqueWords = compose2( unique, words );
 ```
 
 ### Composition Variation
+### 组合的变体
 
 It may seem like the `<-- unique <-- words` combination is the only order these two functions can be composed. But we could actually compose them in the opposite order to create a utility with a bit of a different purpose:
+看起来貌似 `<-- unique <-- words` 的组合方式是这两种函数能够被组合起来的唯一顺序。但我们实际上能够以另外的目的创建一个工具，将它们以相反的顺序组合起来。
 
 ```js
 var letters = compose2( words, unique );
@@ -201,14 +209,19 @@ chars;
 ```
 
 This works because the `words(..)` utility, for value-type safety sake, first coerces its input to a string using `String(..)`. So the array that `unique(..)` returns -- now the input to `words(..)` -- becomes the string `"H,o,w, ,a,r,e,y,u,n,?"`, and then the rest of the behavior in `words(..)` processes that string into the `chars` array.
+因为 `words(..)` 工具函数，上面的码才能正常工作。为了值类型的安全，第一步使用 `String(..)`将它的输入强转为一个字符串。所以 `unique(..)` 返回的数组 -- 现在是 `words(..)` 的输入 -- 成为了 `"H,o,w, ,a,r,e,y,u,n,?"` 这样的字符串。然后 `words(..)` 中的行为将字符串处理成为 `chars` 数组。
 
 Admittedly, this is a contrived example. But the point is that function compositions are not always unidirectional. Sometimes we put the gray brick on top of the blue brick, and sometimes we put the blue brick on top.
+不得不承认，这是个刻意的例子。但重点是，函数的组合不总是无方向的。有时候我们将灰方块放到蓝方块上，有时我们又会将蓝方块放到最上面。
 
 The candy factory better be careful if they try to feed the wrapped candies into the machine that mixes and cools the chocolate!
+糖果工厂最好要小心点了，如果他们尝试将包装好的糖果放入搅拌和冷却巧克力的机器。
 
 ### General Composition
+### 通用组合
 
 If we can define the composition of two functions, we can just keep going to support composing any number of functions. The general data visualization flow for any number of functions being composed looks like this:
+如果我们能够定义两个函数的组合，我们也同样能够支持组合任意数量的函数。任意数目函数的组合的通用可视化数据流如下：
 
 ```
 finalValue <-- func1 <-- func2 <-- ... <-- funcN <-- origValue
@@ -219,18 +232,23 @@ finalValue <-- func1 <-- func2 <-- ... <-- funcN <-- origValue
 </p>
 
 Now the candy factory owns the best machine of all: a machine that can take any number of separate smaller machines and spit out a big fancy machine that does every step in order. That's one heck of a candy operation! It's Willy Wonka's dream!
+现在糖果工厂拥有了最好的制造机：它能够接收任意数量独立的小机器，并吐出一个大只的、超赞的机器，能把每一步都按照顺序做好。这个糖果制作流程简直棒呆了！简直是威利·旺卡（译者注：《查理和巧克力工厂》中的人物，他拥有一座巧克力工厂）的梦想！
 
 We can implement a general `compose(..)` utility like this:
+我们能够像这样实现一个通用 `compose(..)` 工具函数：
 
 ```js
 function compose(...fns) {
 	return function composed(result){
 		// copy the array of functions
+		// 拷贝一份保存函数的数组
 		var list = fns.slice();
 
 		while (list.length > 0) {
 			// take the last function off the end of the list
 			// and execute it
+			// 将最后一个函数从列表尾部拿出
+			// 并执行它
 			result = list.pop()( result );
 		}
 
@@ -239,6 +257,7 @@ function compose(...fns) {
 }
 
 // or the ES6 => form
+// ES6箭头函数形式写法
 var compose =
 	(...fns) =>
 		result => {
@@ -247,6 +266,8 @@ var compose =
 			while (list.length > 0) {
 				// take the last function off the end of the list
 				// and execute it
+				// 将最后一个函数从列表尾部拿出
+				// 并执行它
 				result = list.pop()( result );
 			}
 
@@ -255,6 +276,7 @@ var compose =
 ```
 
 Now let's look at an example of composing more than two functions. Recalling our `uniqueWords(..)` composition example, let's add a `skipShortWords(..)` to the mix:
+现在看一下组合超过两个函数的例子。回想下我们的 `uniqueWords(..)` 组合例子，让我们增加一个 `skipShortWords(..)`。
 
 ```js
 function skipShortWords(list) {
@@ -271,6 +293,7 @@ function skipShortWords(list) {
 ```
 
 Let's define `biggerWords(..)` that includes `skipShortWords(..)`. The manual composition equivalent we're looking for is `skipShortWords(unique(words(text)))`, so let's do it with `compose(..)`:
+让我们再定义一个 `biggerWords(..)` 来包含 `skipShortWords(..)`。我们期望等价的手工组合方式是 `skipShortWords(unique(words(text)))`，所以让我们照此来做一个 `compose(..)`：
 
 ```js
 var text = "To compose two functions together, pass the \
@@ -287,12 +310,15 @@ wordsUsed;
 ```
 
 Now, let's recall `partialRight(..)` from Chapter 3 to do something more interesting with composition. We can build a right-partial application of `compose(..)` itself, pre-specifying the second and third arguments (`unique(..)` and `words(..)`, respectively); we'll call it `filterWords(..)` (see below).
+现在，让我们回忆一下第 3 章中出现的 `partialRight(..)` 来让组合变的更有趣。我们能够构造一个由 `compose(..)` 自身组成的右偏函数应用，通过提前定义好第二和第三参数（`unique(..)` 和 `words(..)`）；我们把它称作 `filterWords(..)` （如下）。
 
 Then, we can complete the composition multiple times by calling `filterWords(..)`, but with different first-arguments respectively:
+然后，我们能够通过多次调用 `filterWords(..)` 来完成组合，但是每次的第一参数却各不相同。
 
 ```js
 // Note: uses a `<= 4` check instead of the `> 4` check
 // that `skipShortWords(..)` uses
+// 注意： 使用 a `<= 4` 来检查，而不是 `skipShortWords(..)` 中用到的 `> 4`
 function skipLongWords(list) { /* .. */ }
 
 var filterWords = partialRight( compose, unique, words );
@@ -309,22 +335,31 @@ shorterWords( text );
 ```
 
 Take a moment to consider what the right-partial application on `compose(..)` gives us. It allows us to specify ahead of time the first step(s) of a composition, and then create specialized variations of that composition with different subsequent steps (`biggerWords(..)` and `shorterWords(..)`). This is one of the most powerful tricks of FP!
+花些时间考虑一下基于 `compose(..)` 的右偏函数应用给了我们什么。它允许我们在组合的第一步之前做指定，然后以不同后期步骤的组合来创建特定的变体。这是函数式编程中最强大的手段之一。
 
 You can also `curry(..)` a composition instead of partial application, though because of right-to-left ordering, you might more often want to `curry( reverseArgs(compose), ..)` rather than just `curry( compose, ..)` itself.
+你也能通过 `curry(..)` 作出的组合来替代偏函数应用，但因为从右往左的顺序，比起只使用 `curry( compose, ..)` 本身，你可能更想使用 `curry( reverseArgs(compose), ..)`。
 
 **Note:** Since `curry(..)` (at least the way we implemented it in Chapter 3) relies on either detecting the arity (`length`) or having it manually specified, and `compose(..)` is a variadic function, you'll need to manually specify the intended arity like `curry(.. , 3)`.
+**注意：** 因为 `curry(..)` 依赖于探测数目（`length`）或手动指定数目，而 `compose(..)` 是一个可变的函数，你需要手动指定数目，就像这样 `curry(.. , 3)`。
 
 ### Alternate Implementations
+### 不同的实现
 
 While you may very well never implement your own `compose(..)` to use in production, and rather just use a library's implementation as provided, I've found that understanding how it works under the covers actually helps solidify general FP concepts very well.
+当然，你可能永远不会在生产中使用自己写的 `compose(..)`，而更倾向于使用某个库所提供的方案。但我发现了解底层工作的原理实际上对强化我们的函数式编程中通用概念非常有用。
 
 So let's examine some different implementation options for `compose(..)`. We'll also see there are some pros/cons to each implementation, especially performance.
+所以让我们看看对于 `compose(..)` 的不同实现方案。我们能看到每一种实现中有一些 pros/cons，特别是性能。
 
 We'll be looking at the `reduce(..)` utility in detail later in the text, but for now, just know that it reduces a list (array) to a single finite value. It's like a fancy loop.
+我们讲在文中稍后查看 `reduce(..)` 工具的细节，但现在，只需了解它将一个列表（数组）简化为一个单一的有限值。看起来像是一个很棒的循环体。
 
 For example, if you did an addition-reduction across the list of numbers `[1,2,3,4,5,6]`, you'd be looping over them adding them together as you go. The reduction would add `1` to `2`, and add that result to `3`, and then add that result to `4`, and so on, resulting in the final summation: `21`.
+举个栗子，如果在数字列表 `[1,2,3,4,5,6]` 上做加法约减，你将要循环它们，并且随着循环将它们加在一起。这一过程将首先将 `1` 加 `2`，然后将结果加 `3`，然后加 `4`，等等。最后得到总和：`21`。
 
 The original version of `compose(..)` uses a loop and eagerly (aka, immediately) calculates the result of one call to pass into the next call. We can do that same thing with `reduce(..)`:
+原始版本的 `compose(..)` 使用一个循环并且饥渴的（也就是，立刻）执行计算，从一个调用的结果传递到下一个调用。我们可以通过 `reduce(..)` （代替循环）做到同样的事。
 
 ```js
 function compose(...fns) {
@@ -336,6 +371,7 @@ function compose(...fns) {
 }
 
 // or the ES6 => form
+// ES6箭头函数形式写法
 var compose = (...fns) =>
 	result =>
 		fns.reverse().reduce(
@@ -346,12 +382,16 @@ var compose = (...fns) =>
 ```
 
 Notice that the `reduce(..)` looping happens each time the final `composed(..)` function is run, and that each intermediate `result(..)` is passed along to the next iteration as the input to the next call.
+注意到 `reduce(..)` 循环发生在最后的 `composed(..)` 运行时，并且每一个中间的 `result(..)` 将会在下一次调用时作为输入值传递给下一个迭代。
 
 The advantage of this implementation is that the code is more concise and also that it uses a well-known FP construct: `reduce(..)`. And the performance of this implementation is also similar to the original `for`-loop version.
+这种实现的优点就是代码更简练，并且使用了常见的函数式编程结构：`reduce(..)`。这种实现方式的性能和原始的 `for`-循环版本很相近。 
 
 However, this implementation is limited in that the outer composed function (aka, the first function in the composition) can only receive a single argument. Most other implementations pass along all arguments to that first call. If every function in the composition is unary, this is no big deal. But if you need to pass multiple arguments to that first call, you'd want a different implementation.
+但是，这种实现局限处在于外层的组合函数（也就是，组合中的第一个函数）只能接收一个参数。其他大多数实现在首次调用的时候就把所有参数传进去了。如果组合中的每一个函数都是一元的，这个方案没啥大问题。但如果你需要给第一个调用传递多参数，那么你可能需要不同的实现方案。
 
 To fix that first call single-argument limitation, we can still use `reduce(..)` but produce a lazy-evaluation function wrapping:
+为了修正第一次调用的单参数限制，我们可以仍使用 `reduce(..)` 但加一个懒执行函数包裹器：
 
 ```js
 function compose(...fns) {
