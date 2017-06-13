@@ -298,7 +298,7 @@ function isEven(v) {
 isOdd( 33333 );			// RangeError: Maximum call stack size exceeded
 ```
 
-What's going on with this error? The engine throws this error because it's trying to protect your program from running the system out of memory. To explain that, we need to peek a little below the hood at what's going on in the JS engine when function calls happen.
+这个错误是神马情况？引擎抛出这个错误，是因为它试图保护系统内存不会被你的程序吃掉。为了解释这个问题，我们需要先看看当函数调用时JS引擎中发生了什么。
 
 Each function call sets aside a small chunk of memory called a stack frame. The stack frame holds certain important information about the current state of processing statements in a function, including the values in any variables. The reason this information needs to be stored in memory (in a stack frame) is because the function may call out to another function, which pauses the current function. When the other function finishes, the engine needs to resume the exact state from when it was paused.
 
