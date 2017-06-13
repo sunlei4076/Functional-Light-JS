@@ -173,9 +173,10 @@ function sum(num1,...nums) {
 
 ## 声明式递归
 
-Mathematicians use the **Σ** symbol as a placeholder to represent the summation of a list of numbers. The primary reason they do that is because it's more cumbersome (and less readable!) if they're working with more complex formulas and they have to write out the summation manually, like `1 + 3 + 5 + 7 + 9 + ..`. Using the notation is declarative math!
+数学家使用 **Σ** 符号来表示一列数字的总和。他们这么做的主要原因是，如果他们正在使用更复杂的公式且必须要手动写出求和的话，这是非常麻烦（且阅读性非常差！），比如 
+ `1 + 3 + 5 + 7 + 9 + ..`。符号是数学的声明式语言！
 
-Recursion is declarative for algorithms in the same sense that **Σ** is declarative for mathematics. Recursion expresses that a problem solution exists, but doesn't necessarily require the reader of the code to understand how that solution works. Let's consider two approaches to finding the highest even number passed as an argument:
+递归是声明式的算法，就好比 **Σ** 是数学的声明一样。递归说明：一个问题存在解决方案，但并不一定要求阅读代码的人了解该解决方案的工作原理。我们来思考下，找出入参最大偶数值的两种方法：
 
 ```js
 function maxEven(...nums) {
@@ -193,23 +194,23 @@ function maxEven(...nums) {
 }
 ```
 
-This implementation is not particulary intractable, but it's also not readily apparent what its nuances are. How obvious is it that `maxEven()`, `maxEven(1)`, and `maxEven(1,13)` all return `undefined`? Is it quickly clear why the final `if` statement is necessary?
+这种实现方式并不是特别难处理，但它的一些细微的问题也不容忽视。很明显，运行 `maxEven()`，`maxEven(1)` 和 `maxEven(1,13)` 都将会返回 `undefined`？最终的 `if` 表达式是必需的吗？
 
-Let's instead consider a recursive approach, to compare. We could notate the recursion this way:
+我们试着换一个递归的方法来对比下。我们可以通过这种方式来表示递归：
 
 ```
 maxEven( nums ):
 	maxEven( nums.0, maxEven( ...nums.1 ) )
 ```
 
-In other words, we can define the max-even of a list of numbers as the max-even of the first number compared to the max-even of the rest of the numbers. For example:
+换句话说，我们可以将数表的 max-even 定义为其余数字的 max-even 与第一个数字的 max-even 的结果。例如：
 
 ```
 maxEven( 1, 10, 3, 2 ):
 	maxEven( 1, maxEven( 10, maxEven( 3, maxEven( 2 ) ) )
 ```
 
-To implement this recursive definition in JS, one approach is:
+在JS中实现这个递归定义的方法之一是：
 
 ```js
 function maxEven(num1,...restNums) {
@@ -223,18 +224,18 @@ function maxEven(num1,...restNums) {
 }
 ```
 
-So what advantages does this approach have?
+那么这个方法有什么优点吗？
 
-First, the signature is a little different than before. I intentionally called out `num1` as the first argument name, collecting the rest of the arguments into `restNums`. But why? We could just have collected them all into a single `nums` array and then referred to `nums[0]`.
+首先，参数与之前不一样了。我专门把第一个参数叫作 `num1`，剩余的其它参数放在一起叫作 `restNums`。我们本可以把所有参数都放在 `nums` 数组中，并从 `nums[0]` 获取第一个参数。为什么呢？
 
-This function signature is an intentional hint at the recursive definition. It reads like this:
+函数的参数是专门为递归定义的。 它看起来像这样：
 
 ```
 maxEven( num1, ...restNums ):
 	maxEven( num1, maxEven( ...restNums ) )
 ```
 
-Do you see the symmetry between the signature and the recursive definition?
+你有发现参数和递归之间的对称性吗？
 
 When we can make the recursive definition more apparent even in the function signature, we improve the declarativeness of the function. And if we can then mirror the recursive definition from the signature to the function body, it gets even better.
 
