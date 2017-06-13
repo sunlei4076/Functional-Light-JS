@@ -247,18 +247,18 @@ maxEven( num1, ...restNums ):
 
 接下来，我们把精力放在对比 `num1` 和 `maxRest` 上 -- 算法的主要逻辑是如何确定两个数字中的哪一个（如果有的话）是最大偶数。如果 `num1` 不是偶数（`num1 % 2 != 0`），或着它小于 `maxRest`，那么 `maxRest` 会 `return` 掉，即使 `maxRest` 的值是 `undefined`。否则，返回结果会是 `num1`。
 
-The case I'm making is that this reasoning while reading an implementation is more straightforward, with fewer nuances or noise to distract us, than the imperative approach; it's **more declarative** than the `for`-loop with `-Infinity` approach.
+在阅读整个实现过程中，与命令式的方法相比，我所做这个例子的推理过程更加直接，核心点更加突出，少做无用功；比 `for`-循环中引用 `无穷数值` 这一方法 **更具有声明性**。 
 
-**Tip:** We should point out that another (likely better!) way to model this besides manual iteration or recursion would be with list operations like we discussed in Chapter 7. The list of numbers could first be `filter(..)`ed to include only evens, and then finding the max is a `reduce(..)` that simply compares two numbers and returns the bigger of the two. We only used this example to illustrate the more declarative nature of recursion over manual iteration.
+**小贴士：** 我们应该指出，除了手动迭代或递归之外，另一种（可能更好的）建模的方法是我们在在第7章中讨论的列表操作。我们先把数列中的偶数用 `filter(..)` 过滤出来，然后通过递归 `reduce(..)` 函数（对比两个数值并返回其中较大的数值）来找到最大值。在这里，我们只是使用这个例子来说明在手动迭代中递归的声明性更强。
 
-Here's another recursion example: calculating the depth of a binary tree. The depth of a binary tree is the longest path down (either left or right) through the nodes of the tree. Another way to define that is recursively: the depth of a tree at any node is 1 (the current node) plus the greater of depths from either its left or right child trees:
+还有一个递归的例子：计算二叉树的深度。二叉树的深度是指通过树的节点向下（左或右）的最长路径。二叉树深度的另外一种定义是递归：任何树节点的深度为1（当前节点）加上来自其左侧或右侧子树的深度的最大值：
 
 ```
 depth( node ):
 	1 + max( depth( node.left ), depth( node.right ) )
 ```
 
-Translating that straightforwardly to a binary recursive function:
+直接转换为二分法递归函数：
 
 ```js
 function depth(node) {
@@ -272,13 +272,13 @@ function depth(node) {
 }
 ```
 
-I'm not going to list out the imperative form of this algorithm, but trust me, it's a lot messier and more imperative. This recursive approach is nicely and gracefully declarative. It follows the recursive definition of the algorithm very closely with very little distraction.
+我不打算列出这个算法的命令式形式，但请相信我，它太麻烦、过于命令式了。这种递归方法很不错，声明也很优雅。它遵循递归的定义，与递归定义的算法非常接近，省心。
 
-Not all problems are cleanly recursive. This is not some silver bullet that you should try to apply broadly. But recursion can be very effective at evolving the expression of a problem from more imperative to more declarative.
+并不是所有的问题都是完全可递归的。这不是你应该尝试广泛应用的一些新技术。但是递归可以非常有效地将问题的表达，从更具必要性转变为更有声明性。
 
-## Stack
+## 栈、堆
 
-Let's revisit the `isOdd(..)` / `isEven(..)` recursion from earlier:
+一起看下之前的两个递归函数 `isOdd(..)` 和 `isEven(..)`：
 
 ```js
 function isOdd(v) {
