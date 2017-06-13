@@ -241,11 +241,11 @@ maxEven( num1, ...restNums ):
 
 但我想说最明显的改进是，`for` 循环造成的错乱感没有了。所有循环逻辑都被抽象为递归回调栈，所以这些东西不会造成代码混乱。我们可以轻松的把精力集中在一次比较两个数字来找到最大偶数值的逻辑中 -- 不管怎么说，这都是很重要的部分！
 
-Mentally, what's happening is similar to when a mathematician uses a **Σ** summation in a larger equation. We're saying, "the max-even of the rest of the list is calculated by `maxEven(...restNums)`, so we'll just assume that part and move on."
+从心理上来讲，这如同一位数学家在更庞大的方程中使用 **Σ** 求和一样。我们说，“数列中剩余值的最大偶数是通过 `maxEven(...restNums)` 计算出来的，所以我们只需要继续推断这一部分。”
 
-Additionally, we reinforce that notion with the `restNums.length > 0` guard, because if there are no more numbers to consider, the natural result is that `maxRest` would have to be `undefined`. We don't need to devote any extra mental attention to that part of the reasoning. This base condition (no more numbers to consider) is clearly evident.
+另外，我们用 `restNums.length > 0` 保证推断更加合理，因为当没有参数的情况下，返回的 `maxRest` 结果肯定是 `undefined`。我们不需要对这部分的推理投入额外的精力。这个基本条件（没有参数情况下）显而易见。
 
-Next, we turn our attention to checking `num1` against `maxRest` -- the main logic of the algorithm is how to determine which of two numbers, if any, is a max-even. If `num1` is not even (`num1 % 2 != 0`), or it's less than `maxRest`, then `maxRest` *has* to be `return`ed, even if it's `undefined`. Otherwise, `num1` is the answer.
+接下来，我们把精力放在对比 `num1` 和 `maxRest` 上 -- 算法的主要逻辑是如何确定两个数字中的哪一个（如果有的话）是最大偶数。如果 `num1` 不是偶数（`num1 % 2 != 0`），或着它小于 `maxRest`，那么 `maxRest` 会 `return` 掉，即使 `maxRest` 的值是 `undefined`。否则，返回结果会是 `num1`。
 
 The case I'm making is that this reasoning while reading an implementation is more straightforward, with fewer nuances or noise to distract us, than the imperative approach; it's **more declarative** than the `for`-loop with `-Infinity` approach.
 
@@ -292,7 +292,7 @@ function isEven(v) {
 }
 ```
 
-In most browsers, if you try this you'll get an error:
+如果你执行下面这行代码，在大多数浏览器里面都会报错：
 
 ```js
 isOdd( 33333 );			// RangeError: Maximum call stack size exceeded
