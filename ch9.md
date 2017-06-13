@@ -1,4 +1,4 @@
-# Functional-Light JavaScript
+# Javascript轻量级函数式编程
 # 第9章：递归
 
 下面，我们将进入到递归的论题。
