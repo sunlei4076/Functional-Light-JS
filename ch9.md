@@ -300,11 +300,11 @@ isOdd( 33333 );			// RangeError: Maximum call stack size exceeded
 
 这个错误是神马情况？引擎抛出这个错误，是因为它试图保护系统内存不会被你的程序吃掉。为了解释这个问题，我们需要先看看当函数调用时JS引擎中发生了什么。
 
-Each function call sets aside a small chunk of memory called a stack frame. The stack frame holds certain important information about the current state of processing statements in a function, including the values in any variables. The reason this information needs to be stored in memory (in a stack frame) is because the function may call out to another function, which pauses the current function. When the other function finishes, the engine needs to resume the exact state from when it was paused.
+每个函数调用都将开辟出一小块称为堆栈桢的内存。堆栈桢中包含了函数语句当前状态的某些重要信息，包括任意变量的值。之所以这样，是因为一个函数暂停去执行另外一个函数，而另外一个函数运行结束后，引擎需要返回到之前暂停时候的状态继续执行。
 
-When the second function call starts, it needs a stack frame as well, bringing the count to 2. If that function calls another, we need a third stack frame. And so on. The word "stack" speaks to the notion that each time a function is called from the previous one, the next frame is *stacked* on top. When a function call finishes, its frame is popped off the stack.
+当第二个函数开始执行，堆栈桢增加到 2 个。如果第二个函数又调用了另外一个函数，堆栈桢将增加到 3 个，以此类推。“堆、栈”的意思是，函数被它前一个函数调用时，这个函数桢会被“推”到最顶部。当这个函数调用结束后，它的桢会从堆栈中退出。
 
-Consider this program:
+看下这段程序：
 
 ```js
 function foo() {
@@ -324,13 +324,13 @@ function baz() {
 baz();
 ```
 
-Visualizing this program's stack frame step by step:
+来一步步想象下这个程序的堆栈桢：
 
 <p align="center">
 	<img src="fig15.png" width="600">
 </p>
 
-**Note:** If these functions didn't call each other, but were just called sequentially -- like `baz(); bar(); foo();`, where each one finishes before the next one starts -- the  frames won't stack up; each function call finishes and removes its frame from the stack before the next one is added.
+**注意：** 如果这些函数间没有相互调用，而只是依次执行 -- 比如前一个函数运行结束后才开始调用下一个函数 `baz(); bar(); foo();` -- 则堆栈桢并没有产生；因为在下一个函数开始之前，上一个函数运行结束并把它的桢从堆栈里面移除了。
 
 OK, so a little bit of memory is needed for each function call. No big deal under most normal program conditions, right? But it quickly becomes a big deal once you introduce recursion. While you'd almost certainly never manually stack thousands (or even hundreds!) of calls of different functions together in one call stack, you'll easily see tens of thousands or more recursive calls stack up.
 
