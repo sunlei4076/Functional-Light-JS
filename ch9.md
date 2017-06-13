@@ -337,11 +337,12 @@ baz();
 
 当引擎认为回调堆栈增加的太多并且应该停止增加时候，它会以任意的限制来阻止当前步骤，所以 `isOdd(..)` 或 `isEven(..)` 函数抛出了 `RangeError` 未知错误。这不太可能是内存接近零时候产生的限制，而是引擎的预测，因为如果这种程序持续运行下去，内存会爆掉的。由于引擎无法判断一个程序最终是否会停止，所以它必须做出确定的猜测。
 
-This limit is implementation dependent. The specification doesn't say anything about it at all, so it's not *required*. But practically all JS engines do have a limit, because having no limit would create an unstable device that's susceptible to poorly written or malicious code. Each engine in each different device environment is going to enforce its own limits, so there's no way to predict or guarantee how far we can run up the function call stack.
+引擎的限制因情况而定。规范里面并没有任何说明，因此，它也不是 *必需的*。但如果没有限制的话，设备很容易遭到破坏或恶意代码攻击，故而几乎所有的JS引擎都有一个限制。不同的设备环境、不同的引擎，会有不同的限制，也就无法预测或保证函数回调堆栈能调用多少次。
 
-What this limit means to us as developers is that there's a practical limitation on the usefulness of recursion in solving problems on non-trivially sized data sets. In fact, I think this kind of limitation might be single biggest reason that recursion is a second-class citizen in the developer's toolbox. Regrettably, recursion is an after thought rather than a primary technique.
+在处理大数据量时候，这个限制对于开发人员来说，会对递归的性能有一定的要求。我认为，这种限制也可能是造成开发人员不喜欢使用递归编程的最大原因。
+遗憾的是，递归编程是一种编程思想而不是主流的编程技术。
 
-### Tail Calls
+### 尾调用
 
 Recursion far predates JS, and so do these memory limitations. Back in the 1960s, developers were wanting to use recursion and running up against hard limits of device memory of their powerful computers that were far lower than we have on our watches today.
 
