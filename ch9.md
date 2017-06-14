@@ -362,46 +362,45 @@ baz();
 
 ### 正确的尾调用 (PTC)
 
-在 ES6 出来之前，JavaScript 从没要求（也没有禁用）尾调用。
-JavaScript has never required (nor forbidden) tail calls, until ES6. ES6 mandates recognition of tail calls, of a specific form referred to as Proper Tail Calls (PTC), and the guarantee that code in PTC form will run without unbounded stack memory growth. Practically speaking, this means we should not get `RangeError`s thrown if we adhere to PTC.
+在 ES6 出来之前，JavaScript 对尾调用一直没明确规定（也没有禁用）。ES6 明确规定了 PTC 的特定形式，在 ES6 中，只要使用尾调用，就不会发生栈溢出。实际上这也就意谓着，只要正确的使用 PTC，就不会抛出 `RangeError` 这样的异常错误。
 
-First, PTC in JavaScript requires strict mode. You should already be using strict mode, but if you aren't, this is yet another reason you should already be using strict mode. Did I mention, yet, you should already be using strict mode!?
+首先，在 JavaScript 中应用 PTC，必须以严格模式书写代码。如果你以前没有用过严格模式，你得试着用用了。那么，您，应该已经在使用严格模式了吧！？
 
-Second, a *proper* tail call is exactly like this:
+其次，*正确* 的尾调用就像这个样子：
 
 ```js
 return foo( .. );
 ```
 
-In other words, the function call is the last thing to execute in the function, and whatever value it returns is explicitly `return`ed. In this way, JS can be absolutely guaranteed that the current stack frame won't be needed anymore.
+换句话说，函数调用应该放在最后一步去执行，并且不管返回什么东东，都得有返回（ `return` ）。这样的话，JS 就不再需要当前的堆栈桢了。
 
-These *are not* PTC:
+下面这些 *不能* 称之为 PTC：
 
 ```js
 foo();
 return;
 
-// or
+// 或
 
 var x = foo( .. );
 return x;
 
-// or
+// 或
 
 return 1 + foo( .. );
 ```
 
-**Note:** A JS engine *could* do some code reorganization to realize that `var x = foo(); return x;` is effectively the same as `return foo();`, which would then make it eligible as PTC. But that is not be required by the specification.
+**注意：** 一些 JS 引擎 *能够* 把 `var x = foo(); return x;` 自动识别为 `return foo();`，这样也可以达到 PTC 的效果。但这毕竟不符合规范。
 
-The `1 +` part is definitely processed *after* `foo(..)` finishes, so the stack frame has to be kept around.
+`foo(..)` 运行结束之后 `1+` 这部分才开始执行，所以此时的堆栈桢依然存在。
 
-However, this *is* PTC:
+不过，下面这个 *是* PTC：
 
 ```js
 return x ? foo( .. ) : bar( .. );
 ```
 
-After the `x` condition is computed, either `foo(..)` or `bar(..)` will run, and in either case, the return value will be always be `return`ed back. That's PTC form.
+`x`进行条件判断之后，或执行 `foo(..)`，或执行 `bar(..)`，不论执行哪个，返回结果都会被 `return` 返回掉。这个例子符合 PTC 规范。
 
 Binary recursion -- two (or more!) recursive calls are made -- can never be effective PTC as-is, because all the recursion has to be in tail call position to avoid the stack growth. Earlier, we showed an example of refactoring from binary recursion to mutual recursion. It may be possible to achieve PTC from a multiple-recursive algorithm by splitting each into separate function calls, where each is expressed respectively in PTC form.
 
