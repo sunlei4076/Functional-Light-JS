@@ -216,21 +216,22 @@ stringMap( uppercaseLetter, "Hello World!" );
 
 我认为最通常的理解过滤（在编程之外）过滤是剔除掉不需要的成员。不幸的是，在程序中我们基本上将这个语意转变为更像是过滤需要的成员。
 
-The `filter(..)` list operation takes a function to decide if each value in the original array should be in the new array or not. This function needs to return `true` if a value should make it, and `false` if it should be skipped. A function that returns `true` / `false` for this kind of decision making goes by the special name: predicate function.
+列表的`filter(..)`操作采用一个函数确定每一项在新数组中是保留还是剔除。这个函数返回`true`将保留这一项，返回`false`将剔除这一项。这样返回`true` / `false`来做决定的函数，有一个特别的称谓：断言函数。
 
-If you think of `true` as being as a positive signal, the definition of `filter(..)` is that you are saying "keep" (to filter in) a value rather than saying "discard" (to filter out) a value.
+如果你认为`true`是积极的信号，`filter(..)`的定义是，你说“保留”一个值，而不是“抛弃”一个值。
 
-To use `filter(..)` as an exclusionary action, you have to twist your brain to think of positively signaling an exclusion by returning `false`, and passively letting a value pass through by returning `true`.
+如果`filter(..)`被用语剔除操作，你需要转动你的脑子，积极的返回`false`发出排除的信号，并且被动的返回`true`来让一个值通过过滤器。
 
-The reason this semantic mismatch matters is because of how you will likely name the function used as `predicateFn(..)`, and what that means for the readability of code. We'll come back to this point shortly.
+这种语意上不匹配的原因是你会将这个函数命名为`predicateFn(..)`，这对于代码的可读性有意义，我们很快会讨论这一点。
 
-Here's how to visualize a `filter(..)` operation across a list of values:
+下图很形象的介绍了列表间的`filter(..)`操作：
+
 
 <p align="center">
 	<img src="fig10.png" width="400">
 </p>
 
-To implement `filter(..)`:
+实现 `filter(..)` 的代码如下:
 
 ```js
 function filter(predicateFn,arr) {
@@ -246,23 +247,24 @@ function filter(predicateFn,arr) {
 }
 ```
 
-Notice that just like `mapperFn(..)` before, `predicateFn(..)` is passed not only the value but also the `idx` and `arr`. Use `unary(..)` to limit its arguments as necessary.
+注意，就像之前的`mapperFn(..)`， `predicateFn(..)`不仅仅传入了值，还传入了`idx` 和 `arr` 。如果有必要，采用 `unary(..)` 来限制它的参数。
 
-Just as with `map(..)`, `filter(..)` is provided as a built-in utility on JS arrays.
+正如`map(..)`，`filter(..)`也是JS数组内置支持的功能函数。
 
-Let's consider a predicate function like this:
+我们将谓词函数定义这样：
 
 ```js
 var whatToCallIt = v => v % 2 == 1;
 ```
 
-This function uses `v % 2 == 1` to return `true` or `false`. The effect here is that an odd number will return `true`, and an even number will return `false`. So, what should we call this function? A natural name might be:
+这个函数采用`v % 2 == 1`来返回`true`或`false`. 这里的效果是，值为偶数时返回`true`，值为奇数时返回`false`。 这样，我们该如何命名这个函数？一个很自然的名字可能是：
 
 ```js
 var isOdd = v => v % 2 == 1;
 ```
 
-Consider how you might use `isOdd(..)` with a simple value check somewhere in your code:
+考虑一下如何在你的代码中使用`isOdd(..)`来做简单的值检查：
+
 
 ```js
 var midIdx;
@@ -275,18 +277,18 @@ else {
 }
 ```
 
-Makes sense, right? But, let's consider using it with the built-in array `filter(..)` to filter a list of values:
+有感觉了，对吧？让我们采用内置的数组操作`filter(..)`来对一组值做筛选：
 
 ```js
 [1,2,3,4,5].filter( isOdd );
 // [1,3,5]
 ```
 
-If you described the `[1,3,5]` result, would you say, "I filtered out the even numbers", or would you say "I filtered in the odd numbers"? I think the former is a more natural way of describing it. But the code reads the opposite. The code reads, almost literally, that we "filtered (in) each number that is odd".
+如果让你描述`[1,3,5]`这个结果，你是说“我将偶去掉了”，还是说“我将奇数挑选出来了” ？我认为前者是更自然的描述。但代码可读性好的是后者。阅读代码几乎是逐字的，我们“挑选的每一个数字都是奇数”。
 
-I personally find this semantic confusing. There's no question there's plenty of precedent for experienced developers. But if you just start with a fresh slate, this expression of the logic seems kinda like not speaking without a double negative -- aka, speaking with a double negative.
+我个人觉得这语意混乱。 对于经验丰富的开发者，这里毫无疑问有大量的先例。但是对于一个新手来说，这个逻辑表达看上去不采用双重否定不好表达，换句话说，采用双重否定来表达。
 
-We could make this easier by renaming the function from `isOdd(..)` to `isEven(..)`:
+为了便以理解，我们可以将这个函数从`isOdd(..)`重命名为`isEven(..)`：
 
 ```js
 var isEven = v => v % 2 == 1;
@@ -294,16 +296,16 @@ var isEven = v => v % 2 == 1;
 [1,2,3,4,5].filter( isEven );
 // [1,3,5]
 ```
-
-Yay! But that function makes no sense with its name, in that it returns `false` when it's even:
+耶，但是这个函数名变得无意义，下面的示例中，传入的偶数，确返回了`false`
 
 ```js
 isEven( 2 );		// false
 ```
 
-Yuck.
+呸！
 
-Recall that in "No Points" in Chapter 3, we defined a `not(..)` operator that negates a predicate function. Consider:
+回顾在第三章中的"No Points"， 我们定义`not(..)`操作来反转谓词函数，代码如下：
+
 
 ```js
 var isEven = not( isOdd );
@@ -311,14 +313,13 @@ var isEven = not( isOdd );
 isEven( 2 );		// true
 ```
 
-But we can't use *this* `isEven(..)` with `filter(..)` the way it's currently defined, because our logic will be reversed; we'll end up with evens, not odds. We'd need to do:
+但在前面定义的`filter(..)`方式中，无法使用**这个**`isEven(..)`，因为它的逻辑已经反转了。我们将以偶数结束，而不是奇数，我们需要这么做：
 
 ```js
 [1,2,3,4,5].filter( not( isEven ) );
 // [1,3,5]
 ```
-
-That defeats the whole purpose, though, so let's not do that. We're just going in circles.
+这样完全违背了我们的初衷，所以我们不要这么做。这样，我们只是在兜圈子。
 
 ### Filtering-Out & Filtering-In
 
