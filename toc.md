@@ -1,23 +1,23 @@
 # Functional-Light JavaScript
 
-## Table of Contents
+## 目录
 
-* Foreword
-* Preface
-* Chapter 1: Why Functional Programming?
+* 序言
+* 前言
+* 第一章: 为何采用函数式程序设计？
 	* Confidence
-	* Communication
+	* 沟通
 	* Take
 	* YAGNI
-	* Resources
-* Chapter 2: Foundations of Functional Functions
-	* What Is A Function?
-	* Function Input
-	* Function Output
-	* Functions Of Functions
-	* Syntax
-	* What's This?
-* Chapter 3: Managing Function Inputs
+	* 来源
+* Chapter 2: 功能函数的基础
+	* 函数是什么？
+	* 函数输入
+	* 函数输出
+	* 复合函数
+	* 句法
+	* 这是什么？
+* Chapter 3: 管理函数输入
 	* Some Now, Some Later
 	* One At A Time
 	* All For One
