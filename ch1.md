@@ -1,7 +1,7 @@
 # 轻量级函数式编程
 # 第一章：为什么使用函数式编程？
 
-> Functional programmer: (noun) One who names variables "x", names functions "f", and names code patterns "zygohistomorphic prepromorphism"
+> 函数式的程序员: 没人会把变量命名为x，函数命名为f，代码模式命名为 zygohistomorphic prepromorphism 这样的形式。
 >
 > James Iry ‏@jamesiry 5/13/15
 >
@@ -113,7 +113,7 @@ YAGNI的挑战，告诉我们：即使有的功能在某种情况下是反直觉
 
 ### 参考文献
 
-Some FP/JavaScript books that you should definitely read:
+一些你务必要阅读的FP / JavaScript书籍：
 
 * [Professor Frisby's Mostly Adequate Guide to Functional Programming](https://drboolean.gitbooks.io/mostly-adequate-guide/content/ch1.html) by [Brian Lonsdorf](https://twitter.com/drboolean)
 * [JavaScript Allongé](https://leanpub.com/javascript-allonge) by [Reg Braithwaite](https://twitter.com/raganwald)
@@ -121,7 +121,7 @@ Some FP/JavaScript books that you should definitely read:
 
 ### 博客和站点
 
-Some other authors and content you should check out:
+一些其他作者和相关内容供查阅：
 
 * [Fun Fun Function Videos](https://www.youtube.com/watch?v=BMUiFMZr7vk) by [Mattias P Johansson](https://twitter.com/mpjme)
 * [Awesome FP JS](https://github.com/stoeffel/awesome-fp-js)
