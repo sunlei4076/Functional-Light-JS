@@ -1,29 +1,28 @@
-# Contributing
+# 贡献
+请随时通过提交PR为提高本内容的质量做出贡献，比如改进代码片段，说明等。如果你觉得有单词和叙述让你感到困惑, **在提交PR前，先open一个issue询问下.**
 
-Please feel free to contribute to the quality of this content by submitting PR's for improvements to code snippets, explanations, etc. If there's any doubt or if you think that a word/phrase is used confusingly, **before submitting a PR, open an issue to ask about it.**
+然而，如果你一旦你选择了为这个仓库贡献内容（不仅仅是拼写纠正），那么你就同意授予我（以及任何未来的发布者）一个非你独占性许可，在合适的时候可以使用该内容。也许你已经知道了，但是我必须明确声明以确保不会有法律的麻烦。
 
-However, if you choose to contribute content (not just typo corrections) to this repo, you agree that you're giving me a non-exclusive license to use that content for the book, as I (and any future publisher) deem appropriate. You probably guessed that already, but I just have to make sure the lawyers are happy by explicitly stating it.
+## 请先搜索!
 
-## Search First!
+如果你有任何疑问或者关注点，请确保先在issue（包括open和close状态）里面搜一下，把issue控制在最小化。我希望尽肯把我的精力放在写书上。
 
-If you have any questions or concerns, please make sure to search the issues (both open and closed!) first, to keep the churn of issues to a minimum. I want to keep my focus on writing the book as much as possible.
+## 拼写?
 
-## Typos?
+这本书最终会经过官方编辑，拼写错误将会在那时候被纠正。所以 **关于拼写我现在不会太关注**.
 
-This book will go through official editing eventually, and typos will likely all be caught at that stage. As such, **typos are not a big concern of mine for now**.
+如果你要因为拼写错误发起PR， 请考虑将几个小的校正合成一个PR（通过不同的commits）。 或者, **暂时不用太在意它们** 因为我保证我们到时会统一处理它们。
 
-If you're going to submit a PR for typo fixes, please be measured in doing so by collecting several small changes into a single PR (in separate commits). Or, **just don't even worry about them for now,** because we'll get to them later. I promise.
+## 阅读体验（章节/单元 链接，等）
 
-## Reading Experience (Chapter/Section links, etc)
+我认同在没有相关联的链接指向其他章节的情况，阅读一篇长的.md文件的体验不是特别好。出于这个原因，你们可能觉得可以发起一个issue/PR 去增加这些功能。
 
-I understand that reading one long .md file, with no relative cross links to other sections/etc, is not the preferred reading experience for most of you. As such, it's totally reasonable to want to file an issue/PR to add those kinds of features.
+这个话题被提起过很多次，我也考虑过，但我 **不** 接受这些改变合到仓库。
+ 
+我的书的仓库主要目的是为了对出版（付费的电子书和印刷版本）进行内容的管理和追踪。我把它公开，是因为我同样在意提供一个早期免费获得内容的途径，确保不会因为付费的壁垒阻碍学习。
 
-This topic has been brought up many times, and I've considered it. For now, I **do not** accept these kinds of changes into the repo.
+所以, 这个仓库 **不是用来优化你的阅读体验的** 。而是用来优化出版流程的。
 
-The main purpose of my book repos is to track and manage the content for the purposes of publication (paid-for ebooks and print books). I do this in the open because I also care about providing free and early access to the content, to make sure there is no paywall barrier to learning.
+最适合的阅读体验 -- 对你们大多数人而言 -- 是我（最终）出售的电子书或者印刷版本。提供免费的内容，但是付费的阅读体验，这是我关注的平衡点。对于平衡点其他作者可能有不同的想法，但这是我现在选择的。
 
-As such, this repo **is not optimized for your reading experience.** It's optimized for the publishing process.
-
-The primary intended reading experience -- likely the most pleasant one for many of you! -- is the ebooks or print books, which I (will eventually) sell. The balance I'm striking here is releasing the content for free, but selling the reading experience. Other authors make different decisions on that balance, but that's what I've come to for now.
-
-I hope you continue to enjoy and benefit from the content, and I also hope you value it enough to purchase the best reading experience in the ebook/print form (once available).
+我希望你们从内容里面获益，同时希望你们对购买电子/印刷书（一旦可以销售）获得最好的阅读体验感到值得。
