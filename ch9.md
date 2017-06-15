@@ -402,7 +402,7 @@ return x ? foo( .. ) : bar( .. );
 
 `x`进行条件判断之后，或执行 `foo(..)`，或执行 `bar(..)`，不论执行哪个，返回结果都会被 `return` 返回掉。这个例子符合 PTC 规范。
 
-Binary recursion -- two (or more!) recursive calls are made -- can never be effective PTC as-is, because all the recursion has to be in tail call position to avoid the stack growth. Earlier, we showed an example of refactoring from binary recursion to mutual recursion. It may be possible to achieve PTC from a multiple-recursive algorithm by splitting each into separate function calls, where each is expressed respectively in PTC form.
+为了避免堆栈增加，PTC 要求所有的递归必须是在尾部调用，所以，二分法递归 -- 两次（或以上）递归调用 -- 是不能实现 PTC 的。文章的前面部分，我们曾展示过把二分法递归转变为相互递归的例子。It may be possible to achieve PTC from a multiple-recursive algorithm by splitting each into separate function calls, where each is expressed respectively in PTC form.
 
 ## Rearranging Recursion
 
