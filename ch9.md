@@ -533,7 +533,7 @@ function sum(result,num1,...nums) {
 sum( /*initialResult=*/0, 3, 1, 17, 94, 8 );		// 123
 ```
 
-What you might observe is that `result` is a number just like `num1`, which means that we can always treat the first number in our list as our running total; that includes even the first call. All we need is to rename those params to make this clear:
+也许你会注意到，`result` 就像 `num1` 一样，也就是说，我们可以把列表中的第一个数字作为我们的运行总和；这甚至包括了第一次调用的情况。我们需要的是重新命名这些参数，使函数清晰可读：
 
 ```js
 "use strict";
@@ -547,20 +547,20 @@ function sum(num1,num2,...nums) {
 sum( 3, 1, 17, 94, 8 );								// 123
 ```
 
-Awesome. That's much better, huh!? I think this pattern achieves a good balance between declarative/reasonable and performant.
+帅呆了。比之前好了很多，嗯？！我认为这种模式在声明/合理和执行之间达到了很好的平衡。
 
-Let's try refactoring with PTC once more, revisiting our earlier `maxEven(..)` (currently not PTC). We'll observe that similar to keeping the sum as the first argument, we can narrow the list of numbers one at a time, keeping the first argument as the highest even we've come across thus far.
+让我们试着重构下前面的 `maxEven(..)`（目前还不符合 PTC 规范）。就像之前我们把参数的和作为第一个参数一样，我们可以依次减少列表中的数字，同时一直把遇到的最大偶数作为第一个参数。
 
-For clarity, the algorithm strategy (similar to what we discussed earlier) we might use:
+为了清楚起见，我们可能使用算法策略（类似于我们之前讨论过的）：
 
-1. Start by comparing the first two numbers, `num1` and `num2`.
-2. Is `num1` even, and is `num1` greater than `num2`? If so, keep `num1`.
-3. If `num2` is even, keep it (store in `num1`).
-4. Otherwise, fall back to `undefined` (store in `num1`).
-5. If there are more `nums` to consider, recursively compare them to `num1`.
-6. Finally, just return whatever value is left in `num1`.
+1. 首先对前两个参数 `num1` 和 `num2` 进行对比。
+2. 如果 `num1` 是偶数，并且 `num1` 大于 `num2`，`num1` 保持不变。
+3. 如果 `num2` 是偶数，把 `num2` 赋值给 `num1`。
+4. 否则的话，`num1` 等于 `undefined`。
+5. 如果除了这两个参数之外，还存在其它参数 `nums`，把它们与 `num1` 进行递归对比。
+6. 最后，不管是什么值，只需返回 `num1`。
 
-Our code can follow these steps almost exactly:
+依照上面的步骤，代码如下：
 
 ```js
 "use strict";
