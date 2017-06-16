@@ -88,6 +88,7 @@ And so it goes with our code. The more you can apply these principles to more pa
 同样的道理也适用于代码。随着你越来越多的使用FP中的模式，你的代码质量会越来越高。25%的时间使用它们，你会得到一些好处。80%的时间使用它们，你将收益更多。
 
 With perhaps a few exceptions, I don't think you'll find many absolutes in this text. We'll instead talk about aspirations, goals, principles to strive for. We'll talk about balance and pragmatism and trade-offs.
+
 除了几处仅存的特例，你不会在本书里看到很多绝对式的论断。相反，我们讨论的是要追求的目标和现实中方方面面的权衡。
 
 Welcome to this journey into the most useful and practical foundations of FP. We both have plenty to learn!
