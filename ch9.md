@@ -400,15 +400,15 @@ return 1 + foo( .. );
 return x ? foo( .. ) : bar( .. );
 ```
 
-`x`进行条件判断之后，或执行 `foo(..)`，或执行 `bar(..)`，不论执行哪个，返回结果都会被 `return` 返回掉。这个例子符合 PTC 规范。
+`x` 进行条件判断之后，或执行 `foo(..)`，或执行 `bar(..)`，不论执行哪个，返回结果都会被 `return` 返回掉。这个例子符合 PTC 规范。
 
-为了避免堆栈增加，PTC 要求所有的递归必须是在尾部调用，所以，二分法递归 -- 两次（或以上）递归调用 -- 是不能实现 PTC 的。文章的前面部分，我们曾展示过把二分法递归转变为相互递归的例子。It may be possible to achieve PTC from a multiple-recursive algorithm by splitting each into separate function calls, where each is expressed respectively in PTC form.
+为了避免堆栈增加，PTC 要求所有的递归必须是在尾部调用，因此，二分法递归 -- 两次（或以上）递归调用 -- 是不能实现 PTC 的。我们曾在文章的前面部分展示过把二分法递归转变为相互递归的例子。也许我们可以试着化整为零，把多重递归拆分成符合 PTC 规范的单个函数回调。
 
-## Rearranging Recursion
+## 重构递归
 
-If you want to use recursion but your problem set could grow enough eventually to exceed the stack limit of the JS engine, you're going to need to rearrange your recursive calls to take advantage of PTC (or avoid nested calls entirely). There are several refactoring strategies that can help, but there are of course tradeoffs to be aware of.
+如果你想用递归来处理问题，却又超出了 JS 引擎的内存堆栈，这时候就需要重构下你的递归调用，使它能够符合 PTC 规范（或着避免嵌套调用）。这里有一些重构方法也许可以用到，但需要根据实际情况权衡。
 
-As a word of caution, always keep in mind that code readability is our overall most important goal. If recursion along with some combination of these following strategies results in harder to read/understand code, **don't use recursion**; find another more readable approach.
+可读性强的代码，是我们的终级目标 -- 谨记，谨记。如果使用递归后会造成代码难以阅读/理解，那就 **不要使用递归**；换个容易理解的方法吧。
 
 ### Replacing The Stack
 
