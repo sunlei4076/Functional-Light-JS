@@ -13,7 +13,7 @@ Did I just lose you? Don't worry, I'd be lost, too! All those terms that only me
 
 This book is not going to teach you what those words mean. If that's what you're looking for, keep looking. In fact, there's already plenty of great books that teach FP the *right way*, from the top-down. Those words have important meanings and if you formally study FP in-depth, you'll absolutely want to get familiar with them.
 
-这本书并不打算教你以上那些专业术语的具体含义。如果那正是你想查找的，请继续查找。事实上，已经有很多从上到下（正确的方式）介绍FP的书了。这些专业术语有很重要的意义，如果你在深入学习FP，你肯定会对这些专业术语越来越熟悉。
+这本书并不打算教你以上那些专业术语的具体含义。如果那正是你想查找的，请继续查找。事实上，已经有很多从头到尾（正确的方式）介绍FP的书了。这些专业术语有很重要的意义，如果你在深入学习FP，你肯定会对这些专业术语越来越熟悉。
 
 But this book is going to approach the topic quite differently. I'm going to present fundamental FP concepts from the ground-up, with fewer special or non-intuitive terms than most approaches to FP. We'll try to take a practical approach to each principle rather than a purely academic angle. **There will be terms**, no doubt. But we'll be careful and deliberate about introducing them and explaining why they're important.
 
