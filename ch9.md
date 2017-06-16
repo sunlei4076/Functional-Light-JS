@@ -577,14 +577,15 @@ function maxEven(num1,num2,...nums) {
 }
 ```
 
-**Note:** The first `maxEven(..)` call is not in PTC position, but since it only passes in `num2`, it only recurses just that one level then returns right back out; this is only a trick to avoid repeating the `%` logic. As such, this call won't increase the growth of the recursive stack, any more than if that call was to an entirely different function. The second `maxEven(..)` call is the legitimate recursive call, and it is in fact in PTC position, meaning our stack won't grow as the recursion proceeds.
+**注意：** 函数第一次调用 `maxEven(..)` 并不是为了 PTC 优化，当它只传递 `num2` 时，只递归一级就返回了；它只是一个避免重复 `％` 逻辑的技巧。因此，只要该调用是完全不同的函数，就不会增加递归堆栈。第二次调用 `maxEven(..)` 是基于 PTC 优化角度的真正递归调用，因此不会随着递归的进行而造成堆栈的增加。
 
-It should be repeated that this example is only to illustrate the approach to moving recursion to the PTC form to optimize the stack (memory) usage. The more direct way to express a max-even algorithm might indeed be a filtering of the `nums` list for evens first, followed then by a max bubbling or even a sort.
+重申下，此示例仅用于说明将递归转化为符合 PTC 规范以优化堆栈（内存）使用的方法。求最大偶数值的更直接方法可能是，先对参数列表中的 `nums` 过滤，然后冒泡或排序处理。
 
-Refactoring recursion into PTC is admittedly a little intrusive on the simple declarative form, but it still gets the job done reasonably. Unfortunately, some kinds of recursion won't work well even with an interface function, so we'll need different strategies.
+基于 PTC 重构递归，固然对简单的声明形式有一些影响，但依然有理由去做这样的事。不幸的是，存在一些递归，即使我们使用了接口函数来扩展，也不会很好，因此，我们需要有不同的思路。
 
 ### Continuation Passing Style (CPS)
 
+在 JavaScript 中， *continuation* 一词通常用于表示一个回调函数，
 In JavaScript, the word *continuation* is often used to mean a function callback that specifies the next step(s) to execute after a certain function finishes its work. Organizing code so that each function receives another function to execute at its end, is referred to as Continuation Passing Style (CPS).
 
 Some forms of recursion cannot practically be refactored to pure PTC, especially multiple recursion. Recall the `fib(..)` function earlier, and even the mutual recursion form we derived. In both cases, there are multiple recursive calls, which effectively defeats PTC memory optimizations.
