@@ -423,11 +423,11 @@ function sum(num1,...nums) {
 }
 ```
 
-This isn't in PTC form because after the recursive call to `sum(...nums)` is finished, the `total` variable is added to that result. So, the stack frame has to be preserved to keep track of the `total` partial result while the rest of the recursion proceeds.
+这个例子并不符合 PTC 规范。`sum(...nums)` 运行结束之后，`num1` 与 `sum(...nums)` 的运行结果进行了累加。这样的话，当其余参数 `...nums` 再次进行递归调用时候，为了得到其与 `num1` 累加的结果，必须要保留上一次递归调用的堆栈帧。
 
-The key recognition point for this refactoring strategy is that we could remove our dependence on the stack by doing the addition *now* instead of *after*, and then forward-passing that partial result as an argument to the recursive call. In other words, instead of keeping `total` in the current function's stack frame, push it into the stack frame of the next recursive call; that frees up the current stack frame to be removed/reused.
+重构策略的关键点在于，我们可以通过把 `置后` 处理累加改为 `提前` 处理，来消除对堆栈的依赖，然后将该部分结果作为参数传递到递归调用。换句话说，我们不用在当前运用函数的堆栈帧中保留 `num1 + sum(...num1)` 的总和，而是把它传递到下一个递归的堆栈帧中，这样就能释放当前递归的堆栈帧。
 
-To start, we could alter the signature our `sum(..)` function to have a new first parameter as the partial result:
+开始之前，我们做些改动：把部分结果作为一个新的第一个参数传入到函数 `sum(..)`：
 
 ```js
 function sum(result,num1,...nums) {
@@ -435,7 +435,7 @@ function sum(result,num1,...nums) {
 }
 ```
 
-Now, we should pre-calculate the addition of `result` and `num1`, and pass that along:
+这次我们先把 `result` 和 `num1` 提前计算，然后把 `result` 作为参数一起传入：
 
 ```js
 "use strict";
@@ -447,17 +447,17 @@ function sum(result,num1,...nums) {
 }
 ```
 
-Now our `sum(..)` is in PTC form! Yay!
+现在 `sum(..)` 已经符合 PTC 优化规范了！Yes！
 
-But the downside is we now have altered the signature of the function that makes using it stranger. The caller essentially has to pass `0` as the first argument ahead of the rest of the numbers they want to sum.
+但是还有一个缺点，我们修改了函数的参数传递形式后，用法就跟以前不一样了。调用者不得不在需要求和的那些参数的前面，再传递一个 `0` 作为第一个参数。
 
 ```js
 sum( /*initialResult=*/0, 3, 1, 17, 94, 8 );		// 123
 ```
 
-That's unfortunate.
+这就尴尬了。
 
-Typically, people will solve this by naming their awkward-signature recursive function differently, then defining an interface function that hides the awkwardness:
+通常，大家的处理方式是，把这个尴尬的递归函数重新命名，然后定义一个接口函数把问题隐藏起来：
 
 ```js
 "use strict";
@@ -475,7 +475,7 @@ function sum(...nums) {
 sum( 3, 1, 17, 94, 8 );								// 123
 ```
 
-That's better. Still unfortunate that we've now created multiple functions instead of just one. Sometimes you'll see developers "hide" the recursive function as an inner function, like this:
+情况好了些。但依然有问题：之前只需要一个函数就能解决的事，现在我们用了两个。有时候你会发现，在处理这类问题上，有些开发者用内部函数把递归 “藏了起来”：
 
 ```js
 "use strict";
@@ -493,7 +493,7 @@ function sum(...nums) {
 sum( 3, 1, 17, 94, 8 );								// 123
 ```
 
-The downside here is that we'll recreate that inner `sumRec(..)` function each time the outer `sum(..)` is called. So, we can go back to them being side-by-side functions, but hide them both inside an IIFE, and expose just the one we want to:
+这个方法的缺点是，每次调用外部函数 `sum(..)`，我们都得重新创建内部函数 `sumRec(..)`。我们可以把他们平级放置在立即执行的函数中，只暴露出我们想要的那个的函数：
 
 ```js
 "use strict";
@@ -515,11 +515,11 @@ var sum = (function IIFE(){
 sum( 3, 1, 17, 94, 8 );								// 123
 ```
 
-OK, we've got PTC and we've got a nice clean signature for our `sum(..)` that doesn't require the caller to know about our implementation details. Yay!
+好啦，现在即符合了 PTC 规范，又保证了 `sum(..)` 参数的整洁性，调用者不需要了解函数的内部实现细节。完美！
 
-But... wow, our simple recursive function has a lot more noise now. The readability has definitely been reduced. That's unfortunate to say the least. Sometimes, that's just the best we can do.
+可是...天呐，本来是简单的递归函数，现在却出现了很多噪点。可读性已经明显降低。至少说，这是不成功的。有些时候，这只是我们能做的最好的。
 
-Luckily, in some other cases, like the present one, there's a better way. Let's reset back to this version:
+幸运的事，在一些其它的例子中，比如上一个例子，有一个比较好的方式。一起重新看下：
 
 ```js
 "use strict";
