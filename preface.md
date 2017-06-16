@@ -72,7 +72,8 @@ I hope this book "Maybe" breaks the spirit of that curse, even though we won't t
 
 
 The formal FPer will often assert that the *real value* of FP is in using it essentially 100%: it's an all-or-nothing proposition. The belief is that if you use FP in one part of your program but not in another, the whole program is polluted by the non-FP stuff and therefore suffers enough that the FP was probably not worth it.
-专业的FPer经常宣称只有100%使用FP才算是真正的使用FP：这是一种要么全有要么全无的主张。它会让人觉得如果编程时只在一部分使用了FP而另一部分没用到，整个程序会被那些没有使用FP的部分污染，从而认为使用FP并不值得。
+
+科班出身的FPer经常宣称只有100%使用FP才算是真正的使用FP：这是一种要么全有要么全无的主张。它会让人觉得如果编程时只在一部分使用了FP而另一部分没用到，整个程序会被那些没有使用FP的部分污染，从而认为使用FP并不值得。
 
 
 I'll say unequivocally: **I think that absolutism is bogus**. That's as silly to me as suggesting that this book is only good if I use perfect grammar and active voice throughout; if I make any mistakes, it degrades the entire book's quality. Nonsense.
