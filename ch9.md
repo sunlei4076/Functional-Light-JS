@@ -583,16 +583,15 @@ function maxEven(num1,num2,...nums) {
 
 基于 PTC 重构递归，固然对简单的声明形式有一些影响，但依然有理由去做这样的事。不幸的是，存在一些递归，即使我们使用了接口函数来扩展，也不会很好，因此，我们需要有不同的思路。
 
-### Continuation Passing Style (CPS)
+### 后继传递格式 （CPS）
 
-在 JavaScript 中， *continuation* 一词通常用于表示一个回调函数，
-In JavaScript, the word *continuation* is often used to mean a function callback that specifies the next step(s) to execute after a certain function finishes its work. Organizing code so that each function receives another function to execute at its end, is referred to as Continuation Passing Style (CPS).
+在 JavaScript 中， *continuation* 一词通常用于表示在某个函数完成后指定需要执行的下一个步骤的回调函数。组织代码，使得每个函数在其结束时接收另一个执行函数，被称为后继传递格式（CPS）。
 
-Some forms of recursion cannot practically be refactored to pure PTC, especially multiple recursion. Recall the `fib(..)` function earlier, and even the mutual recursion form we derived. In both cases, there are multiple recursive calls, which effectively defeats PTC memory optimizations.
+有些形式的递归，实际上是无法按照纯粹的 PTC 规范重构的，特别是相互递归。我们之前提到过的 `fib(..)` 函数，以及我们派生出来的相互递归形式。这两个情况，皆是存在多个递归调用，这些递归调用阻碍了 PTC 内存优化。 
 
-However, you can perform the first recursive call, and wrap the subsequent recursive calls in a continuation function to pass into that first call. Even though this would mean ultimately many more functions will need to be executed in the stack, as long all of them, continuations included, are in PTC form, stack memory usage will not grow unbounded.
+但是，你可以执行第一个递归调用，并将后续递归调用包含在后续函数中并传递到该第一个调用。尽管这意味着最终需要在堆栈中执行更多的函数，但由于后继函数所包含的都是 PTC 形式的，所以堆栈内存的使用情况不会无限增长。
 
-We could do this for `fib(..)`:
+把 `fib(..)` 做如下修改：
 
 ```js
 "use strict";
@@ -608,6 +607,8 @@ function fib(n,cont = identity) {
 	);
 }
 ```
+
+仔细看下这里都做了哪些事情。首先，我们默认用了第三章中的 `cont(..)` 后继函数作为我们的 `identity(..)` 实用程序；记住，它只返回传递给它的任何东西。
 
 Pay close attention to what's happening here. First, we default the `cont(..)` continuation function as our `identity(..)` utility from Chapter 3; remember, it simply returns whatever is passed to it.
 
