@@ -1,17 +1,17 @@
-# 轻量化函数式 JavaScript
-# Chapter 3: Managing Function Inputs
+# 轻量 JavaScript 函数式编程
+# 第三章：管理函数的输入（Inputs）
 
-In "Function Inputs" in Chapter 2, we talked about the basics of function parameters and arguments. We even looked at some syntactic tricks for easing their use such as the `...` operator and destructuring.
+在第二章的 “函数输入” 小节中，我们聊到了函数形参（parameters）和实参（arguments）的基本知识，甚至还了解到一些能简化其使用的语法技巧，比如 `...` 操作符和解构（destructuring）。
 
-I recommended in that discussion that you try to design functions with a single parameter if at all possible. The fact is, this won't always be possible, and you won't always be in control of function signatures that you need to work with.
+在那个讨论中，我建议尽可能设计单一形参的函数。但实际上你不能每次都做到，而且也不能每次都掌控你要处理的函数声明（function signatures）。
 
-We now want to turn our attention to more sophisticated and powerful patterns for wrangling function inputs in these scenarios.
+现在，我们把注意力放在更复杂、强大的模式上，以便讨论处在这些场景下的函数输入。
 
-## Some Now, Some Later
+## 立即传参和稍后传参
 
-If a function takes multiple arguments, you may want to specify some of those upfront and leave the rest to be specified later.
+如果一个函数接收多个实参，你可能会想先指定部分实参，余下的稍后再指定。
 
-Consider this function:
+请想一下这个函数：
 
 ```js
 function ajax(url,data,callback) {
@@ -19,11 +19,11 @@ function ajax(url,data,callback) {
 }
 ```
 
-Let's imagine you'd like to set up several API calls where the URLs are known upfront, but the data and the callback to handle the response won't be known until later.
+想象一个场景，你要发起多个已知 URL 的 API 请求，但这些请求的数据和处理响应信息的回调函数要稍后才能知道。
 
-Of course, you can just defer making the `ajax(..)` call until all the bits are known, and refer to some global constant for the URL at that time. But another way is to create a function reference that already has the `url` argument preset.
+当然，你可以等到这些东西都确定后再发起 `ajax(..)` 请求，并且到那时再引用为 URL 而定义的全局常量。但我们还有另一种选择，就是创建一个已经预设 `url` 实参的函数引用。
 
-What we're going to do is make a new function that still calls `ajax(..)` under the covers, and it manually sets the first argument to the API URL you care about, while waiting to accept the other two arguments later.
+我们将创建一个新函数，其内部仍然发起 `ajax(..)` 请求，此外在等待接收另外两个实参的同时，我们手动将 `ajax(..)` 第一个实参设置成你关心的 API 地址。
 
 ```js
 function getPerson(data,cb) {
@@ -35,7 +35,7 @@ function getOrder(data,cb) {
 }
 ```
 
-Manually specifying these function call wrappers is certainly possible, but it may get quite tedious, especially if there will also be variations with different arguments preset, like:
+手动指定这些函数调用外壳当然是完全有可能的，但这可能会变得冗长乏味，特别是不同的预设实参还会变化的时候，譬如：
 
 ```js
 function getCurrentUser(cb) {
