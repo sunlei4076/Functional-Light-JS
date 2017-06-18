@@ -608,29 +608,27 @@ function fib(n,cont = identity) {
 }
 ```
 
-仔细看下这里都做了哪些事情。首先，我们默认用了第三章中的 `cont(..)` 后继函数作为我们的 `identity(..)` 实用程序；记住，它只返回传递给它的任何东西。
+仔细看下都做了哪些事情。首先，我们默认用了第三章中的 `cont(..)` 后继函数表示 `identity(..)`；记住，它只返回传递给它的任何东西。
 
-Pay close attention to what's happening here. First, we default the `cont(..)` continuation function as our `identity(..)` utility from Chapter 3; remember, it simply returns whatever is passed to it.
+更重要的是，这里面增加了不仅仅是一个而是两个后续函数。第一个后续函数接收 `fib(n-2)` 的运行结果作为参数 `n2`。第二个内部后续函数接收 `fib(n-1)`的运行结果作为参数 `n1`。当得到 `n1` 和 `n2` 的值后，两者再相加 （`n2 + n1`），相加的运行结果会传入到下一个后续函数 `cont(..)`。 
 
-Morever, not just one but two continuation functions are added to the mix. The first one receives the `n2` argument, which eventually receives the computation of the `fib(n-2)` value. The next inner continuation receives the `n1` argument, which eventually is the `fib(n-1)` value. Once both `n2` and `n1` values are known, they can be added together (`n2 + n1`), and that value is passed along to the next `cont(..)` continuation step.
+也许这将有助于我们梳理下流程：就像我们之前讨论的，在递归堆栈之后，当我们传递部分结果而不是返回它们时，每一步都被包含在一个后续函数中，这拖慢了计算速度。这个技巧允许我们执行多个符合 PTC 规范的步骤。
 
-Perhaps this will help mentally sort out what's going on: just like in the previous discussion when we passed partial results along instead of returning them back after the recursive stack, we're doing the same here, but each step gets wrapped in a continuation, which defers its computation. That trick allows us to perform multiple steps where each is in PTC form.
+在静态语言中，CPS通常为尾调用提供了编译器可以自动识别并重新排列递归代码以利用的机会。很可惜，不能用在原生 JS 上。
 
-In static languages, CPS is often an opportunity for tail calls the compiler can automatically identify and rearrange recursive code to take advantage of. Unfortunately, that doesn't really apply to the nature of JS.
+在 JavaScript 中，你得自己书写出符合 CPS 格式的代码。这并不是明智的做法；以命令符号声明的形式肯定使得内容有些不清楚。 但总的来说，这种形式仍然要比 `for` 循环更具有声明性。
 
-In JavaScript, you'd likely need to write the CPS form yourself. It's clunkier, for sure; the declarative notation-like form has certainly been obscured. But overall, this form is still more declarative than the `for`-loop imperative implementation.
+**警告：** 我们需要注意的一个比较重要的事项是，在 CPS 中，创建额外的内部后续函数仍然消耗内存，但有些不同。并不是之前的堆栈帧累积，闭包只是消耗多余的内存空间（一般情况下，是堆栈里面的多余内存空间）。在这些情况下，引擎似乎没有启动 `RangeError` 限制，但这并不意味着你的内存使用量是按比例固定好的。
 
-**Warning:** One major caveat that should be noted is that in CPS, creating the extra inner continuation functions still consumes memory, but of a different sort. Instead of piling up stack frames, the closures just consume free memory (typically, from the heap). Engines don't seem to apply the `RangeError` limits in these cases, but that doesn't mean your memory usage is fixed in scale.
+### 弹簧床
 
-### Trampolines
+除了 CPS 后续传递格式之外，另外一种内存优化的技术称为弹簧床。在弹簧床格式的代码中，同样的创建了类似 CPS 的后续函数，不同的是，它们没有被传递，而是被简单的返回了。
 
-Where CPS creates continuations and passes them along, another technique for alleviating memory pressure is called trampolines. In this style of code, CPS-like continuations are created, but instead of passed in, they are shallowly returned.
+不再是函数调用另外的函数，堆栈的深度也不会大于一层，因为每个函数只会返回下一个将调用的函数。循环只是继续运行每个返回的函数，直到再也没有函数可运行。
 
-Instead of functions calling functions, the stack never goes beyond depth of one, because each function just returns the next function that should be called. A loop simply keeps running each returned function until there are no more functions to run.
+弹簧床的优点之一是在非 PTC 环境下你一样可以应用此技术。另一个优点是每个函数都是正常调用，而不是 PTC 优化，所以它可以运行得更快。
 
-One advantage with trampolines is you aren't limited to environments that support PTC; another is that each function call is regular, not PTC optimized, so it may run quicker.
-
-Let's sketch out a `trampoline(..)` utility:
+一起来试下 `trampoline(..)`：
 
 ```js
 function trampoline(fn) {
@@ -646,9 +644,9 @@ function trampoline(fn) {
 }
 ```
 
-As long as a function is returned, the loop keeps going, executing that function and capturing its return, then checking its type. Once a non-function comes back, the trampoline assumes the function calling is complete, and just gives back the value.
+当返回一个函数时，循环继续，执行该函数并返回其运行结果，然后检查返回结果的类型。一旦返回结果类型不是函数，弹簧床函数调用结果，并返回结果值。
 
-Because each continuation needs to return another continuation, we likely we'll need to use the earlier trick of forward-passing the partial result as an argument. Here's how we could use this utility with our earlier example of summation of a list of numbers:
+由于每一个后续函数都会返回另外一个后续函数，所以我们可能需要前面将部分结果作为参数传递的技巧。以下是我们在之前的数列求和中使用此技巧的示例：
 
 ```js
 var sum = trampoline(
