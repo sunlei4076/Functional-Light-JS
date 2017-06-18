@@ -673,10 +673,10 @@ sum( ...xs );					// 199990000
 
 递归，是指函数递归调用自身。呃，这就是递归的定义。明白了吧！？
 
-直递归是一种对自身至少调用一次的函数，直到满足基本条件才能停止调用。多重递归（像二分递归）是指对自身进行多次调用的函数。相互递归是当两个或以上函数循环递归 `相互` 调用。而递归的优点是它更具声明性，因此通常更易于阅读。
+直递归是指对自身至少调用一次，直到满足基本条件才能停止调用。多重递归（像二分递归）是指对自身进行多次调用。相互递归是当两个或以上函数循环递归 `相互` 调用。而递归的优点是它更具声明性，因此通常更易于阅读。
 
-The upside of recursion is that it's more declarative and thus typically more readable. The downside is usually performance, but more memory constraints even than execution speed.
+递归的优点是它更具声明性，因此通常更易于阅读。缺点通常是性能方面，但是相比执行速度，更多的限制在于内存方面。
 
-Tail calls alleviate the memory pressure by reusing/discarding stack frames. JavaScript requires strict mode and proper tail calls (PTC) to take advantage of this "optimization". There are several techniques we can mix-n-match to refactor a non-PTC recursive function to PTC form, or at least avoid the memory constraints by flattening the stack.
+尾调用是通过减少或释放堆栈帧来节约内存空间。要在 JavaScript 中实现尾调用 “优化”，需要基于严格模式和适当的尾调用（ PTC ）。我们也可以混合几种技术来将非 PTC 递归函数重构为 PTC 格式，或者至少能通过平铺堆栈来节约内存空间。
 
-Remember: recursion should be used to make code more readable. If you misuse or abuse recursion, the readability will end up worse than the imperative form. Don't do that!
+谨记：递归应该使代码更容易读懂。如果你误用或滥用递归，代码的可读性将会比命令形式更糟。 千万不要这样做。
