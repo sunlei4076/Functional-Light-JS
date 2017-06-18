@@ -71,9 +71,10 @@ function partial(fn,...presetArgs) {
 
 当 `partiallyApplied(..)` 函数稍后在某处执行时，该函数使用被闭包作用（closed over）的 `fn` 引用来执行原函数，首先传入（被闭包作用的）`presetArgs` 数组中所有的偏函数应用（partial application）实参，然后再进一步传入 `laterArgs` 数组中的实参。
 
-If any of that was confusing, stop and go re-read it. Trust me, you'll be glad you did as we get further into the text.
+如果你对以上感到任何疑惑，请停下来再看一遍。相信我，随着我们进一步深入本文，你会欣然接受这个建议。
 
 As a side note, the FPer will often prefer the shorter `=>` arrow function syntax for such code (see Chapter 1 "Syntax"), such as:
+提一句，对于这类代码，FPer 往往喜欢使用更简短的 `=>` 肩头函数语法（请看第二章的 “语法” 小节），像这样：
 
 ```js
 var partial =
@@ -82,9 +83,10 @@ var partial =
 			fn( ...presetArgs, ...laterArgs );
 ```
 
-No question this is more terse, sparse even. But I personally feel that whatever it may gain in symmetry with the mathematical notation, it loses more in overall readability with the functions all being anonymous, and by obscuring the scope boundaries making deciphering closure a little more cryptic.
+这毫无疑问更加简洁，甚至代码稀少。但我个人觉得，无论我们从数学符号的对称性上获得什么好处，都会因函数变成了匿名函数而在整体的可读性上失去更多益处。此外，由于作用域边界变得模糊，我们会更加难以辩认闭包。
 
 Whichever syntax approach tickles your fancy, let's now use the `partial(..)` utility to make those earlier partially-applied functions:
+不管你喜欢哪种语法实现方式，现在让我们用 `partial(..)` 实用函数来制造这些之前提及的偏函数（partially-applied functions）：
 
 ```js
 var getPerson = partial( ajax, "http://some.api/person" );
@@ -92,7 +94,7 @@ var getPerson = partial( ajax, "http://some.api/person" );
 var getOrder = partial( ajax, "http://some.api/order" );
 ```
 
-Stop and think about the shape/internals of `getPerson(..)`. It will look sorta like this:
+请暂停并思考一下 `getPerson(..)` 函数的外形和内在。它相当于下面这样：
 
 ```js
 var getPerson = function partiallyApplied(...laterArgs) {
@@ -100,17 +102,17 @@ var getPerson = function partiallyApplied(...laterArgs) {
 };
 ```
 
-The same will be true of `getOrder(..)`. But what about `getCurrentUser(..)`?
+`getOrder(..)` 函数可以依葫芦画瓢。但是 `getCurrentUser(..)` 函数又如何呢？
 
 ```js
-// version 1
+// 版本 1
 var getCurrentUser = partial(
 	ajax,
 	"http://some.api/person",
 	{ user: CURRENT_USER_ID }
 );
 
-// version 2
+// 版本 2
 var getCurrentUser = partial( getPerson, { user: CURRENT_USER_ID } );
 ```
 
