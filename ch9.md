@@ -665,15 +665,15 @@ for (let i=0; i<20000; i++) {
 sum( ...xs );					// 199990000
 ```
 
-The downside is that a trampoline requires you to wrap your recursive function in the trampoline driving function; moreover, just like CPS, closures are created for each continuation. However, unlike CPS, each continuation function returned runs and finishes right away, so the engine won't have to accumulate a growing amount of closure memory while the call stack depth of the problem is exhausted.
+缺点是你需要将递归函数包裹在执行弹簧床功能的函数中; 此外，就像 CPS 一样，需要为每个后续函数创建闭包。然而，与 CPS 不一样的地方是，每个返回的后续数数，运行并立即完成，所以，当调用堆栈的深度用尽时，引擎中不会累积越来越多的闭包。
 
-Beyond execution and memory performance, the advantage of trampolines over CPS is that they're less intrusive on the declarative recursion form, in that you don't have to change the function signature to receive a continuation function argument. Trampolines are not ideal, but they can be effective in your balancing act between imperative looping code and declarative recursion.
+除了执行和记忆性能之外，蹦床优于CPS的优点是它们在声明递归形式上的侵入性更小，由于你不必为了接收后续函数的参数而更改函数参数，所以除了执行和内存性能之外，弹簧术技术优于 CPS 的地方还有，它们在声明递归形式上侵入性更小。虽然弹簧床技术并不是理想的，但它们可以有效地在命令循环代码和声明性递归之间达到平衡。
 
-## Summary
+## 总结
 
-Recursion is when a function recursively calls itself. Heh. A recursive definition for recursion. Get it!?
+递归，是指函数递归调用自身。呃，这就是递归的定义。明白了吧！？
 
-Direct recursion is a function that makes at least one call to itself, and it keeps dispatching to itself until it satisifies a base condition. Multiple recursion (like binary recursion) is when a function calls itself multiple times. Mutual recursion is when a two or more functions recursively loop by *mutually* calling each other.
+直递归是一种对自身至少调用一次的函数，直到满足基本条件才能停止调用。多重递归（像二分递归）是指对自身进行多次调用的函数。相互递归是当两个或以上函数循环递归 `相互` 调用。而递归的优点是它更具声明性，因此通常更易于阅读。
 
 The upside of recursion is that it's more declarative and thus typically more readable. The downside is usually performance, but more memory constraints even than execution speed.
 
