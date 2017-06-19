@@ -165,7 +165,7 @@ function add(x,y) {
 
 **注意：**如果你没见过 `map(..)` ，别担心，我们会在本书后面的部分详细介绍它。目前你只需要知道它用来循环遍历（loop over）一个数组，在遍历过程中调用函数产出新值并存到新的数组中。
 
-The reason we can't pass `add(..)` directly to `map(..)` is because the signature of `add(..)` doesn't match the mapping function that `map(..)` expects. That's where partial application can help us: we can adapt the signature of `add(..)` to something that will match.
+因为 `add(..)` 函数不是 `map(..)` 函数所预期的遍历函数，所以我们不直接把它传入 `map(..)` 函数里。这样一来，偏应用就有了用武之地：我们可以调整 `add(..)` 函数的声明，以符合 `map(..)` 函数的预期。
 
 ```js
 [1,2,3,4,5].map( partial( add, 3 ) );
@@ -175,6 +175,7 @@ The reason we can't pass `add(..)` directly to `map(..)` is because the signatur
 ### `bind(..)`
 
 JavaScript has a built-in utility called `bind(..)`, which is available on all functions. It has two capabilities: presetting the `this` context and partially applying arguments.
+JavaScript 有一个 `bind(..)` 内建实用函数
 
 I think this is incredibly unfortunate to conflate these two capabilities in one utility. Sometimes you'll want to hard-bind the `this` context and not partially apply arguments. Other times you'll want to partially apply arguments but not care about `this` binding at all. I personally have almost never needed both at the same time.
 
