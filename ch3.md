@@ -3,7 +3,7 @@
 
 在第二章的 “函数输入” 小节中，我们聊到了函数形参（parameters）和实参（arguments）的基本知识，甚至还了解到一些能简化其使用的语法技巧，比如 `...` 操作符和解构（destructuring）。
 
-在那个讨论中，我建议尽可能设计单一形参的函数。但实际上你不能每次都做到，而且也不能每次都掌控你要处理的函数声明（function signatures）。
+在那个讨论中，我建议尽可能设计单一形参的函数。但实际上你不能每次都做到，而且也不能每次都掌控你的函数调用方式。
 
 现在，我们把注意力放在更复杂、强大的模式上，以便讨论处在这些场景下的函数输入。
 
@@ -165,7 +165,7 @@ function add(x,y) {
 
 **注意：**如果你没见过 `map(..)` ，别担心，我们会在本书后面的部分详细介绍它。目前你只需要知道它用来循环遍历（loop over）一个数组，在遍历过程中调用函数产出新值并存到新的数组中。
 
-因为 `add(..)` 函数不是 `map(..)` 函数所预期的遍历函数，所以我们不直接把它传入 `map(..)` 函数里。这样一来，偏应用就有了用武之地：我们可以调整 `add(..)` 函数的声明，以符合 `map(..)` 函数的预期。
+因为 `add(..)` 函数不是 `map(..)` 函数所预期的遍历函数，所以我们不直接把它传入 `map(..)` 函数里。这样一来，偏应用就有了用武之地：我们可以调整 `add(..)` 函数的调用方式，以符合 `map(..)` 函数的预期。
 
 ```js
 [1,2,3,4,5].map( partial( add, 3 ) );
@@ -174,24 +174,23 @@ function add(x,y) {
 
 ### `bind(..)`
 
-JavaScript has a built-in utility called `bind(..)`, which is available on all functions. It has two capabilities: presetting the `this` context and partially applying arguments.
-JavaScript 有一个 `bind(..)` 内建实用函数
+JavaScript 有一个内建的 `bind(..)` 实用函数，任何函数都可以使用它。该函数有两个功能：预设 `this` 关键字的上下文，以及部分应用实参。
 
-I think this is incredibly unfortunate to conflate these two capabilities in one utility. Sometimes you'll want to hard-bind the `this` context and not partially apply arguments. Other times you'll want to partially apply arguments but not care about `this` binding at all. I personally have almost never needed both at the same time.
+我认为将这两个功能混合进一个实用函数是极其糟糕的决定。有时你不想关心 `this` 的绑定，而只是要部分应用实参。我本人基本上从不会同时需要这两个功能。
 
-The latter scenario is awkward because you have to pass an ignorable placeholder for the `this`-binding argument (the first one), usually `null`.
+对于下面的方案，你通常要传 `null` 给用来绑定 `this` 的实参（第一个实参），而它是一个可以忽略的占位符。因此，这个方案非常糟糕。
 
-Consider:
+请看:
 
 ```js
 var getPerson = ajax.bind( null, "http://some.api/person" );
 ```
 
-That `null` just bugs me to no end.
+那个 `null` 只会给我带来无尽的烦恼。
 
-### Reversing Arguments
+### 将实参顺序颠倒
 
-Recall that the signature for our Ajax function is: `ajax( url, data, cb )`. What if we wanted to partially apply the `cb` but wait to specify `data` and `url` later? We could create a utility that wraps a function to reverse its argument order:
+回想我们之前调用 Ajax 函数的方式：`ajax( url, data, cb )`。如果要部分应用 `cb` 而稍后再指定 `data` 和 `url` 参数，我们应该怎么做呢？我们可以创建一个可以颠倒实参顺序的实用函数，用来包裹原函数。
 
 ```js
 function reverseArgs(fn) {
@@ -207,7 +206,7 @@ var reverseArgs =
 			fn( ...args.reverse() );
 ```
 
-Now we can reverse the order of the `ajax(..)` arguments, so that we can then partially apply from the right rather than the left. To restore the expected order, we'll then reverse the partially applied function:
+现在可以颠倒 `ajax(..)` 实参的顺序了，接下来，我们不再从左边开始，而是从右侧开始部分应用实参。为了恢复期望的实参顺序，接着我们又将部分应用实参后的函数颠倒一下实参顺序：
 
 ```js
 var cache = {};
@@ -218,11 +217,12 @@ var cacheResult = reverseArgs(
 	} )
 );
 
-// later:
+// 处理后:
 cacheResult( "http://some.api/person", { user: CURRENT_USER_ID } );
 ```
 
 Now, we can define a `partialRight(..)` which partially applies from the right, using this same reverse-partial apply-reverse trick:
+好，我们来定义一个从右边开始部分应用实参的 `partialRight(..)` 实用函数。我们将同样的技巧运用在该函数中：
 
 ```js
 function partialRight( fn, ...presetArgs ) {
@@ -235,7 +235,7 @@ var cacheResult = partialRight( ajax, function onResult(obj){
 	cache[obj.id] = obj;
 });
 
-// later:
+// 处理后:
 cacheResult( "http://some.api/person", { user: CURRENT_USER_ID } );
 ```
 
