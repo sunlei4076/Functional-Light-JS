@@ -23,7 +23,7 @@ But I want you to be able to apply some of the fundamentals of FP to your JavaSc
 
 **To read more about the motivations and perspective behind this book, check out the [Preface](preface.md).**
 
-** 更多关于本书背后的动机和各种观点讨论，请参看[前言](preface.md)。**
+**更多关于本书背后的动机和各种观点讨论，请参看[前言](preface.md)。**
 
 ## Book
 ## 本书
