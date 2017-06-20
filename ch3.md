@@ -63,7 +63,7 @@ function partial(fn,...presetArgs) {
 
 **建议：**不要只看这段代码的形式。请花些时间研究一下该实用函数中发生的事情。请确保你真的**理解**了。由于在接下来的文章里，我们将会一次又一次地提到该模式，所以你最好现在就适应它。
 
-`partial(..)` 函数接收 `fn` 参数，来表示我们部分应用实参（partially apply）的函数。接着，`fn` 形参之后，`presetArgs` 数组收集了后面传入的实参，保存起来稍后使用。
+`partial(..)` 函数接收 `fn` 参数，来表示被我们偏应用实参（partially apply）的函数。接着，`fn` 形参之后，`presetArgs` 数组收集了后面传入的实参，保存起来稍后使用。
 
 我们创建并 `return` 了一个新的内部函数（为了清晰明了，我们把它命名为`partiallyApplied(..)`），该函数中，`laterArgs` 数组收集了全部实参。
 
@@ -174,9 +174,9 @@ function add(x,y) {
 
 ### `bind(..)`
 
-JavaScript 有一个内建的 `bind(..)` 实用函数，任何函数都可以使用它。该函数有两个功能：预设 `this` 关键字的上下文，以及部分应用实参。
+JavaScript 有一个内建的 `bind(..)` 实用函数，任何函数都可以使用它。该函数有两个功能：预设 `this` 关键字的上下文，以及偏应用实参。
 
-我认为将这两个功能混合进一个实用函数是极其糟糕的决定。有时你不想关心 `this` 的绑定，而只是要部分应用实参。我本人基本上从不会同时需要这两个功能。
+我认为将这两个功能混合进一个实用函数是极其糟糕的决定。有时你不想关心 `this` 的绑定，而只是要偏应用实参。我本人基本上从不会同时需要这两个功能。
 
 对于下面的方案，你通常要传 `null` 给用来绑定 `this` 的实参（第一个实参），而它是一个可以忽略的占位符。因此，这个方案非常糟糕。
 
@@ -190,7 +190,7 @@ var getPerson = ajax.bind( null, "http://some.api/person" );
 
 ### 将实参顺序颠倒
 
-回想我们之前调用 Ajax 函数的方式：`ajax( url, data, cb )`。如果要部分应用 `cb` 而稍后再指定 `data` 和 `url` 参数，我们应该怎么做呢？我们可以创建一个可以颠倒实参顺序的实用函数，用来包裹原函数。
+回想我们之前调用 Ajax 函数的方式：`ajax( url, data, cb )`。如果要偏应用 `cb` 而稍后再指定 `data` 和 `url` 参数，我们应该怎么做呢？我们可以创建一个可以颠倒实参顺序的实用函数，用来包裹原函数。
 
 ```js
 function reverseArgs(fn) {
@@ -206,7 +206,7 @@ var reverseArgs =
 			fn( ...args.reverse() );
 ```
 
-现在可以颠倒 `ajax(..)` 实参的顺序了，接下来，我们不再从左边开始，而是从右侧开始部分应用实参。为了恢复期望的实参顺序，接着我们又将部分应用实参后的函数颠倒一下实参顺序：
+现在可以颠倒 `ajax(..)` 实参的顺序了，接下来，我们不再从左边开始，而是从右侧开始偏应用实参。为了恢复期望的实参顺序，接着我们又将偏应用实参后的函数颠倒一下实参顺序：
 
 ```js
 var cache = {};
@@ -221,8 +221,7 @@ var cacheResult = reverseArgs(
 cacheResult( "http://some.api/person", { user: CURRENT_USER_ID } );
 ```
 
-Now, we can define a `partialRight(..)` which partially applies from the right, using this same reverse-partial apply-reverse trick:
-好，我们来定义一个从右边开始部分应用实参的 `partialRight(..)` 实用函数。我们将同样的技巧运用在该函数中：
+好，我们来定义一个从右边开始偏应用实参（译注：以下简称右偏应用实参）的 `partialRight(..)` 实用函数。我们将运用和上面相同的技巧于该函数中：
 
 ```js
 function partialRight( fn, ...presetArgs ) {
@@ -240,8 +239,9 @@ cacheResult( "http://some.api/person", { user: CURRENT_USER_ID } );
 ```
 
 This implementation of `partialRight(..)` does not guarantee that a specific parameter will receive a specific partially-applied value; it only ensures that the right-partially applied value(s) appear as the right-most argument(s) passed to the original function.
+这个 `partialRight(..)` 函数的实现方案不能保证让一个特定的形参接受特定的被偏应用的值；它只能确保将被这些值（一个或几个）当作原函数最右边的实参（一个或几个）传入。
 
-For example:
+举个例子:
 
 ```js
 function foo(x,y,z) {
