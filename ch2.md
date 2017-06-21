@@ -1,57 +1,57 @@
-# Functional-Light JavaScript
-# Chapter 2: Foundations of Functional Functions
+# 轻量函数式JavaScript
+# 第2章：函数基础
 
-Functional Programming is **not just programming with the `function` keyword.** Oh if only it was that easy, I could end the book right here! But importantly, the function really *is* at the center of FP. And it's how we use functions that makes our code *functional*.
+函数式编程**不是仅仅用 `function` 这个关键词来编程**。如果真这么简单，那我这本书可以到此为止了！重点在于：函数**是**函数式编程的核心。这也是教会我们如何使用函数，并让我们的代码变得更加具备功能性的秘诀。
 
-But, how sure are you that you know what *function* means?
+然而，你真的明白*函数*的含义吗？
 
-In this chapter, we're going to lay the groundwork for the rest of the book by covering all the foundational aspects of functions. In some ways, the content here is a review of all the things even a non-FP programmer should know about functions. But if we want to get the most out learning FP concepts, we've got to *know* functions inside and out.
+在这一章，我们将会介绍函数的基础知识，为阅读本书的后续章节打下基础。从某种程度上来说，本章是对函数的一个全面回顾，当然也包含了非函数式编程的内容。但如果我们想要充分、全面地学习函数式编程的概念，我们需要从头到脚地**理解**函数。
 
-Brace yourself, because there's a lot more to the function than you may have realized.
+坚持下去啊，因为还有好多你未知的函数知识。
 
-## What Is A Function?
+## 什么是函数？
 
-The most natural place I can think of to start tackling functional programming is with the *function*. That may seem too simplistic and obvious, but I think our journey needs a solid first step.
+每当我提到函数式编程，自然而然会想到*函数*。这似乎听起来太简陋抽象，我想我们还是一步一个脚印地来认识吧。
 
-So... what is a function?
+所以......什么是函数？
 
-### Brief Math Review
+### 简要的数学回顾
 
-I know I've promised we'd stay away from math as much as possible, but bear with me for a moment as we quickly observe some fundamental things about functions and graphs from algebra before we move on.
+我知道我曾说过，离数学越远越好，但是让我们暂且忍一小段时间，在这段时间里，我们会尽快地回顾在代数中一些函数和图像的基本知识。
 
-Do you remember learning anything about `f(x)` back in school? What about the equation `y = f(x)`?
+你还记得你在学校里学习任何有关 `f(x)` 的知识吗？还有方程 `y = f(x)` ?
 
-Let's say an equation is defined like this: <code>f(x) = 2x<sup>2</sup> + 3</code>. What does that mean? What does it mean to graph that equation? Here's the graph:
+现有方程式定义如下：<code>f(x) = 2x<sup>2</sup> + 3</code>. 这个方程有什么意义？它对应的图像是什么样的呢？如下图：
 
 <img src="fig1.png">
 
-What you can notice is that for any value of `x`, say `2`, if you plug it into the equation, you get `11`. What is `11`, though? It's the *return value* of the `f(x)` function, which earlier we said represents a `y` value.
+你可以注意到：对于 `x` 取任意值，例如 `2` ，带入方程后会得到 `11` 。这里的 `11` 代表函数的*返回值*，更简单来说就是 `y` 值。
 
-In other words, there's a point at `(2,11)` on that curve in the graph. And for every value of `x` we plug in, we get another `y` value that pairs with it as a coordinate for a point. Another is `(0,3)`, and another is `(-1,5)`. Put all those points together, and you have the graph of that parabolic curve as shown above.
+根据上述，现在有一个点 `(2,11)` 在图像的曲线上，并且当我们有一个 `x` 值，我们都能获得一个对应的 `y` 值。把两个值组合就能得到一个点的坐标，例如 `(0,3)` ， `(-1,5)` 。当把所有的这些点放在一起，就会获得这个抛物线方程的图像，如上图所示。
 
-So what's any of this got to do with FP?
+所以，这些和函数式编程有什么关系？
 
-In math, a function always takes input(s), and always gives an output. A term you'll often hear around FP is "morphism"; this is a fancy way of describing a set of values that maps to another set of values, like the inputs of a function related to the outputs of that function.
+在数学中，函数总是获取一些输入值，然后给出一个输出值。你能听到一个函数式编程的术语叫做“态射”：这是一个优雅的方式来描述一组值和另一组值的映射关系，就像一个函数的输入值与输出值之间的关联关系。
 
-In algebraic math, those inputs and outputs are often interpreted as parts of coordinates to be graphed. In our programs, however, we can define functions with all sorts of input(s) and output(s), and they need not have any relationship to a visually plotted curve on a graph.
+在代数数学中，那些输入值和输出值经常解释为要绘制坐标的一部分。不过，在我们的程序中，我们可以定义函数有各种的输入和输出值，同时它们并不需要在图像上组成抛物线。
 
-### Function vs Procedure
+### 函数 vs 程序
 
-So why all the talk of math and graphs? Because in a sense functional programming is about embracing using functions as *functions* in this mathematical sense.
+为什么所有的讨论都围绕数学和图像？因为在某种程度上，函数式编程就是使用在数学意义上的方程作为*函数*。
 
-You may be more accustomed to thinking of functions as procedures. What's the difference? An arbitrary collection of functionality. It may have inputs, it may not. It may have an output (`return` value), it may not.
+你可能会习以为常地认为函数就是程序。它们之间的区别是什么？程序就是一个任意的功能集合。它或许有许多个输入值，或许没有。它或许有一个输出值（ `return` 值），或许没有。
 
-A function takes input(s) and definitely always has a `return` value.
+而函数则是接收输入值，并明确地 `return` 值。
 
-If you plan to want to do functional programming, **you should be using functions as much as possible**, and not procedures. All your `function`s should take input(s) and return output(s). Why? The answer to that will have many levels of meaning that we'll uncover throughout this book.
+如果你计划使用函数式编程，**你应该尽可能多地使用函数**，而不是程序。你所有编写的 `function` 应该接收输入值，并且返回输出值。这么做的原因是多方面的，我们将会在后面的书中来介绍的。
 
-## Function Input
+## 函数输入
 
-From this definition, all functions need input.
+从上述的定义出发，所有的函数都需要输入。
 
-You sometimes hear people refer to them as "arguments" and sometimes as "parameters". So what's that all about?
+你有时听人们把函数的输入值称为 "arguments" 或者 "parameters" 。所以它到底是什么？
 
-*Arguments* are the values you pass in, and *parameters* are the named variables inside the function that receive those passed in values. Example:
+*arguments*是你输入的值（实参），*parameters*是函数中的命名变量（形参），用于接收函数的输入值。例子如下：
 
 ```js
 function foo(x,y) {
@@ -63,13 +63,13 @@ var a = 3;
 foo( a, a * 2 );
 ```
 
-`a` and `a * 2` (actually, the result of that expression, `6`) are the *arguments* to the `foo(..)` call. `x` and `y` are the *parameters* that receive the argument values (`3` and `6`, respectively).
+`a` 和 `a * 2`（即为 `6`）是函数 `foo(..)` 调用的 *arguments*。`x` 和 `y` 是 *parameters*，用于接收参数值（分别为 `3` 和 `6` ）。
 
-**Note:** In JavaScript, there's no requirement that the number of *arguments* matches the number of *parameters*. If you pass more *arguments* than you have declared *parameters* to receive them, the values pass in just fine untouched. These values can be accessed in a few different ways, including the old-school `arguments` object you may have heard of before. If you pass fewer *arguments* than the declared *parameters*, each unaccounted-for parameter is an "undefined" variable, meaning it's present and available in the scope of the function, but just starts out with the empty `undefined` value.
+**注意：**在JavaScript中，*实参*的个数没必要完全符合*形参*的个数。如果你传入许多个*实参*，而且多过你所声明的*形参*，这些输入值仍然会被通过。这些值会通过一些不同的方式传入，包含了你以前可能听过的旧版本中的 `arguments` 对象。反之，你传入少于声明*形参*个数的*实参*，所有缺少的参数将会被赋予 "undefined" 变量，意味着你仍然可以在函数作用域中使用它，但值是 `undefined` 。
 
-### Counting Inputs
+### 输入计数
 
-The number of arguments a function "expects" -- how many arguments you'll probably want to pass to it -- is determined by the number of parameters that are declared.
+一个函数所“期望”的实参个数是取决于已声明的形参个数，即你希望传入多少参数。
 
 ```js
 function foo(x,y,z) {
@@ -77,9 +77,9 @@ function foo(x,y,z) {
 }
 ```
 
-`foo(..)` *expects* three arguments, because it has three declared parameters. This count has a special term: arity. Arity is the number of parameters in a function declaration. The arity of `foo(..)` is `3`.
+`foo(..)` *期望*三个实参，因为它声明了三个形参。这里有一个特殊的术语：Arity。Arity是一个函数声明的形参数量。 `foo(..)` 的Arity是 `3`。
 
-You may wish to inspect a function reference during the runtime of a program to determine its arity. This can be done with the `length` property of that function reference:
+你可能需要在程序运行时获取函数的Arity，使用函数的 `length` 属性即可。
 
 ```js
 function foo(x,y,z) {
@@ -89,13 +89,13 @@ function foo(x,y,z) {
 foo.length;				// 3
 ```
 
-One reason for determining the arity during execution would be if a piece of code received a function reference from multiple sources, and sent different values depending on the arity of each.
+在执行时要确定Arity的一个原因是：一段代码可能从多个来源接收函数引用，不同的Arity会发送不同的值。
 
-For example, imagine a case where an `fn` function reference could expect one, two, or three arguments, but you always want to just pass a variable `x` in the last position:
+举个例子，如果函数 `fn` 可以传入1，2或3个参数，但你只希望把变量 `x` 放在最后的位置传入：
 
 ```js
-// `fn` is set to some function reference
-// `x` exists with some value
+// `fn` 是被设置好的函数引用
+// `x` 是存在的值
 
 if (fn.length == 1) {
 	fn( x );
@@ -108,9 +108,9 @@ else if (fn.length == 3) {
 }
 ```
 
-**Tip:** The `length` property of a function is read-only and it's determined at the time you declare the function. It should be thought of as essentially a piece of metadata that describes something about the intended usage of the function.
+**提示：** 函数的 `length` 属性是一个只读属性，并且它是在最初声明函数的时候就被确定了。它在函数的使用中是一个最基本的元数据。
 
-One gotcha to be aware of is that certain kinds of parameter list variations can make the `length` property of the function report something different than you might expect. Don't worry, we'll explain each of these (ES6-introduced) features later in this chapter:
+需要注意的是，某些参数列表的变量会让 `length` 属性变得不同于你的预期。别紧张，我们将会在后续的章节逐一解释这些特性（引入ES6）：
 
 ```js
 function foo(x,y = 2) {
@@ -130,9 +130,9 @@ bar.length;				// 1
 baz.length;				// 1
 ```
 
-If you use any of these forms of parameters, be aware that your function's `length` value may surprise you.
+如果你使用这些形式的参数，你或许会被函数的 `length` 值吓一跳。
 
-What about counting the number of arguments the current function call received? This used to be trivial, but now the situation is slightly more complicated. Each function has an `arguments` object (array-like) available that holds a reference to each of the arguments passed in. You can then inspect the `length` property of `arguments` to figure out how many were actually passed:
+怎么样计算当前函数的参数个数？这在以前非常简单，但现在情况稍微复杂了一些。每一个函数都有一个 `arguments` 对象（类数组）存放需要传入的参数。你可以通过 `arguments` 的 `length` 值来找出有多少传入的参数：
 
 ```js
 function foo(x,y,z) {
@@ -142,23 +142,23 @@ function foo(x,y,z) {
 foo( 3, 4 );
 ```
 
-As of ES5 (and strict mode, specifically), `arguments` is considered by some to be soft-deprecated; many will avoid using it if possible. It'll never be removed -- in JS we "never" break backwards-compatibility no matter how convenient that may be -- but it's strongly suggested for several reasons that you avoid using it whenever possible.
+由于ES5（特别是严格模式下）的 `arguments` 不被一些人认同，很多人尽可能地避免使用。尽管如此，它永远不会被移除，这是因为在JS中我们“永远不会”因为便利性而去牺牲向后的兼容性，但我还是强烈建议不要去使用它。
 
-However, I suggest that `arguments.length`, and only that, is OK to keep using for those cases where you need to care about the passed number of arguments. A future version of JS might possibly add a feature that restores the ability to determine the number of arguments passed without `arguments.length`; if that happens, then we can fully drop usage of `arguments`.
+不过，当你需要知道参数个数的时候， `arguments.length` 是一个好选择，但也仅此而已。在未来版本的JS或许会新增特性来替代 `arguments.length` ；如果成真，那么我们可以完全把 `arguments` 抛诸脑后。
 
-Be careful: **never** access arguments positionally, like `arguments[1]`. Stick to `arguments.length` only, if you must.
+请注意：**不要**通过 `arguments[1]` 访问参数的位置。只要记住 `arguments.length` 。
 
-Except... how will you access an argument that was passed in a position beyond the declared parameters? I'll answer that in a moment; but first, take a step back and ask yourself, "Why would I want to do that?". Seriously. Think about that closely for a minute.
+除此之外，你或许想知道如何访问那些超出声明的参数？这个问题我一会儿会告诉你，不过你先要问自己的问题是，“为什么我想要知道这个？”。认真地思考一段时间。
 
-It should be pretty rare that this occurs; it shouldn't be something you regularly expect or rely on when writing your functions. If you find yourself in such a scenario, spend an extra 20 minutes trying to design the interaction with that function in a different way. Name that extra argument even if it's exceptional.
+发生这种情况应该是非常罕见的。因为这不会是你日常需要的，也不会是你编写函数时所必要的东西。如果这种情况真的发生，你应该花20分钟来试着重新设计函数，或者命名那些多出来的参数。
 
-A function signature that accepts an indeterminate amount of arguments is referred to as a variadic function. Some people prefer this style of function design, but I think you'll find that often the FPer wants to avoid these where possible.
+带有可变数量参数的函数被称为variadic。有些人更喜欢这样的函数设计，不过你会发现，这正是使用函数式编程的人想要避免的。
 
-OK, enough harping on that point.
+好了，上面的重点已经讲得够多了。
 
-Say you do need to access the arguments in a positional array-like way, possibly because you're accessing an argument that doesn't have a formal parameter at that position. How do we do it?
+例如，当你需要像数组那样访问参数，很有可能的原因是你想要获取的参数没有在一个规范的位置。我们如何处理？
 
-ES6 to the rescue! Let's declare our function with the `...` operator -- variously referred to as "spread", "rest", or (my preference) "gather".
+ES6救星来了！让我们用 `...` 操作符声明我们的函数，后面使用"spread", "rest", 或者"gather" (我比较偏爱）都可以。
 
 ```js
 function foo(x,y,z,...args) {
@@ -166,7 +166,7 @@ function foo(x,y,z,...args) {
 }
 ```
 
-See the `...args` in the parameter list? That's a new ES6 declarative form that tells the engine to collect (ahem, "gather") all remaining arguments (if any) not assigned to named parameters, and put them in a real array named `args`. `args` will always be an array, even if it's empty. But it **will not** include values that are assigned to the `x`, `y`, and `z` parameters, only anything else that's passed in beyond those first three values.
+看到参数列表中的 `...args` 了吗？那就是ES6用来告诉解析引擎获取所有剩余的未命名参数，并把它们放在一个真实的命名为 `args` 的数组。 `args` 无论是不是空的，它永远是一个数组。但它**不包含**已经命名的 `x`, `y`, 和 `z` 参数，只会包含超出前三个值的传入参数。
 
 ```js
 function foo(x,y,z,...args) {
@@ -179,11 +179,11 @@ foo( 1, 2, 3, 4 );		// 1 2 3 [ 4 ]
 foo( 1, 2, 3, 4, 5 );	// 1 2 3 [ 4, 5 ]
 ```
 
-So, if you *really* want to design a function that can account for an arbitrary number of arguments to be passed in, use `...args` (or whatever name you like) on the end. Now, you'll have a real, non-deprecated, non-yucky array to access those argument values from.
+所以，如果你*诚心*想要设计一个函数，并且计算出任意传入参数的个数，那就在最后用 `...args` （或任何你喜欢的名称）。现在你有一个真正的、好用的数组来获取这些参数值了。
 
-Just pay attention to the fact that the value `4` is at position `0` of that `args`, not position `3`. And its `length` value won't include those three `1`, `2`, and `3` values. `...args` gathers everything else, not including the `x`, `y`, and `z`.
+你需要注意的是： `4` 所在的位置是 `args` 的第 `0` 个，不是在第 `3` 个位置。它的 `length` 值也不包含 `1`, `2`, 和 `3` ，`...args` 剩下所有的值, 但不包括 `x`, `y`, 和 `z`。
 
-You *can* even use the `...` operator in the parameter list even if there's no other formal parameters declared:
+你**甚至可以**直接在参数列中使用 `...` 操作符，没有其他正式声明的参数也没关系：
 
 ```js
 function foo(...args) {
@@ -191,13 +191,13 @@ function foo(...args) {
 }
 ```
 
-Now `args` will be the full array of arguments, whatever they are, and you can use `args.length` to know exactly how many arguments have been passed in. And you're safe to use `args[1]` or `args[317]` if you so choose. Please don't pass in 318 arguments, though.
+现在 `args` 是一个由参数组成的完整数组，你可以尽情使用 `args.length` 来获取传入的参数。你也可以安全地使用 `args[1]` 或者 `args[317]` 。当然，别真的传318个参数！
 
-Speaking of ES6 goodies, there's a few other tricks you may want to know about with your function arguments and parameters. For more information beyond this brief overview, see Chapter 2 of my "You Don't Know JS: ES6 & Beyond" book.
+说到ES6的好，你肯定想知道一些小秘诀。在这里将会介绍一些，更多的内容推荐你阅读《You Don't Know JS: ES6 & Beyond》这本书的第2章。
 
-#### Argument Tricks
+#### 关于实参（Argument）的小技巧
 
-What if you wanted to pass along an array of values as the arguments in your function call?
+如果您想在你的函数引用中调用一个数组的值，该怎么办？
 
 ```js
 function foo(...args) {
@@ -209,9 +209,9 @@ var arr = [ 1, 2, 3, 4, 5 ];
 foo( ...arr );						// 4
 ```
 
-Our new friend `...` is used, but not just in the parameter list; it's also used in the argument list at the call-site. It has the opposite behavior in this context. In a parameter list, we said it *gathered* arguments together. In an argument list, it *spreads* them out. So the contents of `arr` are actually spread out as individual arguments to the `foo(..)` call. Do you see how that's different from just passing in a reference to the whole `arr` array?
+我们的新朋友 `...` 在这里被使用到了，但不仅仅在实参列表，同样在调用形参列表中被使用。在这里的情况有所不同：在形参列表，它把实参*整合*。在实参列表，它把实参*展开*。所以 `arr` 的内容是以函数 `foo(..)` 引用的单独参数进行展开。你能理解传入一个引用值和传入整个 `arr` 数组两者之间的不同了吗？
 
-By the way, multiple values and `...` spreadings can be interleaved, as you see fit:
+顺带一提，多个值和 `...` 是可以相互交错放置的，如下：
 
 ```js
 var arr = [ 2 ];
@@ -219,15 +219,15 @@ var arr = [ 2 ];
 foo( 1, ...arr, 3, ...[4,5] );		// 4
 ```
 
-Think of `...` in this symmetric sense: in a value-list position, it *spreads*. In an assignment position -- like a parameter list, because arguments get *assigned to* parameters -- it *gathers*.
+在对称的意义上来考虑 `...` ：在值列表的情况，它会*展开*。在赋值的情况，它就像形参列一样，因为实参会*赋值*到形参上。
 
-Whichever behavior you invoke, `...` makes working with arrays of arguments much easier. Gone are the days of `slice(..)`, `concat(..)` and `apply(..)` to wrangle our argument value arrays.
+无论采取什么行为， `...` 都会让实参数组更容易操作。那些我们使用实参数组 `slice(..)`， `concat(..)` 和 `apply(..)` 的日子已经过去了。
 
-#### Parameter Tricks
+#### 关于形参（Parameter）的小技巧
 
-As of ES6, parameters can have declared *default values*. In the case where the argument for that parameter is not passed, or it's passed as the value `undefined`, the default assignment expression takes over.
+在ES6中，形参可以声明*默认值*。当形参没有传入到实参中，或者传入值是 `undefined` ，会进行默认赋值的操作。
 
-Consider:
+思考以下：
 
 ```js
 function foo(x = 3) {
@@ -240,11 +240,11 @@ foo( null );			// null
 foo( 0 );				// 0
 ```
 
-**Note:** We won't cover it here in any more detail, but the default value expression is lazy, meaning it's not evaluated unless and until needed. Also, it can be any valid JS expression, even a function call. Many cool tricks are possible with this capability. For example, you could declare `x = required()` in your parameter list, and in the `required()` function simply `throw "This argument is required."` to make sure someone always calls your function with that argument/parameter specified.
+**注意：**我们如果在这里不给它更多的信息，默认值表达式不会那么聪明地完成操作。这也意味着除非需要，否则它不会被赋值。同样的，它同样可以是一些有效的JS表达式，甚至一个函数引用。许多非常酷的小技巧用到了这个方法。例如，你可以这样在你的参数列声明 `x = required()` ，并且在函数 `required()` 中`抛出 "This argument is required."` 来确信总有人用你指定的实参或形参来引用你的函数。
 
-Another ES6 trick we can use with our parameters is called "destructuring". We'll only glance briefly at it because this topic is much more complex than we have space to cover here. But again, refer to my "ES6 & Beyond" book for lots more info.
+另一个我们可以在参数中使用的ES6技巧，被称为“解构”。在这里我们只会简单一提，因为要说清这个话题实在太过繁杂。在这里推荐《ES6 & Beyond》这本书了解更多信息。
 
-Remember our `foo(..)` from before that could receive as many as 318 arguments!?
+记住我们的之前提到可以接受318个参数的 `foo(..)` 吗？
 
 ```js
 function foo(...args) {
@@ -254,7 +254,7 @@ function foo(...args) {
 foo( ...[1,2,3] );
 ```
 
-What if we wanted to change that interaction so the caller of our function passes in an array of values instead of individual argument values? Just drop the two `...` usages:
+如果我们想要把函数内的参数从一个个单独的参数值替换为一个数组，应该怎么做？这里有两个 `...` 的写法：
 
 ```js
 function foo(args) {
@@ -264,7 +264,7 @@ function foo(args) {
 foo( [1,2,3] );
 ```
 
-Simple enough. But what if now we wanted to give a parameter name to each of the first two values in the passed in array? We aren't declaring individual parameters anymore, so it seems we lost that ability. Destructuring is the answer:
+这个非常简单。但如果我们想要命名传入数组的第1、2个值，该怎么做？我们不能用单独传入参数的办法了，所以这似乎看起来无能为力。不过解构可以回答这个问题：
 
 ```js
 function foo( [x,y,...args] = [] ) {
@@ -274,11 +274,11 @@ function foo( [x,y,...args] = [] ) {
 foo( [1,2,3] );
 ```
 
-Do you spot the `[ .. ]` brackets around the parameter list now? That's array destructuring. Destructuring is a way to declaratively describe a *pattern* for the kind of structure (object, array, etc) that you expect to see, and how decomposition (assignment) of its individual parts should happen.
+你看到了在参数列出现的 `[ .. ]` 了吗？这就是数组解构。解构是一种通过你期望的模式来描述数据（对象，数组等），还有如何分配（赋值）值。
 
-In this example, destructuring tells the engine that an array is expected in this assignment position (aka parameter). The pattern says to take the first value of that array and assign to a local parameter variable called `x`, the second to `y`, and whatever is left is *gathered* into `args`.
+在这里例子中，解构告诉解析器，一个数组应该出现的赋值位置（即参数）。这种模式是：拿出数组中的第一个值，并且赋值给局部参数变量 `x` ，第二个赋值给 `y` ，剩下的则*组成* `args` 。
 
-You could have done that same thing manually like this:
+你应该亲自动手写一写：
 
 ```js
 function foo(params) {
@@ -290,13 +290,13 @@ function foo(params) {
 }
 ```
 
-But now we start to uncover the first bits of a principle that we'll come back to many more times in this text: declarative code often communicates more cleanly than imperative code.
+现在我们可以发现，在我们这本书中要多次提到的原则第一条：声明性代码通常比命令式代码更干净。
 
-Declarative code, like destructuring in the earlier snippet, focuses on what the outcome of a piece of code should be. Imperative code, like the manual assignments just shown, focuses more on how to get the outcome. If you later read the code, you have to mentally execute it to understand the desired outcome. The outcome is *coded* there, but it's not as clear.
+声明性代码，如同更早期的解构，它关心的是一段代码的结果是什么。命令式代码，如同普通的赋值，它更关心的是获得结果的过程。也就是说，你在之后阅读代码，你必须在脑中执行它，并且理解期望的结果。这个结果就是*编码*，但是并没有那么清楚易懂。
 
-Wherever possible, and to whatever degrees our language and our libraries/frameworks will let us, **we should be striving for declarative and self-explanatory code.**
+只要可能，无论我们的语言和我们的库或框架允许我们达到什么程度，**我们都应该尽可能使用声明性的和自解释的代码**。
 
-Just as we can destructure arrays, we can destructure object parameters:
+正如我们可以解构的数组，我们可以解构的对象参数：
 
 ```js
 function foo( {x,y} = {} ) {
@@ -308,25 +308,25 @@ foo( {
 } );					// undefined 3
 ```
 
-We pass in an object as the single argument, and it's destructured into two separate parameter variables `x` and `y`, which are assigned the values of those corresponding property names from the object passed in. It didn't matter that the `x` property wasn't on the object; it just ended up as a variable with `undefined` like you'd expect.
+我们传入一个对象作为一个参数，它解构成两个独立的参数变量 `x` 和 `y` ，从传入的对象中分配相应属性名的值。我们不在意属性值 `x` 到底存不存在对象上，如果不存在，就用我们所预设的 `undefined` 来赋值。
 
-But the part of parameter object destructuring I want you to pay attention to is the object being passed into `foo(..)`.
+但是我希望你注意：对象解构的部分参数是将要传入 `foo(..)` 的对象。
 
-With a normal call-site like `foo(undefined,3)`, position is used to map from argument to parameter; we put the `3` in the second position to get it assigned to a `y` parameter. But at this new kind of call-site where parameter destructuring is involved, a simple object-property indicates which parameter (`y`) the argument value `3` should be assigned to.
+现在有一个正常可用的调用现场 `foo(undefined,3)` ，它用于映射实参到形参。我们试着把 `3` 放到第二个位置，分配给 `y` 。但是在新的调用现场上用到了参数解构，一个简单的对象属性代表了实参 `3` 应该分配给形参(`y`)。
 
-We didn't have to account for `x` in *that* call-site because in effect we didn't care about `x`. We just omitted it, instead of having to do something distracting like passing `undefined` as a positional placeholder.
+我们不需要操心 `x` 应该放在*哪个*调用现场。因为事实上，我们不用去关心 `x`，我们只需要省略它，而不是分配 `undefined` 值。
 
-Some languages have a direct feature for this behavior: named arguments. In other words, at the call-site, labeling an input value to indicate which parameter it maps to. JavaScript doesn't have named arguments, but parameter object destructuring is the next best thing.
+有一些语言对这样的操作有一个直接的特性：命名参数。换句话说，在调用现场，通过标记输入值来告诉它映射关系。JavaScript没有命名参数，不过退而求其次，参数对象解构是一个选择。
 
-The FP-related benefit of using an object destructuring to pass in potentially multiple arguments is that a function that only takes one parameter (the object) is much easier to compose with another function's single output. Much more on that later.
+使用对象解构来传入多个匿名参数是函数式编程的优势，这个优势在于使用一个参数（对象）的函数能更容易接受另一个函数的单个输出。这点会在后面讨论到。
 
-Recall that the term arity refers to how many parameters a function expects to receive. A function with arity of 1 is also referred to as a unary function. In FP, we'll want our functions to be unary whenever possible, and sometimes we'll even use a variety of functional tricks to transform a function of higher arity to a unary form.
+回想一下，术语Arity是指期望函数接收多少个参数。Arity为1的函数也被称为一元函数。在函数式编程中，我们希望我们的函数在任何的情况下是一致的，有时我们甚至会使用各种技巧来将高Arity的函数都转换为一元的形式。
 
-**Note:** In Chapter 3, we'll revisit this named-argument destructuring trick to deal with annoying issues around parameter ordering.
+**注意：**在第3章，我们将重新讨论命名参数的解构技巧，并使用它来处理关于参数排序的问题。
 
-### Functions Varying By Input
+### 随着输入而变化的函数
 
-Consider this function:
+思考以下函数
 
 ```js
 function foo(x,y) {
@@ -339,9 +339,9 @@ function foo(x,y) {
 }
 ```
 
-Obviously, this contrived example is going to behave differently depending on what inputs you pass in.
+明显地，这个函数会根据你传入的值而有所不同。
 
-For example:
+举例：
 
 ```js
 foo( 3, 4 );			// 12
@@ -349,19 +349,19 @@ foo( 3, 4 );			// 12
 foo( "3", 4 );			// "34"
 ```
 
-One reason programmers define functions like this is because it can be more convenient to *overload* different behaviors into a single function. The most well-known example is the `$(..)` function provided by many major JS libraries like jQuery. The "dollar sign" function has about a dozen very different kinds of behaviors -- from DOM element lookup to DOM element creation to deferring a function until the `DOMContentLoaded` event -- depending on what arguments you pass to it.
+程序员这样定义函数的原因之一是，更容易通过同一个函数来*重载*不同的操作。最广为人知的例子就是jQuery提供的 `$(..)` 。"$"函数大约有十几种不同的操作——从DOM元素查找，到DOM元素创建，到等待“DOMContentLoaded”事件后，执行一个函数，这些都取决于你传递给它的参数。
 
-The perceived advantage is learning a smaller API (just one `$(..)` function), but the obvious downside is in reading code and having to carefully inspect exactly what's being passed in to try to decipher what a call will do.
+上述函数，显而易见的优势是降低了学习API的成本（仅仅是一个 `$(..)` 函数），但缺点体现在阅读代码上，你必须仔细检查传递的内容，理解一个函数调用将做什么。
 
-This technique of overloading a function with lots of behaviors based on its inputs is called ad hoc polymorphism.
+能够让一个函数重载并且赋予它许多操作，是需要依靠它的即时多态的输入。
 
-Another manifestation of this design pattern is making a function that has different outputs (see the next section for more detail) under different scenarios.
+这种设计模式的另一个表现形式就是在不同的情况下，使函数具有不同的输出（在下一章节会提到）。
 
-**Warning:** Be very careful of the *convenience* temptation here. Just because you can design a function in this way, and even though there may be immediate perceived wins, the long-term costs of this design decision can be unpleasant.
+**提醒：**要对*方便*的诱惑有警惕之心。因为你可以通过这种方式设计一个函数，即使可以立即使用，但这个设计的长期成本可能会让你后悔。
 
-## Function Output
+## 函数输出
 
-In JavaScript, functions always return a value. These three functions all have identical `return` behavior:
+在JavaScript中，函数只会返回一个值。下面的三个函数都有相同的 `return` 操作。
 
 ```js
 function foo() {}
@@ -375,11 +375,11 @@ function baz() {
 }
 ```
 
-The `undefined` value is implicitly `return`ed if you have no `return` or if you just have an empty `return;`.
+如果你没有 `return` 值，或者你使用 `return;`，那么则会隐式地返回 `undefined` 值。
 
-But keeping as much with the spirit of FP function definition as possible -- using functions and not procedures -- our functions should always have outputs, which means they should explicitly `return` a value, and usually not `undefined`.
+如果想要尽可能靠近函数式编程的定义：使用函数而非程序，那么我们的函数必须永远有返回值。这也意味着他们必须明确地 `return` 一个值，通常这个值也不是 `undefined` 。
 
-A `return` statement can only return a single value. So if your function needs to return multiple values, your only viable option is to collect them into a compound value like an array or an object:
+一个 `return` 的表达式仅能够返回一个值。所以，如果你需要返回多个值，切实可行的办法就是把你需要返回的值放到一个复合值当中去，例如数组、对象：
 
 ```js
 function foo() {
@@ -389,7 +389,7 @@ function foo() {
 }
 ```
 
-Just like destructuring lets us de-construct array/object values in parameters, we can also do so in regular assignments:
+就像解构一样，让我们解构数组或对象的参数值，我们也可以在平时操作中这样做：
 
 ```js
 function foo() {
@@ -402,15 +402,15 @@ var [ x, y ] = foo();
 console.log( x + y );			// 42
 ```
 
-Collecting multiple values into an array (or object) to return, and subsequently destructuring those values back into distinct assignments, is a way to transparently express multiple outputs for a function.
+将多个值放到数组（或对象）中并且返回，然后将这些值解构为不同的赋值，这是一种透明地表达函数的多个输出的方法。
 
-**Tip:** I'd be remiss if I didn't suggest you take a moment to consider if a function needing multiple outputs could be refactored to avoid that, perhaps separated into two or more smaller single-purpose functions? Sometimes that will be possible, sometimes not; but you should at least consider it.
+**提示：**在这里我十分建议你花一点时间来思考：是否需要避免函数有可重构的多个输出？或许将这个函数分为两个或更多个更小的单用途函数。有时会需要这么做，有时可能不需要，但你应该至少考虑一下。
 
-### Early Returns
+### 提前 return
 
-The `return` statement doesn't just return a value from a function. It's also a flow control structure; it ends the execution of the function at that point. A function with multiple `return` statements thus has multiple possible exit points, meaning that it may be harder to read a function to understand its output behavior if there are many paths that output.
+`return` 语句不仅仅是从函数中返回一个值，它也是一个流量控制结构，它可以结束函数的执行。因此，具有多个 `return` 语句的函数具有多个可能的退出点，这意味着如果输出的路径很多，可能难以读取并理解函数的输出行为。
 
-Consider:
+思考以下：
 
 ```js
 function foo(x) {
@@ -428,15 +428,15 @@ function foo(x) {
 }
 ```
 
-Pop quiz: without cheating and running this code in your browser, what does `foo(2)` return? What about `foo(4)`? And `foo(8)`? And `foo(12)`?
+突击测验：不要作弊也不要在浏览器中运行这段代码，请思考 `foo(2)` 返回什么？ `foo(4)` 返回什么？ `foo(8)` ， `foo(12)`呢？
 
-How confident are you in your answers? How much mental tax did you pay to get those answers? I got it wrong the first two times I tried to think it through, and I wrote it!
+你对自己的回答有多少信心？你付出多少精力来获得答案？我错了两次后，我试图仔细思考并且写下来！
 
-I think part of the readability problem here is that we're using `return` not just to return different values, but also as a flow control construct to quit a function's execution early in certain cases. There are obviously better ways to write that flow control (the `if` logic, etc), but I also think there are ways to make the output paths more obvious.
+我认为在许多可读性的问题上，是因为我们不仅使用 `return` 返回不同的值，更把它作为一个流控制结构——在某些情况下可以提前退出一个函数的执行。我们显然有更好的方法来编写流控制（ `if` 逻辑等），也有办法使输出路径更加明显。
 
-**Note:** The answers to the pop quiz are `2`, `2`, `8`, and `13`.
+**注意：**突击测验的答案是：`2` , `2` , `8` 和 `13`。
 
-Consider this version of the code:
+思考以下版本的代码：
 
 ```js
 function foo(x) {
@@ -466,17 +466,17 @@ function foo(x) {
 }
 ```
 
-This version is unquestionably more verbose. But I would argue it's slightly simpler logic to follow, because every branch where `retValue` can get set is *guarded* by the condition that checks if it's already been set.
+这个版本毫无疑问是更冗长的。但是在逻辑上，我认为这比上面的代码更容易理解。因为 `retValue` 设置的每一个分支都被*保护*并检查是否已被设置。
 
-Rather than `return`ing from the function early, we used normal flow control (`if` logic) to determine the `retValue`'s assignment. At the end, we simply `return retValue`.
+相比在函数中提早使用 `return` ，我们更应该用常用的流控制（ `if` 逻辑 ）来控制 `retValue` 的赋值。到最后，我们 `return retValue`。
 
-I'm not unconditionally saying that you should always have a single `return`, or that you should never do early `return`s, but I do think you should be careful about the flow control part of `return` creating more implicitness in your function definitions. Try to figure out the most explicit way to express the logic; that will often be the best way.
+我不是说，你只能有一个 `return` ，或你不应该提早 `return` ，我只是认为在定义函数时，最好不要用 `return` 来实现流控制，这样会创造更多的隐含意义。尝试找出最明确的表达逻辑的方式，这往往是最好的办法。
 
-### Un`return`ed Outputs
+### 未 `return` 的输出
 
-One technique that you've probably used in most code you've written, and maybe didn't even think about it much, is to have a function output some or all of its values by simply changing variables outside itself.
+您可能已经在大多数代码中使用过这种技术，但可能对此没有更多思考。这种技术就是通过简单地改变外部变量来输出一些或全部的值。
 
-Remember our <code>f(x) = 2x<sup>2</sup> + 3</code> function from earlier in the chapter? We could have defined it like this in JS:
+还记得我们之前提到的函数<code>f(x) = 2x<sup>2</sup> + 3</code>吗？我们可以在JS中这样定义：
 
 ```js
 var y;
@@ -490,7 +490,7 @@ foo( 2 );
 y;						// 11
 ```
 
-I know this is a silly example; we could just as easily have `return`d the value instead of setting it into `y` from within the function:
+我知道这是一个无聊的例子。我们完全可以用 `return` 来返回，而不是赋值给 `y` ：
 
 ```js
 function foo(x) {
@@ -502,13 +502,13 @@ var y = foo( 2 );
 y;						// 11
 ```
 
-Both functions accomplish the same task. Is there any reason we should pick one over the other? **Yes, absolutely.**
+这两个函数完成相同的任务。我们有什么理由要从中挑一个吗？**是的，绝对是的。**
 
-One way to explain the difference is that the `return` in the latter version signals an explicit output, whereas the `y` assignment in the former is an implicit output. You may already have some intuition that guides you in such cases; typically, developers prefer explicit patterns over implicit ones.
+解释这两者不同的一种方法是，后一个版本中的 `return` 表示一个显式输出，而前者的 `Y` 赋值是一个隐式输出。在这种情况下，你可能已经猜到了：通常，开发人员喜欢显式模式而不是隐式模式。
 
-But changing a variable in an outer scope, as we did with the `y` assignment inside of `foo(..)`, is just one way of achieving an implicit output. A more subtle example is making changes to non-local values via reference.
+但是，改变一个外部作用域的变量，就像我们在 `foo(..)` 中所做的赋值 `y` 一样，只是实现隐式输出的一种方式。一个更微妙的例子是通过引用对非局部值进行更改。
 
-Consider:
+思考：
 
 ```js
 function sum(list) {
@@ -527,19 +527,19 @@ var nums = [ 1, 3, 9, 27, , 84 ];
 sum( nums );			// 124
 ```
 
-The most obvious output from this function is the sum `124`, which we explicitly `return`ed. But do you spot the other output? Try that code and then inspect the `nums` array. Now do you spot the difference?
+很明显，这个函数输出为 `124` ，我们也非常明确地 `return` 了。但你是否发现其他的输出？查看代码，并检查 `nums` 数组。你发现区别了吗？
 
-Instead of an `undefined` empty slot value in position `4`, now there's a `0`. The harmless looking `list[i] = 0` operation ended up affecting the array value on the outside, even though we operated on a local `list` parameter variable.
+为了填补 `4` 位置的空值 `undefined` ，这里使用了 `0` 代替。尽管我们在局部操作 `list` 参数变量，但我们仍然影响了外部的数组。
 
-Why? Because `list` holds a reference-copy of the `nums` reference, not a value-copy of the `[1,3,9,..]` array value. Because JS uses references and reference-copies for arrays, objects, and functions, we can create an output from our function all too easily, even if by accident.
+为什么？因为 `list` 使用了 `nums` 的引用，不是对 `[1,3,9,..]` 的值复制，而是引用复制。因为JS对数组、对象和函数都使用引用和引用复制，我们可以很容易地从函数中创建输出，即使是无心的。
 
-This implicit function output has a special name in the FP world: side effects. But a function that has *no side effects* also has a special name: pure function. We'll talk a lot more about these in a later chapter, but the punchline is that we'll want to prefer pure functions and avoid side effects if at all possible.
+这个隐式函数输出在函数式编程中有一个特殊的名称：副作用。但是**没有副作用**的函数也有一个特殊的名称：纯函数。我们将在以后的章节讨论这些，但关键是我们应该喜欢纯粹的函数，并且要尽可能避免副作用。
 
-## Functions Of Functions
+## 函数功能
 
-Functions can receive and return values of any type. A function that receives or returns one or more other function values has the special name: higher-order function.
+函数是可以接受并且返回任何类型的值。一个函数如果可以接受或返回一个甚至多个值，它被叫做高阶函数。
 
-Consider:
+思考：
 
 ```js
 function forEach(list,fn) {
@@ -554,9 +554,9 @@ forEach( [1,2,3,4,5], function each(val){
 // 1 2 3 4 5
 ```
 
-`forEach(..)` is a higher-order function because it receives a function as an argument.
+`forEach(..)` 就是一个高阶函数，因为它可以接受一个函数作为参数。
 
-A higher-order function can also output another function, like:
+一个高阶函数同样可以把一个函数作为输出，像这样：
 
 ```js
 function foo() {
@@ -572,7 +572,7 @@ var f = foo();
 f( "Hello!" );			// Hello!
 ```
 
-`return` is not the only way to "output" another function:
+`return` 不是唯一的办法来“输出”函数。
 
 ```js
 function foo() {
@@ -590,15 +590,15 @@ function bar(func) {
 foo();					// Hello!
 ```
 
-Functions that treat other functions as values are higher-order functions by definition. FPers write these all the time!
+将其他函数视为值的函数是高阶函数的定义。编写函数式编程的我们应该学会这样写！
 
-### Keeping Scope
+### 保持作用域
 
-One of the most powerful things in all of programming, and especially in FP, is how a function behaves when it's inside another function's scope. When the inner function makes reference to a variable from the outer function, this is called closure.
+在所有编程，尤其是函数式编程中，最强大的就是：当一个函数内部存在另一个函数的作用域时，对当前函数进行操作。当内部函数从外部函数引用变量，这被称作闭包。
 
-Defined pragmatically, closure is when a function remembers and accesses variables from outside of its own scope, even when that function is executed in a different scope.
+实际上，闭包是它可以记录并且访问它作用域外的变量，甚至当这个函数在不同的作用域被执行。
 
-Consider:
+思考：
 
 ```js
 function foo(msg) {
@@ -614,11 +614,11 @@ var helloFn = foo( "Hello!" );
 helloFn();				// Hello!
 ```
 
-The `msg` parameter variable in the scope of `foo(..)` is referenced inside the inner function. When `foo(..)` is executed and the inner function is created, it captures the access to the `msg` variable, and retains that access even after being `return`d.
+处于 `foo(..)` 函数作用域中的 `msg` 参数变量是可以在内部函数中被引用的。当 `foo(..)` 执行时，并且内部函数被创建，函数可以获取 `msg` 变量，即使 `return` 后仍可被访问。
 
-Once we have `helloFn`, a reference to the inner function, `foo(..)` has finished and it would seem as if its scope should have gone away, meaning the `msg` variable would no longer exist. But that doesn't happen, because the inner function has a closure over `msg` that keeps it alive. The closed over `msg` variable survives for as long as the inner function (now referenced by `helloFn` in a different scope) stays around.
+虽然我们有函数内部引用 `helloFn` ，现在 `foo(..)` 执行后，作用域应该回收，这也意味着 `msg` 也不存在了。不过这个情况并不会发生，函数内部会因为闭包的关系，将 `msg` 保留下来。只要内部函数（现在被处在不同作用域的 `helloFn` 引用）存在， `msg` 就会一直被被保留。
 
-Let's look at a few more examples of closure in action:
+让我们看看闭包作用的一些例子：
 
 ```js
 function person(id) {
@@ -636,9 +636,9 @@ fred();					// I am Fred: 0.8331252801601532
 susan();				// I am Susan: 0.3940753308893741
 ```
 
-The inner function `identify()` has closure over two variables, the parameter `id` and the inner variable `randNumber`.
+`identify()` 函数内部有两个闭包变量，参数 `id` 和 `randNumber`。
 
-The access that closure enables is not restricted to merely reading the variable's original value -- it's not just a snapshot but rather a live link. You can update the value, and that new current state remains remembered until the next access.
+闭包不仅限于获取变量的原始值：它不仅仅是快照，而是直接链接。你可以更新该值，并在下次访问时获取更新后的值。
 
 ```js
 function runningCounter(start) {
@@ -657,9 +657,9 @@ score();				// 2
 score( 13 );			// 15
 ```
 
-**Warning:** For reasons that we'll cover more later in the text, this example of using closure to remember a state that changes (`val`) is probably something you'll want to avoid where possible.
+**提醒：**我们将在稍后的文本中介绍更多。不过在这个例子中，你需要尽可能避免使用闭包来记录状态更改（`val`）。
 
-If you have an operation that needs two inputs, one of which you know now but the other will be specified later, you can use closure to remember the first input:
+如果你需要设置两个输入，一个你已经知道，另一个还需要后面才能知道，你可以使用闭包来记录第一个输入值：
 
 ```js
 function makeAdder(x) {
@@ -668,22 +668,22 @@ function makeAdder(x) {
 	};
 }
 
-// we already know `10` and `37` as first inputs, respectively
+//我们已经分别知道作为第一个输入的 `10` 和 `37`
 var addTo10 = makeAdder( 10 );
 var addTo37 = makeAdder( 37 );
 
-// later, we specify the second inputs
+// 紧接着，我们指定第二个参数
 addTo10( 3 );			// 13
 addTo10( 90 );			// 100
 
 addTo37( 13 );			// 50
 ```
 
-Normally, a `sum(..)` function would take both an `x` and `y` input to add them together. But in this example we receive and remember (via closure) the `x` value(s) first, while the `y` value(s) are separately specified later.
+通常， `sum(..)` 函数会一起接收 `x` 和 `y` 并相加。但是在这个例子中，我们接收并且首先记录（通过闭包） `x` 的值，然后等待 `y` 被指定。
 
-**Note:** This technique of specifying inputs in successive function calls is very common in FP, and comes in two forms: partial application and currying. We'll dive into them more thoroughly later in the text.
+**注意：** 在连续函数调用中指定输入，这种技巧在函数式编程中非常普遍，并且有两种形式：偏函数应用和柯里化。我们稍后会在文中深入讨论。
 
-Of course, since functions are just values in JS, we can remember function values via closure.
+当然，因为函数如果只是JS中的值，我们可以通过闭包来记住函数值。
 
 ```js
 function formatter(formatFn) {
@@ -704,23 +704,23 @@ lower( "WOW" );				// wow
 upperFirst( "hello" );		// Hello
 ```
 
-Instead of distributing/repeating the `toUpperCase()` and `toLowerCase()` logic all over our code, FP encourages us to create simple functions that encapsulate -- a fancy way of saying wrapping up -- that behavior.
+函数式编程并不是在我们的代码中分配或重复 `toUpperCase()`和 `toLowerCase()` 逻辑，而是鼓励我们用优雅的封装方式来创建简单的函数。
 
-Specifically, we create two simple unary functions `lower(..)` and `upperFirst(..)`, because those functions will be much easier to wire up to work with other functions in the rest of our program.
+具体来说，我们创建两个简单的一元函数`lower（..）`和`upperFirst（..）`，因为这些函数在我们程序中，更容易与其他函数配合使用。
 
-**Tip:** Did you spot how `upperFirst(..)` could have used `lower(..)`?
+**提示：** 你知道如何让 `upperFirst（..）` 使用 `lower（..）` 吗？
 
-We'll use closure heavily throughout the rest of the text. It may just be the most important foundational practice in all of FP, if not programming as a whole. Get really comfortable with it!
+我们将在本书的后续中大量使用闭包。如果抛开整个编程来说，它可能是所有函数式编程中最重要的基础。希望你能用得舒服！
 
-## Syntax
+## 句法
 
-Before we move on from this primer on functions, let's take a moment to discuss their syntax.
+在我们函数入门开始之前，让我们花点时间来讨论它的语法。
 
-More than many other parts of this text, the discussions in this section are mostly opinion and preference, whether you agree with the views presented here or take opposite ones. These ideas are highly subjective, though many people seem to feel rather absolutely about them. Ultimately, you decide.
+不同于本书中的许多其他部分，本节中的讨论主要是意见和偏好，无论你是否同意这里提出的观点或采取相反的观点。这些想法是非常主观的，尽管许多人似乎对此非常执着。不过最终，都由你决定。
 
-### What's In A Name?
+### 什么是名称？
 
-Syntatically speaking, function declarations require the inclusion of a name:
+在语法上，函数声明需要包含一个名称：
 
 ```js
 function helloMyNameIs() {
@@ -728,27 +728,27 @@ function helloMyNameIs() {
 }
 ```
 
-But function expressions can come in both named and anonymous forms:
+但是函数表达式可以命名或者匿名：
 
 ```js
 foo( function namedFunctionExpr(){
 	// ..
 } );
 
-bar( function(){	// <-- look, no name!
+bar( function(){	// <-- 这就是匿名的!
 	// ..
 } );
 ```
 
-What exactly do we mean by anonymous, by the way? Specifically, functions have a `name` property that holds the string value of the name the function was given syntactically, such as `"helloMyNameIs"` or `"namedFunctionExpr"`. This `name` property is most notably used by the console/developer tools of your JS environment to list the function when it participates in a stack trace (usually from an exception).
+顺便说一句，匿名的意思是什么？具体来说，函数具有一个 `name` 的属性，用于保存函数在语法上设定名称的字符串值，例如 `"helloMyNameIs"` 或 `"FunctionExpr"` 。 这个`name` 属性特别用于JS环境的控制台或开发工具。当我们在堆栈轨迹中追踪（通常来自异常）时，这个属性可以列出该函数。
 
-Anonymous functions are generally displayed as `(anonymous function)`.
+而匿名函数通常显示为：`(anonymous function)` 。
 
-If you've ever had to debug a JS program from nothing but a stack trace of an exception, you probably have felt the pain of seeing `(anonymous function)` appear line after line. This listing doesn't give a developer any clue whatsoever as to the path the exception came from. It's not doing the developer any favors.
+如果你曾经试着在一个异常的堆栈轨迹中调试一个JS程序，你可能已经发现痛苦了：看到 `(anonymous function)` 出现。这个列表条目不给开发人员任何关于异常来源路径的线索。它没有给我们开发者提供任何帮助。
 
-If you name your function expressions, the name is always used. So if you use a good name like `handleProfileClicks` instead of `foo`, you'll get much more helpful stack traces.
+如果你命名了你的函数表达式，名称将会一直被使用。所以如果你使用了一个良好的名称 `handleProfileClicks` 来取代 `foo` ，你将会在堆栈轨迹中获得更多的信息。
 
-As of ES6, anonymous function expressions can be aided by *name inferencing*. Consider:
+在ES6中，匿名表达式可以通过**名称引用**来获得名称。思考：
 
 ```js
 var x = function(){};
@@ -756,9 +756,9 @@ var x = function(){};
 x.name;			// x
 ```
 
-If the engine is able to guess what name you *probably* want the function to take, it will go ahead and do so.
+如果解析器能够猜到你可能希望函数采用什么名称，那么它将会继续下去。
 
-But beware, not all syntactic forms benefit from name inferencing. Probably the most common place a function expression shows up is as an argument to a function call:
+但请注意，并不是所有的句法形式都可以用名称引用。最常见的地方是函数表达式是函数调用的参数：
 
 ```js
 function foo(fn) {
@@ -771,14 +771,14 @@ foo( x );				// x
 foo( function(){} );	//
 ```
 
-When the name can't be inferred from the immediate surrounding syntax, it remains an empty string. Such a function will be reported as `(anonymous function)` in a stack trace should one occur.
+当名称不能直接从周围的语法中被推断时，它仍会是一个空字符串。这样的函数将在堆栈轨迹中的被报告为一个 `(anonymous function)`。
 
-There are other benefits to a function being named besides the debugging question. First, the syntactic name (aka lexical name) is useful for internal self-reference. Self-reference is necessary for recursion (both sync and async) and also helpful with event handlers.
+除了调试问题之外，函数被命名还有一个其他好处。首先，句法名称（又称词汇名）是可以被函数内部引用的。内部引用是递归（同步和异步）所必需的，也有助于事件处理。
 
-Consider these different scenarios:
+思考这些不同的情况：
 
 ```js
-// sync recursion:
+// 同步情况:
 function findPropIn(propName,obj) {
 	if (obj == undefined || typeof obj != "object") return;
 
@@ -798,30 +798,30 @@ function findPropIn(propName,obj) {
 ```
 
 ```js
-// async recursion:
+// 异步情况:
 setTimeout( function waitForIt(){
-	// does `it` exist yet?
+	// `it` 存在了吗?
 	if (!o.it) {
-		// try again later
+		// 再试一次
 		setTimeout( waitForIt, 100 );
 	}
 }, 100 );
 ```
 
 ```js
-// event handler unbinding
+// 事件处理未绑定
 document.getElementById( "onceBtn" )
 	.addEventListener( "click", function handleClick(evt){
-		// unbind event
+		// 未绑定的 event
 		evt.target.removeEventListener( "click", handleClick, false );
 
 		// ..
 	}, false );
 ```
 
-In all these cases, the named function's name was a useful and reliable self-reference from inside itself.
+在所有这些情况下，命名函数的名称是一个有用和可靠的内部引用。
 
-Moreover, even in simple cases with one-liner functions, naming them tends to make code more self-explanatory and thus easier to read for those who haven't read it before:
+此外，即使在单行函数的简单情况下，命名它们往往会使代码更加明了，从而让以前没有阅读过的人更容易阅读：
 
 ```js
 people.map( function getPreferredName(person){
@@ -830,45 +830,45 @@ people.map( function getPreferredName(person){
 // ..
 ```
 
-The function name `getPreferredName(..)` tells the reader something about what the mapping operation is intending to do that is not entirely obvious from just its code. This name label helps the code be more readable.
+光看函数 `getPreferredName(..)` 的代码，并不能很明确告诉我们这里的操作是什么意图。但有名称就可以增加代码可读性。
 
-Another place where anonymous function expressions are common is with IIFEs (immediately invoked function expressions):
+经常使用匿名函数表达式的另一个地方是IIFE（立即执行函数表达式）：
 
 ```js
 (function(){
 
-	// look, I'm an IIFE!
+	// 我是 IIFE!
 
 })();
 ```
 
-You virtually never see IIFEs using names for their function expressions, but they should. Why? For all the same reasons we just went over: stack trace debugging, reliable self-reference, and readability. If you can't come up with any other name for your IIFE, at least use the word IIFE:
+你几乎从没看到为IIFE函数来命名，但他们应该命名。为什么？我们刚刚提到过的原因：堆栈轨迹调试，可靠的自我引用和可读性。如果你想不出你的IIFE应该叫什么，请至少使用IIFE：
 
 ```js
 (function IIFE(){
 
-	// You already knew I was an IIFE!
+	// 现在你真的知道我叫 IIFE!
 
 })();
 ```
 
-What I'm getting at is there's multiple reasons why **named functions are always more preferable to anonymous functions.** As a matter of fact, I'd go so far as to say that there's basically never a case where an anonymous function is more preferable. They just don't really have any advantage over their named counterparts.
+我有许多个理由可以解释**命名函数比匿名函数更可取**。事实上，我甚至认为匿名函数都是不可取的。相比命名函数，他们没有任何优势。
 
-It's incredibly easy to write anonymous functions, because it's one less name we have to devote our mental attention to figuring out.
+写匿名功能非常容易，因为我们完全不用在想名称这件事上费神费力。
 
-I'll be honest; I'm as guilty of this as anyone. I don't like to struggle with naming. The first 3 or 4 names I come up with a function are usually bad. I have to revisit the naming over and over. I'd much rather just punt with a good ol' anonymous function expression.
+我其实也是一个诚实的人，我不喜欢在起名称这件事上浪费时间。我能想到命名一个函数的前3或4个名字通常是不好的。我必须反复思考这个命名。这个时候，我宁愿只是用一个匿名函数表达。
 
-But we're trading ease-of-writing for pain-of-reading. This is not a good trade off. Being lazy or uncreative enough to not want to figure out names for your functions is an all too common, but poor, excuse for using anonymous functions.
+但是，我们把易写性拿来与易读性做交换，这不是一个好选择。因为懒而不想为你的函数命名，这是常见的使用匿名功能的借口。
 
-**Name every single function.** And if you sit there stumped, unable to come up with a good name for some function you've written, I'd strongly suggest you don't fully understand that function's purpose yet -- or it's just too broad or abstract. You need to go back and re-design the function until this is more clear. And by that point, a name will become more apparent.
+**命名所有单个函数。**如果你对着你写的函数，想不出一个好名称，我强烈建议你不需要完全理解这个函数的目的，那太广泛和抽象了。 您需要重新设计功能，直到它更清楚。从这个角度说，一个名称会更明白清晰。
 
-I can testify from my own experience that in the struggle to name something well, I usually have come to understand it better and often even refactor its design for improved readability and maintability. This time investment is well worth it.
+我从我自己的经验中证明，在思考名称的过程中，我会更好地了解它，甚至重构其设计，以提高可读性和可维护性。这些时间的投入是值得的。
 
-### Functions Without `function`
+### 没有 `function` 的函数
 
-So far we've been using the full canonical syntax for functions. But you've no doubt also heard all the buzz around the new ES6 `=>` arrow function syntax.
+到目前为止，我们一直在使用完整的规范语法功能。但是相信你也对新的ES6 `=>` 箭头函数语法有所耳闻。
 
-Compare:
+比较：
 
 ```js
 people.map( function getPreferredName(person){
@@ -879,55 +879,55 @@ people.map( function getPreferredName(person){
 people.map( person => person.nicknames[0] || person.firstName );
 ```
 
-Whoa.
+哇！
 
-The keyword `function` is gone, so is `return`, the `( )` parentheses, the `{ }` curly braces, and the `;` semicolon. For all that, we traded for a so-called fat arrow `=>` symbol.
+关键字 `function` 没了，`return`，`()`括号，`{}`花括号和 `;` 分号也是这样。所有这一切，都是我们与一个胖箭头做了交易： `=>` 。
 
-But there's another thing we omitted. Did you spot it? The `getPreferredName` function name.
+但还有另一件事我们忽略了。 你发现了吗？`getPreferredName` 函数名也没了。
 
-That's right; `=>` arrow functions are lexically anonymous; there's no way to syntatically provide it a name. Their names can be inferred like regular functions, but again, the most common case of function expression values as arguments won't get any assistance in that way.
+那就对了。 `=>` 箭头函数是词法匿名的。没有办法合理地为它提供一个名字。他们的名字可以像常规函数一样被推断，但是，最常见的函数表达式值作为参数的情况将不会起任何作用了。
 
-If `person.nicknames` isn't defined for some reason, an exception will be thrown, meaning this `(anonymous function)` will be at the top of the stack trace. Ugh.
+假设 `person.nicknames` 因为一些原因没有被定义，一个异常将会被抛出，意味着这个 `(anonymous function)` 将会在追踪堆栈的最上层。啊！
 
-Honestly, the anonymity of `=>` arrow functions is a `=>` dagger to the heart, for me. I cannot abide by the loss of naming. It's harder to read, harder to debug, and impossible to self-reference.
+`=>` 箭头函数的匿名性是 `=>` 的阿克琉斯之踵。这让我不能遵守刚刚所说的命名原则了：阅读困难，调试困难，无法自我引用。
 
-But if that wasn't bad enough, the other slap in the face is that there's a whole bunch of subtle syntactic variations that you must wade through if you have different scenarios for your function definition. I'm not going to cover all of them in detail here, but briefly:
+但是，这还不够糟糕，要面对的另一个问题是，如果你的函数定义有不同的场景，那么你必须要一大堆细微差别的语句来实现。我不会在这里详细介绍所有，但会简要地说：
 
 ```js
 people.map( person => person.nicknames[0] || person.firstName );
 
-// multiple parameters? need ( )
+// 多个参数? 需要 ( )
 people.map( (person,idx) => person.nicknames[0] || person.firstName );
 
-// parameter destructuring? need ( )
+// 解构参数? 需要 ( )
 people.map( ({ person }) => person.nicknames[0] || person.firstName );
 
-// parameter default? need ( )
+// 默认参数? 需要 ( )
 people.map( (person = {}) => person.nicknames[0] || person.firstName );
 
-// returning an object? need ( )
+// 返回对象? 需要 ( )
 people.map( person =>
 	({ preferredName: person.nicknames[0] || person.firstName })
 );
 ```
 
-The case for excitement over `=>` in the FP world is primarily that it follows almost exactly from the mathematical notation for functions, especially around FP languages like Haskell. The shape of `=>` arrow function syntax communicates mathematically.
+在函数式编程中， `=>` 令人兴奋的地方在于它几乎完全遵循函数的数学符号，特别是像Haskell这样的函数式编程语言。 `=>` 箭头函数语法甚至可以用于数学交流。
 
-Digging even further, I'd suggest that the argument in favor of `=>` is that by using much lighter-weight syntax, we reduce the visual boundaries between functions which lets us use simple function expressions much like we'd use lazy expressions -- another favorite of the FPer.
+我们进一步地来深挖，我建议使用 `=>` 的论点是，通过使用更轻量级的语法，可以减少函数之间的视觉边界，也让我们使用偷懒的方式来使用它，这也是函数式编程者的另一个爱好。
 
-I think most FPers are going to blink and wave off these concerns. They love anonymous functions and they love saving on syntax. But like I said before: you decide.
+我认为大多数的函数式编程者都会对此睁只眼闭只眼。他们喜欢匿名函数，喜欢简洁语法。但是像我之前说过的那样：这都由你决定。
 
-**Note:** Though I do not prefer to use `=>` in practice in my applications, we will use it in many places throughout the rest of this book -- especially when we present typical FP utilities -- where conciseness is preferred to optimize for the limited physical space in code snippets. Make your own determinations whether this approach will make your own code more or less readable.
+**注意：**虽然我不喜欢在我的应用程序中使用 `=>`，但我们将在本书的其余部分多次使用它，特别是当我们介绍典型的函数式编程实战时，它能简化、优化代码片段中的空间。不过，增强或减弱代码的可读性也取决你自己做的决定。
 
-## What's This?
+## 来说说 This ？
 
-If you're not familiar with the `this` binding rules in JavaScript, I recommend you check out my "You Don't Know JS: this & Object Prototypes" book. For the purposes of this section, I'll assume you know how `this` gets determined for a function call (one of the four rules). But even if you're still fuzzy on *this*, the good news is we're going to conclude that you shouldn't be using `this` if you're trying to do FP.
+如果您不熟悉JavaScript中的 `this` 绑定规则，我建议去看我写的《You Don't Know JS: this & Object Prototypes》。 在这一章节中，我会假设你知道如何用 `this` 进行函数调用（四个规则之一）。但是，如果你对*this*仍然没有清晰的认识，那么我们可以得出结论了：使用函数式编程时，你可以不用要求自己使用 `this`。
 
-JavaScript `function`s have a `this` keyword that's automatically bound per function call. The `this` keyword can be described in many different ways, but I prefer to say it provides an object context for the function to run against.
+JavaScript的 `function` 有一个 `this` 关键字，每个函数调用都会自动绑定。`this` 关键字有许多不同的方式描述，但我更喜欢说它提供了一个对象上下文来使该函数运行。
 
-`this` is an implicit parameter input for your function.
+`this` 是你函数的一个隐式的输入参数。
 
-Consider:
+思考：
 
 ```js
 function sum() {
@@ -948,7 +948,7 @@ var s = sum.bind( context );
 s();						// 3
 ```
 
-Of course, if `this` can be input into a function implicitly, the same object context could be sent in as an explicit argument:
+当然，如果 `this` 能够隐式地输入到一个函数当中去，与 `this` 相同的对象上下文可以作为显式参数传入：
 
 ```js
 function sum(ctx) {
@@ -963,9 +963,9 @@ var context = {
 sum( context );
 ```
 
-Simpler. And this kind of code will be a lot easier to deal with in FP. It's much easier to wire multiple functions together, or use any of the other input wrangling techniques we will get into in the next chapter, when inputs are always explicit. Doing them with implicit inputs like `this` ranges from awkward to nearly-impossible depending on the scenario.
+这样的代码更简单，在函数式编程中也更容易处理：当输入是显式的时候，将多个函数组合在一起，或者使用我们在下一章中介绍的输入技巧都会更容易来处理。但根据不同情况，使用类似 `this` 的隐式输入来做这些，是非常困难的。
 
-There are other tricks we can leverage in a `this`-based system, like for example prototype-delegation (also covered in detail in the "this & Object Prototypes" book):
+还有一些技巧，是基于 `this` 完成的，例如原型授权（在《this & Object Prototypes》一书中也详细介绍）：
 
 ```js
 var Auth = {
@@ -998,11 +998,11 @@ var Login = Object.assign( Object.create( Auth ), {
 Login.doLogin( "fred", "123456" );
 ```
 
-**Note:** `Object.assign(..)` is an ES6+ utility for doing a shallow assignment copy of properties from one or more source objects to a single target object: `Object.assign( target, source1, ... )`.
+**注意：**`Object.assign(..)`是一个ES6+提供的实用功能，将所有属性的值从一个或多个源对象复制到目标对象：`Object.assign( target, source1, ... )` 。
 
-In case you're having trouble parsing what this code does: we have two separate objects `Login` and `Auth`, where `Login` performs prototype-delegation to `Auth`. Through delegation and the implicit `this` context sharing, these two objects virtually compose during the `this.authorize()` function call, so that properties/methods on `this` are dynamically shared with the `Auth.authorize(..)` function.
+这段代码的作用是：现在我们有两个独立的对象 `Login` 和 `Auth` ，其中 `Login` 执行原型授权给 `Auth` 。通过委托和隐式的 `this` 共享上下文对象，这两个对象在 `this.authorize()` 函数调用期间实际上是组合的，所以这个 `this` 上的属性或方法可以与 `Auth.authorize(..)` 动态共享 `this`。
 
-*This* code doesn't fit with various principles of FP for a variety of reasons, but one of the obvious hitches is the implicit `this` sharing. We could be more explicit about it and keep code that was easier to push in the FP direction:
+*this* 因为各种原因，不符合函数式编程的原则。其中一个明显的问题是隐式 `this` 共享。但我们可以更加显式地，更靠向函数式编程的方向：
 
 ```js
 // ..
@@ -1027,16 +1027,16 @@ doLogin(user,pw) {
 // ..
 ```
 
-From my perspective, the problem is not with using objects to organize behavior. It's that we're trying to use implicit input instead of being explicit about it. When I'm wearing my FP hat, I want to leave `this` stuff on the shelf.
+从我的角度来看，问题不在于使用对象来进行操作，而是我们试图使用隐式输入取代显式输入。当我戴上名为函数式编程的帽子时，我应该把 `this` 放回衣架上。
 
-## Summary
+## 小结
 
-Functions are powerful.
+函数是强大的。
 
-But let's be clear what a function is. It's not just a collection of statements/operations. Specifically, a function needs one or more inputs (ideally, just one!) and an output.
+现在，让我们清楚地理解什么是函数：它不仅仅是一个语句或者操作的集合，而且需要一个或多个输入（理想情况下只需一个！）和一个输出。
 
-Functions inside of functions can have closure over outer variables and remember them for later. This is one of the most important concepts in all of programming, and a fundamental foundation of FP.
+函数内部的函数可以闭包外部变量，并记住它们以备日后使用。这是所有程序设计中最重要的概念之一，也是函数式编程的基础。
 
-Be careful of anonymous functions, especially `=>` arrow functions. They're convenient to write, but they shift the cost from author to reader. The whole reason we're studying FP here is to write more readable code, so don't be so quick to jump on that bandwagon.
+要警惕匿名函数，特别是 `=>` 箭头函数。虽然在编程时用起来很方便，但是会对增加代码阅读的负担。我们学习函数式编程的全部理由是为了书写更具可读性的代码，所以不要赶时髦去用匿名函数。
 
-Don't use `this`-aware functions. Just don't.
+别用 `this` 敏感的函数。没理由。
