@@ -238,7 +238,6 @@ var cacheResult = partialRight( ajax, function onResult(obj){
 cacheResult( "http://some.api/person", { user: CURRENT_USER_ID } );
 ```
 
-This implementation of `partialRight(..)` does not guarantee that a specific parameter will receive a specific partially-applied value; it only ensures that the right-partially applied value(s) appear as the right-most argument(s) passed to the original function.
 这个 `partialRight(..)` 函数的实现方案不能保证让一个特定的形参接受特定的被偏应用的值；它只能确保将被这些值（一个或几个）当作原函数最右边的实参（一个或几个）传入。
 
 举个例子:
@@ -260,15 +259,15 @@ f( 1, 2, 3 );		// 1 2 3 ["z:last"]
 f( 1, 2, 3, 4 );	// 1 2 3 [4,"z:last"]
 ```
 
-The value `"z:last"` is only applied to the `z` parameter in the case where `f(..)` is called with exactly two arguments (matching `x` and `y` parameters). In all other cases, the `"z:last"` will just be the right-most argument, however many arguments precede it.
+只有在传两个实参（匹配到 `x` 和 `y` 形参）调用 `f(..)` 函数时，`"z:last"` 这个值才能被赋给函数的形参 `z`。在其他的例子里，不管左边有多少个实参，`"z:last"` 都被传给最右的实参。
 
-## One At A Time
+## 一次传一个
 
-Let's examine a technique similar to partial application, where a function that expects multiple arguments is broken down into successive chained functions that each take a single argument (arity: 1) and return another function to accept the next argument.
+我们来看一个跟偏应用类似的技术，该技术将一个期望接收多个实参的函数拆解成连续的链式函数（chained functions），每个链式函数接受单一实参（实参个数：1）并返回另一个接收下一个实参的函数。
 
-This technique is called currying.
+这就是柯里化（curry）技术。
 
-To first illustrate, let's imagine we had a curried version of `ajax(..)` already created. This is how we'd use it:
+首先，想象我们已创建了一个 `ajax(..)` 的柯里化版本。我们这样使用它：
 
 ```js
 curriedAjax( "http://some.api/person" )
@@ -276,7 +275,7 @@ curriedAjax( "http://some.api/person" )
 		( function foundUser(user){ /* .. */ } );
 ```
 
-Perhaps splitting out each of the three calls helps understand what's going on better:
+我们将三次调用分别拆解开来，这也许有助于我们理解整个过程：
 
 ```js
 var personFetcher = curriedAjax( "http://some.api/person" );
@@ -286,17 +285,17 @@ var getCurrentUser = personFetcher( { user: CURRENT_USER_ID } );
 getCurrentUser( function foundUser(user){ /* .. */ } );
 ```
 
-Instead of taking all the arguments at once (like `ajax(..)`), or some of the arguments up-front and the rest later (via `partial(..)`), this `curriedAjax(..)` function receives one argument at a time, each in a separate function call.
+该 `curriedAjax(..)` 函数在每次调用中，一次只接收一个实参，而不是一次性接收所有实参（像 `ajax(..)` 那样），也不是先传部分实参再传剩余部分实参（借助 `partial(..)` 函数）。
 
-Currying is similar to partial application in that each successive curried call kind of partially applies another argument to the original function, until all arguments have been passed.
+柯里化和偏应用相似，每个类似偏应用的连续柯里化调用都把另一个实参应用到原函数，一直到所有实参传递完毕。
 
-The main difference is that `curriedAjax(..)` will explicitly return a function (we call `curriedGetPerson(..)`) that expects **only the next argument** `data`, not one that (like the earlier `getPerson(..)`) can receive all the rest of the arguments.
+不同之处在于，`curriedAjax(..)` 函数会明确地返回一个期望**只接收下一个实参** `data` 的函数（我们把它叫做 `curriedGetPerson(..)`），而不是那个能接收所有剩余实参的函数(像此前的 `getPerson(..)` 函数) 。
 
-If an original function expected 5 arguments, the curried form of that function would take just the first argument, and return a function to accept the second. That one would take just the second argument, and return a function to accept the third. And so on.
+如果一个原函数期望接收 5 个实参，这个函数的柯里化形式只会接收第一个实参，并且返回一个用来接收第二个参数的函数。而这个被返回的函数又只接收第二个参数，并且返回一个接收第三个参数的函数。依此类推。
 
-So currying unwinds a higher-arity function into a series of chained unary functions.
+由此而知，柯里化将一个多参数（higher-arity）函数拆解为一系列的单元链式函数。
 
-How might we define a utility to do this currying? We're going to use some tricks from Chapter 2.
+如何定义一个用来柯里化的实用函数呢？我们将要用到第二章中的一些技巧。
 
 ```js
 function curry(fn,arity = fn.length) {
@@ -315,7 +314,7 @@ function curry(fn,arity = fn.length) {
 }
 ```
 
-And for the ES6 `=>` fans:
+给 ES6 箭头函数粉的版本：
 
 ```js
 var curry =
@@ -335,6 +334,7 @@ var curry =
 ```
 
 The approach here is to start a collection of arguments in `prevArgs` as an empty `[]` array, and add each received `nextArg` to that, calling the concatenation `args`. While `args.length` is less than `arity` (the number of declared/expected parameters of the original `fn(..)` function), make and return another `curried(..)` function to collect the next `nextArg` argument, passing the running `args` collection along as `prevArgs`. Once we have enough `args`, execute the original `fn(..)` function with them.
+此处的实现方式是把空数组 `[]` 当作初始实参集合传给 `prevArgs`，并且将每次接收到的 `nextArg` 同 `prevArgs` 连接成 `args`。当 `args.length` 小于 `arity`（原函数 `fn(..)` 被定义和期望的形参数量）时
 
 By default, this implementation relies on being able to inspect the `length` property of the to-be-curried function to know how many iterations of currying we'll need before we've collected all its expected arguments.
 
