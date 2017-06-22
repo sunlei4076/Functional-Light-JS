@@ -391,7 +391,7 @@ However, this implementation is limited in that the outer composed function (aka
 但是，这种实现局限处在于外层的组合函数（也就是，组合中的第一个函数）只能接收一个参数。其他大多数实现在首次调用的时候就把所有参数传进去了。如果组合中的每一个函数都是一元的，这个方案没啥大问题。但如果你需要给第一个调用传递多参数，那么你可能需要不同的实现方案。
 
 To fix that first call single-argument limitation, we can still use `reduce(..)` but produce a lazy-evaluation function wrapping:
-为了修正第一次调用的单参数限制，我们可以仍使用 `reduce(..)` 但加一个懒执行函数包裹器：
+为了修正第一次调用的单参数限制，我们可以仍使用 `reduce(..)` ，但加一个懒执行函数包裹器：
 
 ```js
 function compose(...fns) {
@@ -403,6 +403,7 @@ function compose(...fns) {
 }
 
 // or the ES6 => form
+// ES6箭头函数形式写法
 var compose =
 	(...fns) =>
 		fns.reverse().reduce( (fn1,fn2) =>
@@ -412,28 +413,37 @@ var compose =
 ```
 
 Notice that we return the result of the `reduce(..)` call directly, which is itself a function, not a computed result. *That* function lets us pass in as many arguments as we want, passing them all down the line to the first function call in the composition, then bubbling up each result through each subsequent call.
+注意到我们直接返回了 `reduce(..)` 调用的结果，该结果自身就是个函数，不是一个计算过的值。**该**函数让我们能够传入任意数目的参数，在整个组合过程中，将这些参数传入到第一个函数调用中，然后依次产出结果给到后面的调用。
 
 Instead of calculating the running result and passing it along as the `reduce(..)` looping proceeds, this implementation runs the `reduce(..)` looping **once** up front at composition time, and defers all the function call calculations -- referred to as lazy calculation. Each partial result of the reduction is a successively more wrapped function.
+相较于直接计算结果并把它传入到 `reduce(..)` 循环中进行处理，这中实现通过在组合之前只运行 **一次** `reduce(..)` 循环，然后将所有的函数调用运算全部延迟了 -- 成为懒运算。每一个简化后的局部结果都是一个包裹层级更多的函数。
 
 When you call the final composed function and provide one or more arguments, all the levels of the big nested function, from the inner most call to the outer, are executed in reverse succession (not via a loop).
+当你调用最终组合函数并且提供一个或多个函数的时候，这个层层嵌套的大函数内部的所有层级，由内而外调用，以相反的方式连续执行（不是通过循环）。
 
 The performance characteristics will potentially be different than in the previous `reduce(..)`-based implementation. Here, `reduce(..)` only runs once to produce a big composed function, and then this composed function call simply executes all its nested functions each call. In the former version, `reduce(..)` would be run for every call.
+这个的性能特征将和之前的 `reduce(..)`-基础实现有潜在的不同。在这儿，`reduce(..)` 只在生成大个的组合函数时运行过一次，然后这个组合函数只是简单的一层层执行它内部所嵌套的函数。在前一版本中， `reduce(..)` 将在每一次调用中运行。
 
 Your mileage may vary on which implementation is better, but keep in mind that this latter implementation isn't limited in argument count the way the former one is.
+在考虑哪一种实现更好时，你的情况可能会不一样，但是要记得后面的实现方式并没有像前一种限制只能传一个参数。
 
 We could also define `compose(..)` using recursion. The recursive definition for `compose(fn1,fn2, .. fnN)` would look like:
+我们也能够使用递归来定义 `compose(..)`。递归式定义 `compose(fn1,fn2, .. fnN)` 看起来会是这样：
 
 ```
 compose( compose(fn1,fn2, .. fnN-1), fnN );
 ```
 
 **Note:** We will cover recursion in deep detail in Chapter 9, so if this approach seems confusing, feel free to skip it for now and come back later after reading that chapter.
+**注意：** 我们将在第 9 章揭示更多的细节，所以如果这块看起来让你疑惑，那么暂时跳过该部分是没问题的，可以在阅读完第 9 章后再来看。
 
 Here's how we implement	`compose(..)` with recursion:
+这里是我们如何用递归实现 `compose(..)` 的代码：
 
 ```js
 function compose(...fns) {
 	// pull off the last two arguments
+	// 拿出最后两个参数
 	var [ fn1, fn2, ...rest ] = fns.reverse();
 
 	var composedFn = function composed(...args){
@@ -446,9 +456,11 @@ function compose(...fns) {
 }
 
 // or the ES6 => form
+// ES6箭头函数形式写法
 var compose =
 	(...fns) => {
 		// pull off the last two arguments
+		// 拿出最后两个参数
 		var [ fn1, fn2, ...rest ] = fns.reverse();
 
 		var composedFn =
@@ -462,18 +474,25 @@ var compose =
 ```
 
 I think the benefit of a recursive implementation is mostly conceptual. I personally find it much easier to think about a repetitive action in recursive terms instead of in a loop where I have to track the running result, so I prefer the code to express it that way.
+我认为递归实现的好处是更加概念化。我个人觉得相较于不得不在循环里跟踪运行结果，通过递归的方式进行重复的动作反而更容易想清楚。所以我更喜欢以这种方式的代码来表达。
 
 Others will find the recursive approach quite a bit more daunting to mentally juggle. I invite you to make your own evaluations.
+其他人可能会觉得递归的方法在智力上的困扰有点更让人畏惧。我建议你作出自己的评估。
 
 ## Reordered Composition
+## 
 
 We talked earlier about the right-to-left ordering of standard `compose(..)` implementations. The advantage is in listing the arguments (functions) in the same order they'd appear if doing the composition manually.
+我们早期谈及的是从右往左顺序的标准 `compose(..)` 实现。这么做的好处是能够和手工组合列出参数（函数）的顺序保持一致。
 
 The disadvantage is they're listed in the reverse order that they execute, which could be confusing. It was also more awkward to have to use `partialRight(compose, ..)` to pre-specify the *first* function(s) to execute in the composition.
+不足就是它们列出的顺序和它们执行的顺序是相反的，这将会造成困扰。同时，不得不使用 `partialRight(compose, ..)` 提早定义要在组合过程中 **第一个** 执行的函数。
 
 The reverse ordering, composing from left-to-right, has a common name: `pipe(..)`. This name is said to come from Unix/Linux land, where multiple programs are strung together by "pipe"ing (`|` operator) the output of the first one in as the input of the second, and so on (i.e., `ls -la | grep "foo" | less`).
+相反的顺序，从右往左的组合，有个常见的名字：`pipe(..)`。这个名字据说来自 Unix/Linux 界，那里大量的程序通过“管道传输”（`|` 运算符）第一个的输出到第二个的输入，等等（即，`ls -la | grep "foo" | less`）。
 
 `pipe(..)` is identical to `compose(..)` except it processes through the list of functions in left-to-right order:
+`pipe(..)` 与 `compose(..)` 一模一样，除了它将列表中的函数从左往右处理。
 
 ```js
 function pipe(...fns) {
@@ -492,30 +511,37 @@ function pipe(...fns) {
 ```
 
 In fact, we could just define `pipe(..)` as the arguments-reversal of `compose(..)`:
+实际上，我们只需将 `compose(..)` 的参数反转就能定义出来一个 `pipe(..)`。
 
 ```js
 var pipe = reverseArgs( compose );
 ```
 
 That was easy!
+非常简单！
 
 Recall this example from general composition earlier:
+回忆下之前的通用组合的例子：
 
 ```js
 var biggerWords = compose( skipShortWords, unique, words );
 ```
 
 To express that with `pipe(..)`, we just reverse the order we list them in:
+以 `pipe(..)` 的方式来实现，我们只需要反转参数的顺序：
 
 ```js
 var biggerWords = pipe( words, unique, skipShortWords );
 ```
 
 The advantage of `pipe(..)` is that it lists the functions in order of execution, which can sometimes reduce reader confusion. It may be simpler to see `pipe(words,unique,skipShortWords)` and read that we do `words(..)` first, then `unique(..)`, and finally `skipShortWords(..)`.
+ `pipe(..)` 的优势在于它以函数执行的顺序排布参数，某些情况下能够减轻阅读者的疑惑。`pipe(words,unique,skipShortWords)` 看起来和读起来会更简单，能知道我们首先执行 `words(..)`，然后 `unique(..)`，最后是 `skipShortWords(..)`。
 
 `pipe(..)` is also handy if you're in a situation where you want to partially apply the *first* function(s) that execute. Earlier we did that with right-partial application of `compose(..)`.
+假如你想要应用**第一个**函数（们）来负责执行，`pipe(..)` 同样也很方便。就像我们之前使用 `compose(..)` 构建的右偏函数应用一样。
 
 Compare:
+对比：
 
 ```js
 var filterWords = partialRight( compose, unique, words );
@@ -526,16 +552,23 @@ var filterWords = partial( pipe, words, unique );
 ```
 
 As you may recall from `partialRight(..)`'s definition in Chapter 3, it uses `reverseArgs(..)` under the covers, just as our `pipe(..)` now does. So we get the same result either way.
+你可能会回想起第 3 章 `partialRight(..)` 中的定义，它实际使用了 `reverseArgs(..)`，就像我们的 `pipe(..)` 现在所做的。所以，不管怎样，我们得到了同样的结果。
 
 The slight performance advantage to `pipe(..)` in this specific case is that since we're not trying to preserve the right-to-left argument order of `compose(..)` by doing a right-partial application, using `pipe(..)` we don't need to reverse the argument order back, like we do inside `partialRight(..)`. So `partial(pipe, ..)` is a little better here than `partialRight(compose, ..)`.
+在这一特定场景下使用 `pipe(..)` 的轻微性能优势在于我们不必再通过右偏函数应用的方式来使用 `compose(..)` 保存从右往左的参数顺序，使用
+ `pipe(..)` 我们不必再去将参数顺序反转回去，就像我们在 `partialRight(..)` 中所作的一样。所以在这里 `partial(pipe, ..)` 比 `partialRight(compose, ..)` 要好一点。
 
 In general, `pipe(..)` and `compose(..)` will not have any significant performance differences when using a well-established FP library.
+一般来说，在使用一个完善的函数式编程库时，`pipe(..)` 和 `compose(..)` 没有明显的性能区别。
 
 ## Abstraction
+## 抽象
 
 Abstraction is often defined as pulling out the generality between two or more tasks. The general part is defined once, so as to avoid repetition. To perform each task's specialization, the general part is parameterized.
+抽象经常被定义为对两个或多个任务公共部分的剥离。通用部分只定义一次，从而避免重复。为了表现每个任务的特殊部分，通用部分需要被参数化。
 
 For example, consider this (obviously contrived) code:
+举个例子，思考如下（明显刻意生成的）代码：
 
 ```js
 function saveComment(txt) {
@@ -552,8 +585,10 @@ function trackEvent(evt) {
 ```
 
 Both of these utilities are storing a value in a data source. That's the generality. The specialty is that one of them sticks the value at the end of an array, while the other sets the value at a property name of an object.
+这两个函数都是将一个值存入一个数据源，这是通用的部分。不同的是一个是将值放置到数组的末尾，另一个是将值放置到对象的某个属性上。
 
 So let's abstract:
+让我们抽象一下：
 
 ```js
 function storeData(store,location,value) {
@@ -574,12 +609,16 @@ function trackEvent(evt) {
 ```
 
 The general task of referencing a property on an object (or array, thanks to JS's convenient operator overloading of `[ ]`) and setting its value is abstracted into its own function `storeData(..)`. While this utility only has a single line of code right now, one could envision other general behavior that was common across both tasks, such as generating a unique numeric ID or storing a timestamp with the value.
+引用一个对象（或数组，多亏了 JS 中方便的 `[]` 符号）属性和将值设入的通用任务被抽象到独立的 `storeData(..)` 函数。这个函数当前只有一行，该函数能提出其它多任务中通用的行为，比如生成唯一的数字 ID 或将时间戳存入。
 
 If we repeat the common general behavior in multiple places, we run the maintenance risk of changing some instances but forgetting to change others. There's a principle at play in this kind of abstraction, often referred to as DRY (don't repeat yourself).
+如果我们在多处重复通用的行为，我们将会面临改了几处但忘了改别处的维护风险。在做这类抽象时，有一个原则是，通常被称作 DRY（don't repeat yourself）。
 
 DRY strives to have only one definition in a program for any given task. An alternate quip to motivate DRY coding is that programmers are just generally lazy and don't want to do unnecessary work.
+DRY 力求能在程序的任何任务中有唯一的定义。代码不够 DRY 的另一个托辞就是程序员们太懒，不想做非必要的工作。 
 
 Abstraction can be taken too far. Consider:
+抽象能够走得更远。思考：
 
 ```js
 function conditionallyStoreData(store,location,value,checkFn) {
@@ -606,18 +645,28 @@ function trackEvent(evt) {
 ```
 
 In an effort to DRY and avoid repeating an `if` statement, we moved the conditional into the general abstraction. We also assumed that we may have checks for non-empty strings or non-`undefined` values elsewhere in the program, so we might as well DRY those out, too!
+为了实现 DRY 和避免重复的 `if` 语句，我们将条件判断移动到了通用抽象中。我们同样假设在程序中其它地方可能会检查非空字符串或非 `undefined` 的值，所以我们也能将这些东西 DRY 出来。
 
 This code *is* more DRY, but to an overkill extent. Programmers must be careful to apply the appropriate levels of abstraction to each part of their program, no more, no less.
+这些代码现在**变得**更 DRY了，但有些过度扩展了。开发者需要对他们程序中每个部分使用恰当的抽象级别保持谨慎，不能太过，也不能不够。
 
 Regarding our greater discussion of function composition in this chapter, it might seem like its benefit is this kind of DRY abstraction. But let's not jump to that conclusion, because I think composition actually serves a more important purpose in our code.
+关于我们在该章中对函数的组合进行的大量讨论，看起来它的好处是实现这种 DRY 抽象。但让我们别急着下结论，因为我认为组合实际上在我们的代码中发挥着更重要的作用。
 
 Moreover, **composition is helpful even if there's only one occurrence of something** (no repetition to DRY out).
+而且，**即使某些东西只出现了一次，组合仍然十分有用** （没有可以被抽出来的东西）。
 
 Aside from generalization vs specialization, I think there's another more useful definition for abstraction, as revealed by this quote:
+除了通用化和特殊化的对比，我认为抽象有更多有用的定义，正如下面这段引用所说：
 
 > ... abstraction is a process by which the programmer associates a name with a potentially complicated program fragment, which can then be thought of in terms of its purpose of function, rather than in terms of how that function is achieved. By hiding irrelevant details, abstraction reduces conceptual complexity, making it possible for the programmer to focus on a manageable subset of the program text at any particular time.
 >
 > Programming Language Pragmatics, Michael L Scott
+>
+> https://books.google.com/books?id=jM-cBAAAQBAJ&pg=PA115&lpg=PA115&dq=%22making+it+possible+for+the+programmer+to+focus+on+a+manageable+subset%22&source=bl&ots=yrJ3a-Tvi6&sig=XZwYoWwbQxP2w5qh2k2uMAPj47k&hl=en&sa=X&ved=0ahUKEwjKr-Ty35DSAhUJ4mMKHbPrAUUQ6AEIIzAA#v=onepage&q=%22making%20it%20possible%20for%20the%20programmer%20to%20focus%20on%20a%20manageable%20subset%22&f=false
+> ... 抽象是一个过程，程序员将某个名字与潜在的复杂程序片段关联起来，这样名字就能够被认为是代表函数的目的，而不是代表函数是如何实现的。通过隐藏无关的细节，抽象降低了概念复杂度，让程序员在任意时间都可以集中精神在程序内容中的可维护子集上。
+>
+> 程序设计语言， 迈克尔 L 斯科特
 >
 > https://books.google.com/books?id=jM-cBAAAQBAJ&pg=PA115&lpg=PA115&dq=%22making+it+possible+for+the+programmer+to+focus+on+a+manageable+subset%22&source=bl&ots=yrJ3a-Tvi6&sig=XZwYoWwbQxP2w5qh2k2uMAPj47k&hl=en&sa=X&ved=0ahUKEwjKr-Ty35DSAhUJ4mMKHbPrAUUQ6AEIIzAA#v=onepage&q=%22making%20it%20possible%20for%20the%20programmer%20to%20focus%20on%20a%20manageable%20subset%22&f=false
 
