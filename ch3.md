@@ -351,16 +351,16 @@ var getCurrentUser = personFetcher( { user: CURRENT_USER_ID } );
 getCurrentUser( function foundUser(user){ /* .. */ } );
 ```
 
-Each call adds one more argument to the original `ajax(..)` call, until all three have been provided and `ajax(..)` is executed.
+如上，我们每次函数调用都会新增一个实参，用来满足原函数 `ajax(..)` 的调用，直到收齐三个实参并执行 `ajax(..)` 函数为止。
 
-Remember our example from earlier about adding `3` to a each value in a list of numbers? Recall that currying is similar to partial application, so we could do that task with currying in almost the same way:
+还记得前面讲到为数值列表的每个值加 `3` 的那个例子吗？回顾一下，由于柯里化是和偏应用相似的，所以我们可以用几乎相同的方式以柯里化来完成那个例子。
 
 ```js
 [1,2,3,4,5].map( curry( add )( 3 ) );
 // [4,5,6,7,8]
 ```
 
-The difference between the two? `partial(add,3)` vs `curry(add)(3)`. Why might you choose `curry(..)` over partial? It might be helpful in the case where you know ahead of time that `add(..)` is the function to be adapted, but the value `3` isn't known yet:
+`partial(add,3)` 和 `curry(add)(3)` 两者有什么不同呢？为什么你会选 `curry(..)` 而不是偏函数呢？当你先得知 `add(..)` 是将要被调整的函数，但如果这个时候并不能确定 `3` 这个值，柯里化可能会起作用：
 
 ```js
 var adder = curry( add );
@@ -370,7 +370,7 @@ var adder = curry( add );
 // [4,5,6,7,8]
 ```
 
-How about another numbers example, this time adding a list of them together:
+让我们来看看另一个有关数字的例子，这次我们拿一个列表的数字做加法：
 
 ```js
 function sum(...args) {
@@ -383,14 +383,15 @@ function sum(...args) {
 
 sum( 1, 2, 3, 4, 5 );						// 15
 
-// now with currying:
-// (5 to indicate how many we should wait for)
+// 好，我们看看用柯里化怎么做:
+// (5 用来指定需要链式调用的次数)
 var curriedSum = curry( sum, 5 );
 
 curriedSum( 1 )( 2 )( 3 )( 4 )( 5 );		// 15
 ```
 
 The advantage of currying here is that each call to pass in an argument produces another function that's more specialized, and we can capture and use *that* new function later in the program. Partial application specifies all the partially applied arguments up front, producing a function that's waiting for all the rest of the arguments.
+柯里化在这里的好处不言而喻，每次函数调用传入一个实参，并生成另一个特别的函数，之后我们可以在程序中获取并使用**那个**新函数。
 
 If you wanted to use partial application to specify one parameter at a time, you'd have to keep calling `partialApply(..)` on each successive function. Curried functions do this automatically, making working with individual arguments one-at-a-time more ergonomic.
 
