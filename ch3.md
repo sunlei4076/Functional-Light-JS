@@ -390,18 +390,17 @@ var curriedSum = curry( sum, 5 );
 curriedSum( 1 )( 2 )( 3 )( 4 )( 5 );		// 15
 ```
 
-The advantage of currying here is that each call to pass in an argument produces another function that's more specialized, and we can capture and use *that* new function later in the program. Partial application specifies all the partially applied arguments up front, producing a function that's waiting for all the rest of the arguments.
-柯里化在这里的好处不言而喻，每次函数调用传入一个实参，并生成另一个特别的函数，之后我们可以在程序中获取并使用**那个**新函数。
+柯里化在这里的好处不言而喻，每次函数调用传入一个实参，并生成另一个特别的函数，之后我们可以在程序中获取并使用**那个**新函数。而偏应用则是预先指定所有将被偏应用的实参，产出一个等待接收剩下所有实参的函数。
 
-If you wanted to use partial application to specify one parameter at a time, you'd have to keep calling `partialApply(..)` on each successive function. Curried functions do this automatically, making working with individual arguments one-at-a-time more ergonomic.
+如果想用偏应用来每次指定一个形参，你得在每个函数中逐次调用 `partialApply(..)` 函数。而被柯里化的函数可以自动完成这个工作，这个方案更符合人们的行为习惯。
 
-In JavaScript, both currying and partial application use closure to remember the arguments over time until all have been received, and then the original operation can be performed.
+在 JavaScript 中，柯里化和偏应用都使用闭包来保存实参，直到收齐所有实参并执行原方法的时候。
 
-### Why Currying And Partial Application?
+### 柯里化和偏应用有什么用？
 
-With either currying style (`sum(1)(2)(3)`) or partial application style (`partial(sum,1,2)(3)`), the call-site unquestionably looks stranger than a more common one like `sum(1,2,3)`. So **why would we go this direction** when adopting FP? There are multiple layers to answering that question.
+毫无疑问，无论是柯里化风格（`sum(1)(2)(3)`）还是偏应用风格（`partial(sum,1,2)(3)`），它们的调用方式比普通函数的调用方式奇怪得多。那么，在适应 FP 的时候，**我们为什么要这么做呢**？答案有几个层面。
 
-The first and most obvious reason is that both currying and partial application allow you to separate in time/space (throughout your code base) when and where separate arguments are specified, whereas traditional function calls require all the arguments to be present up front. If you have a place in your code where you'll know some of the arguments and another place where the other arguments are determined, currying or partial application are very useful.
+首先是显而易见的理由，使用柯里化和偏应用可以将指定分离实参的时机和地方独立开来（遍及代码的每一处），而传统函数调用则需要预先确定所有实参。如果你在代码某一处只获取了部分实参，然后在另一处确定另一部分实参，这个时候柯里化和偏应用就能派上用场。
 
 Another layer to this answer, which applies most specifically to currying, is that composition of functions is much easier when there's only one argument. So a function that ultimately needs 3 arguments, if curried, becomes a function that needs just one, three times over. That kind of unary function will be a lot easier to work with when we start composing them. We'll tackle this topic later in the text.
 
