@@ -398,33 +398,33 @@ curriedSum( 1 )( 2 )( 3 )( 4 )( 5 );		// 15
 
 ### 柯里化和偏应用有什么用？
 
-毫无疑问，无论是柯里化风格（`sum(1)(2)(3)`）还是偏应用风格（`partial(sum,1,2)(3)`），它们的调用方式比普通函数的调用方式奇怪得多。那么，在适应 FP 的时候，**我们为什么要这么做呢**？答案有几个层面。
+毫无疑问，无论是柯里化风格（`sum(1)(2)(3)`）还是偏应用风格（`partial(sum,1,2)(3)`），它们的调用方式比普通函数的调用方式奇怪得多。那么，在适应 FP 的时候，**我们为什么要这么做呢**？答案有几个方面。
 
 首先是显而易见的理由，使用柯里化和偏应用可以将指定分离实参的时机和地方独立开来（遍及代码的每一处），而传统函数调用则需要预先确定所有实参。如果你在代码某一处只获取了部分实参，然后在另一处确定另一部分实参，这个时候柯里化和偏应用就能派上用场。
 
-Another layer to this answer, which applies most specifically to currying, is that composition of functions is much easier when there's only one argument. So a function that ultimately needs 3 arguments, if curried, becomes a function that needs just one, three times over. That kind of unary function will be a lot easier to work with when we start composing them. We'll tackle this topic later in the text.
+另一个最能体现柯里化应用的的是，当函数只有一个形参时，我们能够比较容易地组合它们。因此，如果一个函数最终需要三个实参，那么它被柯里化以后会变成需要三次调用，每次调用需要一个实参的函数。当我们组合函数时，这种单元函数的形式会让我们处理起来更简单。我们将在后面继续探讨这个话题。
 
-### Currying More Than One Argument?
+### 如何柯里化多个实参？
 
-The definition and implementation I've given of currying thus far is, I believe, as true to the spirit as we can likely get in JavaScript.
+到目前为止，我相信我给出的是我们能在 JavaScript 中能得到的，最精髓的柯里化定义和实现方式。
 
-Specifically, if we look briefly at how currying works in Haskell, we can observe that multiple arguments always go in to a function one at a time, one per curried call -- other than tuples (analogus to arrays for our purposes) that transport multiple values in a single argument.
+具体来说，如果简单看下柯里化在 Haskell 语言中的应用，我们会发现一个函数总是在一次柯里化调用中接收多个实参 —— 而不是接收一个包含多个值的元组（tuple，类似我们的数组）实参。
 
-For example, in Haskell:
+在 Haskell 中的示例：
 
 ```
 foo 1 2 3
 ```
 
-This calls the `foo` function, and has the result of passing in three values `1`, `2`, and `3`. But functions are automatically curried in Haskell, which means each value goes in as a separate curried-call. The JS equivalent of that would look like `foo(1)(2)(3)`, which is the same style as the `curry(..)` I presented above.
+该示例调用了 `foo` 函数，并且根据传入的三个值 `1`、`2` 和 `3` 得到了结果。但是在 Haskell 中，函数会自动被柯里化，这意味着我们传入函数的值都分别传入了单独的柯里化调用。在 JS 中看起来则会是这样：`foo(1)(2)(3)`。这和我此前讲过的 `curry(..)` 风格如出一辙。
 
-**Note:** In Haskell, `foo (1,2,3)` is not passing in those 3 values at once as three separate arguments, but a tuple (kinda like a JS array) as a single argument. To work, `foo` would need to be altered to handle a tuple in that argument position. As far as I can tell, there's no way in Haskell to pass all three arguments separately with just one function call; each argument gets its own curried-call. Of course, the presence of multiple calls is transparent to the Haskell developer, but it's a lot more syntactically obvious to the JS developer.
+**注意：** 在 Haskell 中，`foo (1,2,3)` 不是把三个值当作单独的实参一次性传入函数，而是把它们包含在一个元组（类似 JS 数组）中作为单独实参传入函数。为了正常运行，我们需要改变 `foo` 函数来处理作为实参的元组。据我所知，在 Haskell 中我们没有办法在一次函数调用中将全部三个实参独立地传入，而需要柯里化调用每个函数。诚然，多次调用对于 Haskell 开发者来说是透明的，但对 JS 开发者来说，这在语法上更加一目了然。
 
-For these reasons, I think the earlier `curry(..)` that I demonstrated is a faithful adaptation, or what I might call "strict currying".
+基于以上原因，我认为此前展示的 `curry(..)` 函数是一个可靠的版本，我把它叫做 “严格柯里化”。
 
-However, it's important to note that there's a looser definition used in most popular JavaScript FP libraries.
+然而，我们需要注意，大多数流行的 JavaScript FP 库都使用了一种并不严格的柯里化（loose currying）定义。
 
-Specifically, JS currying utilities typically allow you to specify multiple arguments for each curried-call. Revisiting our `sum(..)` example from before, this would look like:
+具体来说，往往 JS 柯里化实用函数会允许你在每次柯里化调用中指定多个实参。回顾一下之前提到的 `sum(..)` 示例，松散柯里化应用会是下面这样：
 
 ```js
 var curriedSum = looseCurry( sum, 5 );
@@ -432,11 +432,11 @@ var curriedSum = looseCurry( sum, 5 );
 curriedSum( 1 )( 2, 3 )( 4, 5 );			// 15
 ```
 
-We see a slight syntax savings of fewer `( )`, and an implied performance benefit of now having three function calls instead of five. But other than that, using `looseCurry(..)` is identical in end result to the narrower `curry(..)` definition from earlier. I would guess the convenience/performance factor is probably why frameworks allow multiple arguments. This seems mostly like a matter of taste.
+可以看到，语法上我们节省了`()`的使用，并且把五次函数调用减少成三次，间接提高了性能。除此之外，使用 `looseCurry(..)` 函数的结果也和之前更加狭义的 `curry(..)` 函数一样。我猜便利性和性能因素是众框架允许多实参柯里化的原因。这看起来更像是品味问题。
 
-**Note:** The loose currying *does* give you the ability to send in more arguments than the arity (detected or specified). If you designed your function with optional/variadic arguments, that could be a benefit. For example, if you curry five arguments, looser currying still allows more than five arguments (`curriedSum(1)(2,3,4)(5,6)`), but strict currying wouldn't support `curriedSum(1)(2)(3)(4)(5)(6)`.
+**注意：**松散柯里化**允许**你传入超过形参数量（arity，原函数确认或指定的形参数量）的实参。如果你将函数的参数设计成可配的或变化的，那么松散柯里化将会有利于你。例如，如果你将要柯里化的函数接收 5 个实参，松散柯里化依然允许传入超过 5 个的实参（`curriedSum(1)(2,3,4)(5,6)`），而严格柯里化就不支持 `curriedSum(1)(2)(3)(4)(5)(6)`。
 
-We can adapt our previous currying implementation to this common looser definition:
+我们可以将之前的柯里化实现方式调整一下，使其适应这种常见的更松散的定义：
 
 ```js
 function looseCurry(fn,arity = fn.length) {
@@ -455,7 +455,7 @@ function looseCurry(fn,arity = fn.length) {
 }
 ```
 
-Now each curried-call accepts one or more arguments (as `nextArgs`). We'll leave it as an exercise for the interested reader to define the ES6 `=>` version of `looseCurry(..)` similar to how we did it for `curry(..)` earlier.
+现在每个柯里化调用可以接收一个或多个实参了（收集在 `nextArgs` 数组中）。至于这个实用函数的 ES6 箭头函数版本，我们就留作一个小练习，有兴趣的读者可以模仿之前 `curry(..)` 函数的来完成。
 
 ### No Curry For Me, Please
 
