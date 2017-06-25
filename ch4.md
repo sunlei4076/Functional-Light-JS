@@ -671,22 +671,31 @@ Aside from generalization vs specialization, I think there's another more useful
 > https://books.google.com/books?id=jM-cBAAAQBAJ&pg=PA115&lpg=PA115&dq=%22making+it+possible+for+the+programmer+to+focus+on+a+manageable+subset%22&source=bl&ots=yrJ3a-Tvi6&sig=XZwYoWwbQxP2w5qh2k2uMAPj47k&hl=en&sa=X&ved=0ahUKEwjKr-Ty35DSAhUJ4mMKHbPrAUUQ6AEIIzAA#v=onepage&q=%22making%20it%20possible%20for%20the%20programmer%20to%20focus%20on%20a%20manageable%20subset%22&f=false
 
 // TODO: make a proper reference to this book/quote, or at least find a better online link
+// TODO: 对这本书或引用弄一个更好的参照，至少找到一个更好的在线链接
 
 The point this quote makes is that abstraction -- generally, pulling out some piece of code into its own function -- serves the primary purpose of separating apart two pieces of functionality so that each piece can be focused on independent of the other.
+这段引用表述的观点是抽象 -- 通常来说，是指把一些代码片段放到自己的函数中 -- 是围绕着能将两部分功能分离，以达到可以专注于某一独立的部分为主要目的来服务的。
 
 Note that abstraction in this sense is not intended to *hide* details, as if to treat things as black boxes. That notion is more closely associated with the programming principle of encapsulation. **We're not abstracting to hide, but to separate to improve focus**.
+需要注意的是，这种场景下的抽象并不是为了**隐藏**细节，比如把一些东西当作黑盒来对待。这一观念其实更贴近于编程中的封装性原则。**我们不是通过抽象来隐藏细节，而是通过分离来突出关注点**。
 
 Recall that at the outset of this text I described the goal of FP as creating more readable, understandable code. One effective way of doing that is untangling complected -- read: tightly braided, as in strands of rope -- code into separate, simpler -- read: loosely bound -- pieces of code. In that way, the reader isn't distracted by the details of one part while looking for the details of the other part.
+还记得这段文章的开头，我说函数式编程的目的是为了创造更可读、更易理解的代码。一个有效的方法是将交织缠绕的 -- 紧紧编织在一起，像一股绳子 -- 代码解绑为分离的、更简单的 -- 松散绑定的 -- 代码片段。以这种方式来做的话，代码的阅读者将不会在寻找其它部分细节的时候被其中某块的细节所分心。
 
 Our higher goal is not to implement something only once, as it is with the DRY mindset. As a matter of fact, sometimes we'll actually repeat ourselves in code. Instead, we seek to implement separate things, separately. We're trying to improve focus, because that improves readability.
+我们更高的目标是只对某些东西实现一次，这是 DRY 的观念。实际上，有些时候我们确实在代码中不断重复。于是，我们寻求更分离的实现方式。我们尝试突出关注点，因为这能提高可读性。
 
 Another way of describing this goal is with imperative vs declarative programming style. Imperative code is primarily concerned with explicitly stating *how* to accomplish a task. Declarative code states *what* the outcome should be, and leaves the implementation to some other responsibility.
+用另一种方式描述这个目标就是命令式 vs 声明式编程风格的区别。命令式代码主要关心的是描述**怎么做**来准确完成一项任务。声明式代码则是描述输出应该**是什么**，并将具体实现交给其它部分。
 
 In other words, declarative code abstracts the *what* from the *how*. Typically declarative coding is favored in readability over imperative, though no program (except of course machine code 1's and 0's) is ever entirely one or the other. The programmer must seek balance between them.
+换句话说，声明式代码从**怎么做**中抽象出了**是什么**。尽管普通的声明式代码在可读性上强于命令式，但没有程序（除了机器码 1 和 0）是完全的声明式或者命令式代码。编程者必须在它们之间寻找平衡。
 
 ES6 added many syntactic affordances that transform old imperative operations into newer declarative forms. Perhaps one of the clearest is destructuring. Destructuring is a pattern for assignment that describes how a compound value (object, array) is taken apart into its constituent values.
+ES6 增加了很多语法功能，能将老的命令式操作转换为新的声明式形式。可能最清晰的当属解构了。结构是一种赋值模式，它描述了如何将组合值（对象、数组）内的构成值分解出来的方法。
 
 Here's an example of array destructuring:
+这里是一个数组结构的例子：
 
 ```js
 function getData() {
@@ -694,47 +703,61 @@ function getData() {
 }
 
 // imperative
+// 命令式
 var tmp = getData();
 var a = tmp[0];
 var b = tmp[3];
 
 // declarative
+// 声明式
 var [ a ,,, b ] = getData();
 ```
 
 The *what* is assigning the first value of the array to `a` and the fourth value to `b`. The *how* is getting a reference to the array (`tmp`) and manually referencing indexes `0` and `3` in assignments to `a` and `b`, respectively.
+**是什么**就是将数组中的第一个值赋给 `a`，然后第四个值赋给 `b`。**怎么做**就是得到一个数组的引用（`tmp`）然后手动的通过数组索引 `0` 和 `3`，分别赋值给 `a` 和 `b`。
 
 Does the array destructuring *hide* the assignment? Depends on your perspective. I'm asserting that it simply separates the *what* from the *how*. The JS engine still does the assignments, but it prevents you from having to be distracted by *how* it's done.
+数组的解构是否**隐藏**了赋值细节？这要看你看待的角度了。我认为它知识简单的将**是什么**从**怎么做**中分离出来。JS 引擎仍然做了赋值的工作，但它阻止了你自己去抽象**怎么做**的过程。
 
 Instead, you read `[ a ,,, b ] = ..` and can see the assignment pattern merely telling you *what* will happen. Array destructuring is an example of declarative abstraction.
+相反的是，你阅读 `[ a ,,, b ] = ..` 的时候，便能看到该赋值模式只不过是告诉你将要发生的**是什么**。数组的解构是声明式抽象的一个例子。
 
 ### Composition As Abstraction
+### 将组合当作抽象
 
 What's all this have to do with function composition? Function composition is also declarative abstraction.
+函数组合到底做了什么？函数组合同样也是一种声明式抽象。
 
 Recall the `shorterWords(..)` example from earlier. Let's compare an imperative and declarative definition for it:
+回想下之前的 `shorterWords(..)` 例子。让我们对比下命令式和声明式的定义。
 
 ```js
 // imperative
+// 命令式
 function shorterWords(text) {
 	return skipLongWords( unique( words( text ) ) );
 }
 
 // declarative
+// 声明式
 var shorterWords = compose( skipLongWords, unique, words );
 ```
 
 The declarative form focuses on the *what* -- these 3 functions pipe data from a string to a list of shorter words -- and leaves the *how* to the internals of `compose(..)`.
+声明式关注点在**是什么**上 -- 这 3 个函数传递的数据从一个字符串到一系列更短的单词 -- 并且将**怎么做**留在了 `compose(..)`的内部。
 
 In a bigger sense, the `shorterWords = compose(..)` line explains the *how* for defining a `shorterWords(..)` utility, leaving this declarative line somewhere else in the code to focus only on the *what*:
+在一个更大的层面上看，`shorterWords = compose(..)` 行解释了**怎么做**来定义一个 `shorterWords(..)` 工具函数，这样在代码的别处使用时，只需关注下面这行声明式的代码输出**是什么**。
 
 ```js
 shorterWords( text );
 ```
 
 Composition abstracts getting a list of shorter words from the steps it takes to do that.
+组合将一步步得到一系列更短的单词的过程抽象了出来。
 
 By contrast, what if we hadn't used composition abstraction?
+相反的看，如果我们不实用组合抽象呢？
 
 ```js
 var wordsFound = words( text );
@@ -743,24 +766,30 @@ skipLongWords( uniqueWordsFound );
 ```
 
 Or even:
+或者这种：
 
 ```js
 skipLongWords( unique( words( text ) ) );
 ```
 
 Either of these two versions demonstrates a more imperative style as opposed to the prior declarative style. The reader's focus in those two snippets is inextricably tied to the *how* and less on the *what*.
+这两个版本展示的都是一种更加命令式的风格，违背了声明式风格优先。阅读者关注这两个代码片段时，会被更多的要求了解**怎么做**而不是**是什么**。
 
 Function composition isn't just about saving code with DRY. Even if the usage of `shorterWords(..)` only occurs in one place -- so there's no repetition to avoid! -- separating the *how* from the *what* still improves our code.
+函数组合并不是通过 DRY 的原则来节省代码量。即使 `shorterWords(..)` 的使用只出现了一次 -- 所以并没有重复问题需要避免！-- 从**怎么做**中分离出**是什么**仍能帮助我们提升代码。
 
 Composition is a powerful tool for abstraction that transforms imperative code into more readable declarative code.
+组合是一个抽象的强力工具，它能够将命令式代码抽象为更可读的声明式代码。
 
 ## Revisiting Points
+## 回顾点
 
 Now that we've thoroughly covered composition -- a trick that will be immensely helpful in many areas of FP -- let's watch it in action by revisiting point-free style from "No Points" in Chapter 3 with a scenario that's a fair bit more complex to refactor:
+既然我们已经把组合都了解了一遍 -- 那么是时候抛出函数式编程中很多地方都有用的小技巧了 -- 让我们通过在某个场景下回顾第 3 章的“无点”段落中的无点代码，并把它重构的稍微复杂点来观察这种小技巧。
 
 ```js
 // given: ajax( url, data, cb )
-
+// 提供该API：ajax( url, data, cb )
 var getPerson = partial( ajax, "http://some.api/person" );
 var getLastOrder = partial( ajax, "http://some.api/order", { id: -1 } );
 
@@ -772,8 +801,10 @@ getLastOrder( function orderFound(order){
 ```
 
 The "points" we'd like to remove are the `order` and `person` parameter references.
+我们想要移除的“点”是对 `order` 和 `person` 参数的引用。
 
 Let's start by trying to get the `person` "point" out of the `personFound(..)` function. To do so, let's first to define:
+让我们尝试将 `person` “点”移出 `personFound(..)` 函数。要达到目的，我们需要首先定义：
 
 ```js
 function extractName(person) {
@@ -782,6 +813,7 @@ function extractName(person) {
 ```
 
 But let's observe that this operation could instead be expressed in generic terms: extracting any property by name off of any object. Let's call such a utility `prop(..)`:
+但据我们观察这段操作能够表达的更通用些：将任意对象的任意属性通过属性名提取出来。让我们把这个工具称为 `prop(..)`：
 
 ```js
 function prop(name,obj) {
@@ -789,14 +821,17 @@ function prop(name,obj) {
 }
 
 // or the ES6 => form
+// ES6 箭头函数形式
 var prop =
 	(name,obj) =>
 		obj[name];
 ```
 
 While we're dealing with object properties, let's also define the opposite utility: `setProp(..)` for setting a property value onto an object.
+我们处理对象属性的时候，也需要定义下反操作的工具：`setProp(..)`，为了将属性值设入某个对象内。
 
 However, we want to be careful not to just mutate an existing object but rather create a clone of the object to make the change to, and then return it. The reasons for such care will be discussed in detail in Chapter 5.
+但是，我们想小心一些，不改动现存的对象，而是创建一个携带变化的复制对象，并将它返回出去。关于这块的处理将在第 5 章中讨论更多细节。
 
 ```js
 function setProp(name,obj,val) {
@@ -807,14 +842,17 @@ function setProp(name,obj,val) {
 ```
 
 Now, to define an `extractName(..)` that pulls a `"name"` property off an object, we'll partially apply `prop(..)`:
+现在，定义一个 `extractName(..)` ，它能将对象中的 `"name"` 属性拿出来，我们将部分应用 `prop(..)`：
 
 ```
 var extractName = partial( prop, "name" );
 ```
 
 **Note:** Don't miss that `extractName(..)` here hasn't actually extracted anything yet. We partially applied `prop(..)` to make a function that's waiting to extract the `"name"` property from whatever object we pass into it. We could also have done it with `curry(prop)("name")`.
+**注意:** 不要误解这里的 `extractName(..)`，它其实什么都还没有做。我们只是部分应用 `prop(..)` 来创建了一个等待接收包含 `"name"`属性的对象的函数。我们也能通过`curry(prop)("name")`做到一样的事。
 
 Next, let's narrow the focus on our example's nested lookup calls to this:
+下一步，让我们缩小关注点，看下例子中嵌套的这块查找操作的调用：
 
 ```js
 getLastOrder( function orderFound(order){
@@ -823,26 +861,31 @@ getLastOrder( function orderFound(order){
 ```
 
 How can we define `outputPersonName(..)`? To visualize what we need, think about the desired flow of data:
+我们该如何定义 `outputPersonName(..)`？为了方便形象化我们所需要的东西，想一下我们需要的数据流是什么样：
 
 ```
 output <-- extractName <-- person
 ```
 
 `outputPersonName(..)` needs to be a function that takes an (object) value, passes it into `extractName(..)`, then passes that value to `output(..)`.
+`outputPersonName(..)` 需要是一个接收（对象）值的函数，并将它传递给 `extractName(..)`，然后将处理后的值传给 `output(..)`。
 
 Hopefully you recognized that as a `compose(..)` operation. So we can define `outputPersonName(..)` as:
+希望你能看出这里需要 `compose(..)` 操作。所以我们能够将 `outputPersonName(..)` 定义为：
 
 ```
 var outputPersonName = compose( output, extractName );
 ```
 
 The `outputPersonName(..)` function we just created is the callback provided to `getPerson(..)`. So we can define a function called `processPerson(..)` that presets the callback argument, using `partialRight(..)`:
+我们刚刚创建的 `outputPersonName(..)` 函数是提供给 `getPerson(..)` 的回调。所以我们还能定义一个函数叫做 `processPerson(..)` 来处理回调参数，使用 `partialRight(..)`：
 
 ```js
 var processPerson = partialRight( getPerson, outputPersonName );
 ```
 
 Let's reconstruct the nested lookups example again with our new function:
+让我们用新函数来重构下之前的代码：
 
 ```js
 getLastOrder( function orderFound(order){
@@ -851,14 +894,17 @@ getLastOrder( function orderFound(order){
 ```
 
 Phew, we're making good progress!
+唔，进展还不错！
 
 But we need to keep going and remove the `order` "point". The next step is to observe that `personId` can be extracted from an object (like `order`) via `prop(..)`, just like we did with `name` on the `person` object:
+但我们需要继续移除掉 `order` 这个“点”。下一步是观察 `personId` 能够被 `prop(..)` 从一个对象（比如 `order`）中提取出来，就想我们在 `person` 对象中提取 `name` 一样。
 
 ```js
 var extractPersonId = partial( prop, "personId" );
 ```
 
 To construct the object (of the form `{ id: .. }`) that needs to be passed to `processPerson(..)`, let's make another utility for wrapping a value in an object at a specified property name, called `makeObjProp(..)`:
+为了创建传递给 `processPerson(..)` 的对象（ `{ id: .. }` 的形式），让我们创建一个工具 `makeObjProp(..)`，用来以特定的属性名将值包装为一个对象。
 
 ```js
 function makeObjProp(name,value) {
@@ -866,32 +912,38 @@ function makeObjProp(name,value) {
 }
 
 // or the ES6 => form
+// ES6 箭头函数形式
 var makeObjProp =
 	(name,value) =>
 		setProp( name, {}, value );
 ```
 
 **Tip:** This utility is known as `objOf(..)` in the Ramda library.
+**提示：** 这个工具在 Ramda 库中被成为 `objOf(..)`。
 
 Just as we did with `prop(..)` to make `extractName(..)`, we'll partially apply `makeObjProp(..)` to build a function `personData(..)` that makes our data object:
+就想我们之前使用 `prop(..)` 来创建 `extractName(..)`，我们将部分应用 `makeObjProp(..)` 来创建 `personData(..)` 函数用来制作我们的数据对象。
 
 ```js
 var personData = partial( makeObjProp, "id" );
 ```
 
 To use `processPerson(..)` to perform the lookup of a person attached to an `order` value, the conceptual flow of data through operations we need is:
+为了使用 `processPerson(..)` 来完成通过 `order` 值查找一个人的功能，我们需要的数据流如下：
 
 ```
 processPerson <-- personData <-- extractPersonId <-- order
 ```
 
 So we'll just use `compose(..)` again to define a `lookupPerson(..)` utility:
+所以我们只需要在使用一次 `compose(..)` 来定义一个 `lookupPerson(..)` ：
 
 ```js
 var lookupPerson = compose( processPerson, personData, extractPersonId );
 ```
 
 And... that's it! Putting the whole example back together without any "points":
+然后，就是这样了！把这整个例子重新组合起来，不带任何的“点”：
 
 ```js
 var getPerson = partial( ajax, "http://some.api/person" );
@@ -908,10 +960,13 @@ getLastOrder( lookupPerson );
 ```
 
 Wow. Point-free. And `compose(..)` turned out to be really helpful in two places!
+哇哦。没有点。并且 `compose(..)` 在两处地方看起来相当有用！
 
 I think in this case, even though the steps to derive our final answer were a bit drawn out, the end result is much more readable code, because we've ended up explicitly calling out each step.
+我认为在这样的场景下，即使推导出我们最终答案的步骤有些多，但最终的代码却变得更加可读，因为我们不用再去详细的调用每一步了。
 
 And even if you didn't like seeing/naming all those intermediate steps, you can preserve point-free but wire the expressions together without individual variables:
+假如你不想看到/命名这么多中间步骤，你已然可以通过不使用独立变量而是将表达式串起来来来保留无点特性。
 
 ```js
 partial( ajax, "http://some.api/order", { id: -1 } )
@@ -928,13 +983,19 @@ partial( ajax, "http://some.api/order", { id: -1 } )
 ```
 
 This snippet is less verbose for sure, but I think it's less readable than the previous snippet where each operation is its own variable. Either way, composition helped us with our point-free style.
+这段代码肯定没那么罗嗦了，但我认为比之前的每个操作都有其对应的变量相比，可读性略有降低。但是不管怎样，组合帮助我们实现了无点的风格。
 
 ## Summary
+## 总结
 
 Function composition is a pattern for defining a function that routes the output of one function call into another function call, and its output to another, and so on.
+函数组合市一中定义函数的模式，它能将一个函数调用的输出路由到另一个函数的调用上，然后一直进行下去。
 
 Because JS functions can only return single values, the pattern essentially dictates that all functions in the composition (except perhaps the first called) need to be unary, taking only a single input from the output of the previous.
+因为 JS 函数只能返回单个值，这个模式本质上要求所有组合中的函数（可能第一个调用的函数除外）需要是一元的，从上一个输出中只接收一个输入。
 
 Instead of listing out each step as a discrete call in our code, function composition using a utility like `compose(..)` abstracts that implementation detail so the code is more readable, allowing us to focus on *what* the composition will be used to accomplish, not *how* it will be performed.
+相较于在我们的代码里详细列出每个调用，函数组合使用 `compose(..)` 工具来提取出实现细节，让代码变得更可读，让我们更关注组合完成的**是什么**，而不是它具体**做什么**。
 
 Composition -- declarative data flow -- is one of the most important tools that underpins most of the rest of FP.
+组合 -- 声明式数据流 -- 是支撑函数式编程其余特性的最重要的工具之一。
