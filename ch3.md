@@ -511,9 +511,8 @@ uncurriedSum( 1, 2, 3 )( 4 )( 5 );			// 15
 ```
 
 Probably the more common case of using `uncurry(..)` is not with a manually curried function as just shown, but with a function that comes out curried as a result of some other set of operations. We'll illustrate that scenario later in this chapter in the "No Points" discussion.
-【本段不明确】也许一般我们使用 `uncurry(..)` 函数不像上面展示的那样作用于手动柯里化后的函数，而是作用于通过其他操作集合生成的柯里化后的函数。我们将在本章 ”No Points“ 小节的讨论中说明该方案。
+【本段不明确】也许一般我们使用 `uncurry(..)` 函数不像上面展示的那样作用于手动柯里化后的函数，而是作用于通过其他操作集合生成的被柯里化的函数。我们将在本章 ”No Points“ 小节的讨论中说明该方案。
 
-## All For One
 ## 只要一个实参 
 
 设想你向一个实用函数传入一个函数，而这个实用函数会把多个实参传入函数，但可能你只希望你的函数接收单一实参。如果你有个类似我们前面提到被松散柯里化的函数，它能接收多个实参，但你却想让它接收单一实参。那么这就是我想说的情况。
@@ -569,9 +568,9 @@ var adder = looseCurry( sum, 2 );
 
 对于 `parseInt(str,radix)` 这个函数调用，如果 `map(..)` 函数调用它时在它的第二个实参位置传入 `index`，那么毫无疑问 `parseInt(..)` 会将 `index` 理解为 `radix` 参数，这是我们不希望发生的。而 `unary(..)` 函数创建了一个只接收第一个传入实参，忽略其他实参的新函数，这就意味着传入 `index` 不再会被误解为 `radix` 参数。
 
-### One On One
+### 传一个返回一个
 
-Speaking of functions with only one argument, another common base operation in the FP toolbelt is a function that takes one argument and does nothing but return the value untouched:
+说到只传一个实参的函数，在 FP 工具库中有另一种通用的基础函数：该函数接收一个实参，然后什么都不做，原封不动地返回实参值。
 
 ```js
 function identity(v) {
@@ -584,9 +583,9 @@ var identity =
 		v;
 ```
 
-This utility looks so simple as to hardly be useful. But even simple functions can be helpful in the world of FP. Like they say in acting: there are no small parts, only small actors.
+看起来这个实用函数简单到了无处可用的地步。但即使是简单的函数在 FP 的世界里也能发挥作用。就像演艺圈有句谚语：没有小角色，只有小演员。
 
-For example, imagine you'd like split up a string using a regular expression, but the resulting array may have some empty values in it. To discard those, we can use JS's `filter(..)` array operation (covered in detail later in the text) with `identity(..)` as the predicate:
+举个例子，想象一下你要用正则表达式拆分（split up）一个字符串，但输出的数组中可能包含一些空值。我们可以使用 `filter(..)` 数组方法（下文会详细说到这个方法）来筛除空值，而我们将 `identity(..)` 函数作为 `filter(..)` 的断言：
 
 ```js
 var words = "   Now is the time for all...  ".split( /\s|\b/ );
@@ -597,11 +596,11 @@ words.filter( identity );
 // ["Now","is","the","time","for","all","..."]
 ```
 
-Since `identity(..)` simply returns the value passed to it, JS coerces each value into either `true` or `false`, and that decides to keep or exclude each value in the final array.
+既然 `identity(..)` 会简单地返回传入的值，而 JS 会将每个值强制转换为 `true` 或 `false`，这样我们就能在最终的数组里对每个值进行保存或排除。
 
-**Tip:** Another unary function that can be used as the predicate in the previous example is JS's own `Boolean(..)` function, which explicitly coerces the values to `true` or `false`.
+**小贴士：**像这个例子一样，另外一个能被用作断言的单实参函数是 JS 自有的 `Boolean(..)` 方法，该方法会强制把传入值转为 `true` 或 `false`。
 
-Another example of using `identity(..)` is as a default function in place of a transformation:
+另一个使用 `identity(..)` 的示例就是将其作为替代一个转换函数（译注：transformation，这里指的是对传入值进行修改或调整，返回新值的函数）的默认函数：
 
 ```js
 function output(msg,formatFn = identity) {
@@ -617,7 +616,7 @@ output( "Hello World", upper );		// HELLO WORLD
 output( "Hello World" );			// Hello World
 ```
 
-If `output(..)` didn't have a default for `formatFn`, we could bring our earlier friend `partialRight(..)`:
+如果不给 `output(..)` 函数的 `formatFn` 参数设置默认值，我们可以叫出老朋友 `partialRight(..)` 函数：
 
 ```js
 var specialOutput = partialRight( output, upper );
@@ -627,11 +626,11 @@ specialOutput( "Hello World" );		// HELLO WORLD
 simpleOutput( "Hello World" );		// Hello World
 ```
 
-You also may see `identity(..)` used as a default transformation function for `map(..)` calls or as the initial value in a `reduce(..)` of a list of functions; both of these utilities will be covered in Chapter 8.
+你也可能会看到 `identity(..)` 被当作 `map(..)` 函数调用的默认转换函数，或者作为某个函数数组的 `reduce(..)` 函数的初始值。我们将会在第 8 章中提到这两个实用函数。
 
 ### Unchanging One
 
-Certain APIs don't let you pass a value directly into a method, but require you to pass in a function, even if that function just returns the value. One such API is the `then(..)` method on JS Promises. Many claim that ES6 `=>` arrow functions are the "solution". But there's an FP utility that's perfectly suited for the task:
+Certain API 禁止直接给方法传值，而要求我们传入一个函数，就算这个函数只是返回一个值。JS Promise 中的 `then(..)` 方法就是一个 Certain API。很多人声称 ES6 箭头函数可以当作这个问题的 “解决方案”。但我这有一个 FP 实用函数可以完美胜任该任务：
 
 ```js
 function constant(v) {
@@ -647,12 +646,12 @@ var constant =
 			v;
 ```
 
-With this tidy little utility, we can solve our `then(..)` annoyance:
+这个微小而简洁实用函数可以解决我们关于 `then(..)` 的烦恼：
 
 ```js
 p1.then( foo ).then( () => p2 ).then( bar );
 
-// vs
+// 对比：
 
 p1.then( foo ).then( constant( p2 ) ).then( bar );
 ```
