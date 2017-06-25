@@ -457,11 +457,11 @@ function looseCurry(fn,arity = fn.length) {
 
 现在每个柯里化调用可以接收一个或多个实参了（收集在 `nextArgs` 数组中）。至于这个实用函数的 ES6 箭头函数版本，我们就留作一个小练习，有兴趣的读者可以模仿之前 `curry(..)` 函数的来完成。
 
-### No Curry For Me, Please
+### 反柯里化
 
-It may also be the case that you have a curried function that you'd like to sort of un-curry -- basically, to turn a function like `f(1)(2)(3)` back into a function like `g(1,2,3)`.
+你也会遇到这种情况：拿到一个柯里化后的函数，却想要它柯里化之前的版本 —— 这本质上就是想将类似 `f(1)(2)(3)` 的函数变回类似 `g(1,2,3)` 的函数。
 
-The standard utility for this is (un)shockingly typically called `uncurry(..)`. Here's a simple naive implementation:
+不出意料的话，处理这个需求的标准实用函数通常被叫作 `uncurry(..)`。下面是简陋的实现方式：
 
 ```js
 function uncurry(fn) {
@@ -476,7 +476,7 @@ function uncurry(fn) {
 	};
 }
 
-// or the ES6 => arrow form
+// ES6 箭头函数形式
 var uncurry =
 	fn =>
 		(...args) => {
@@ -490,7 +490,7 @@ var uncurry =
 		};
 ```
 
-**Warning:** Don't just assume that `uncurry(curry(f))` has the same behavior as `f`. In some libs the uncurrying would result in a function like the original, but not all of them; certainly our example here does not. The uncurried function acts (mostly) the same as the original function if you pass as many arguments to it as the original function expected. However, if you pass fewer arguments, you still get back a partially curried function waiting for more arguments; this quirk is illustrated in the next snippet.
+**警告：**请不要以为 `uncurry(curry(f))` 和 `f` 函数的行为完全一样。虽然在某些库中，反柯里化使函数变成和原函数（译注：这里的原函数指柯里化之前的函数）类似的函数，但是凡事皆有例外，我们这里就有一个例外。如果你传入原函数期望数量的实参，那么在反柯里化后，函数的行为（大多数情况下）和原函数相同。然而，如果你少传了实参，就会得到一个仍然在等待传入更多实参的部分柯里化函数。我们在下面的代码中说明这个怪异行为。
 
 ```js
 function sum(...args) {
@@ -511,12 +511,14 @@ uncurriedSum( 1, 2, 3 )( 4 )( 5 );			// 15
 ```
 
 Probably the more common case of using `uncurry(..)` is not with a manually curried function as just shown, but with a function that comes out curried as a result of some other set of operations. We'll illustrate that scenario later in this chapter in the "No Points" discussion.
+【本段不明确】也许一般我们使用 `uncurry(..)` 函数不像上面展示的那样作用于手动柯里化后的函数，而是作用于通过其他操作集合生成的柯里化后的函数。我们将在本章 ”No Points“ 小节的讨论中说明该方案。
 
 ## All For One
+## 只要一个实参 
 
-Imagine you're passing a function to a utility where it will send multiple arguments to your function. But you may only want to receive a single argument. This is especially true if you have a loosely curried function like we discussed previously that *can* accept more arguments that you wouldn't want.
+设想你向一个实用函数传入一个函数，而这个实用函数会把多个实参传入函数，但可能你只希望你的函数接收单一实参。如果你有个类似我们前面提到被松散柯里化的函数，它能接收多个实参，但你却想让它接收单一实参。那么这就是我想说的情况。
 
-We can design a simple utility that wraps a function call to ensure only one argument will pass through. Since this is effectively enforcing that a function is treated as unary, let's name it as such:
+我们可以设计一个简单的实用函数，它包裹一个函数调用，确保被包裹的函数只接收一个实参。既然实际上我们是强制把一个函数处理成单元函数（unary），那我们索性就这样命名实用函数：
 
 ```js
 function unary(fn) {
@@ -532,7 +534,7 @@ var unary =
 			fn( arg );
 ```
 
-We saw the `map(..)` utility eariler. It calls the provided mapping function with three arguments: `value`, `index`, and `list`. If you want your mapping function to only receive one of these, like `value`, use the `unary(..)` operation:
+我们此前已经和 `map(..)` 函数打过照面了。它调用传入其中的 mapping 函数时会传入三个实参：`value`、`index` 和 `list`。如果你希望你传入 `map(..)` 的 mapping 函数只接受一个参数，比如 `value`，你可以使用 `unary(..)` 函数来操作：
 
 ```js
 function unary(fn) {
@@ -543,16 +545,16 @@ function unary(fn) {
 
 var adder = looseCurry( sum, 2 );
 
-// oops:
+// 出问题了：
 [1,2,3,4,5].map( adder( 3 ) );
 // ["41,2,3,4,5", "61,2,3,4,5", "81,2,3,4,5", "101, ...
 
-// fixed with `unary(..)`:
+// 用 `unary(..)` 修复后:
 [1,2,3,4,5].map( unary( adder( 3 ) ) );
 // [4,5,6,7,8]
 ```
 
-Another commonly cited example using `unary(..)` is:
+另一种常用的 `unary(..)` 函数调用示例：
 
 ```js
 ["1","2","3"].map( parseFloat );
@@ -565,7 +567,7 @@ Another commonly cited example using `unary(..)` is:
 // [1,2,3]
 ```
 
-For the signature `parseInt(str,radix)`, it's clear that if `map(..)` passes an `index` in the second argument position, it will be interpreted by `parseInt(..)` as the `radix`, which we don't want. `unary(..)` creates a function that will ignore all but the first argument passed to it, meaning the passed in `index` is not mistaken as the `radix`.
+对于 `parseInt(str,radix)` 这个函数调用，如果 `map(..)` 函数调用它时在它的第二个实参位置传入 `index`，那么毫无疑问 `parseInt(..)` 会将 `index` 理解为 `radix` 参数，这是我们不希望发生的。而 `unary(..)` 函数创建了一个只接收第一个传入实参，忽略其他实参的新函数，这就意味着传入 `index` 不再会被误解为 `radix` 参数。
 
 ### One On One
 
