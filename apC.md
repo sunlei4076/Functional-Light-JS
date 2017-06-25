@@ -1,45 +1,45 @@
-# Functional-Light JavaScript
-# Appendix C: FP Libraries
+# JavaScript 轻量级函数式编程
+# 附录 C： 函数式编程库
 
-If you've been reading this book from start to finish, take a minute to stop and look back how far you've come since Chapter 1. It's been quite a journey. I hope you've learned a lot and gained insight into thinking functionally for your own programs.
+如果您已经从头到尾通读了此书，请停下来回顾一下从第 1 章到现在您的收货。相当漫长的一段旅程，不是吗？希望您已经收获了大量新知识，并将这些新知识应用在您自己的程序当中。
 
-I want to close this book leaving you with some quick pointers of working with official FP libraries. This is not an exhaustive documentation on each, but a quick glance at the things you should be aware of as you venture beyond "functional-light" into true FP.
+在本书即将完结时，我希望给您提供一些函数式编程库的快速指南。注意我并不会详细的展开每一个库，而是将你在结束“轻量级函数式编程”后进军真正的函数式编程时应该注意的东西快速梳理一下。
 
-Wherever possible, I recommend you *not* reinvent any wheels. If you find an FP library that suits your needs, use it. Only use the ad hoc helper utilities from this book -- or invent ones of your own! -- if you can't find a suitable library method for your circumstance.
+如果有可能，我建议你不要做重新造轮子这样的事情。如果你找到了一个能满足你需求的函数式编程库，那么用它就对了。只有在你实在找不到合适的库来应对你面临的问题时，才应该使用本书提供的工具库——或者自己造轮子。
 
-## Stuff To Investigate
+## 目录
 
-Let's expand the list of FP libraries to be aware of, from Chapter 1. We won't cover all of these (as there's a lot of overlap), but here are the ones that should probably be on your radar screen:
+在本书第 1 章曾列出了一个函数式编程库的列表，现在我们来扩展这个列表。我们不会介绍所有的库（它们之中有许多功能重叠），但下面这些你应该有所关注：
 
-* [Ramda](http://ramdajs.com): General FP Utilities
-* [Sanctuary](https://github.com/sanctuary-js/sanctuary): Ramda Companion For FP Types
-* [lodash/fp](https://github.com/lodash/lodash/wiki/FP-Guide): General FP Utilities
-* [functional.js](http://functionaljs.com/): General FP Utilities
-* [Immutable](https://github.com/facebook/immutable-js): Immutable Data Structures
-* [Mori](https://github.com/swannodette/mori): (ClojureScript Inspired) Immutable Data Structures
-* [Seamless-Immutable](https://github.com/rtfeldman/seamless-immutable): Immutable Data Helpers
-* [tranducers-js](https://github.com/cognitect-labs/transducers-js): Transducers
-* [monet.js](https://github.com/cwmyers/monet.js): Monadic Types
+* [Ramda](http://ramdajs.com): 通用函数式编程工具集
+* [Sanctuary](https://github.com/sanctuary-js/sanctuary): Ramda 伴侣
+* [lodash/fp](https://github.com/lodash/lodash/wiki/FP-Guide): 通用函数式编程工具集
+* [functional.js](http://functionaljs.com/): 通用函数式编程工具集
+* [Immutable](https://github.com/facebook/immutable-js): 不可变数据结构
+* [Mori](https://github.com/swannodette/mori): (ClojureScript Inspired) 不可变数据结构
+* [Seamless-Immutable](https://github.com/rtfeldman/seamless-immutable): 不可变数据助手
+* [tranducers-js](https://github.com/cognitect-labs/transducers-js): 数据转换器
+* [monet.js](https://github.com/cwmyers/monet.js): 单体类型
 
-There are dozens of other fine libraries not on this list. Just because it's not on my list here doesn't mean it's not good, nor is this list a particular endorsement. It's just a quick glance at the landscape of FP-in-JavaScript. A much longer list of FP resources can be [found here](https://github.com/stoeffel/awesome-fp-js).
+上面的列表只列出了所有函数式编程库的一小部分，并不是说没有在列表中列出的库就不好，也不是说列表中列出的就是最佳选择，总之这只是 JavaScript 函数式编程世界中的一瞥。您可以前往[这里](https://github.com/stoeffel/awesome-fp-js)查看更完整的函数式编程资源。
 
-One resource that's extremely important to the FP world -- it's not a library but more an encyclopedia! -- is [Fantasy Land](https://github.com/fantasyland/fantasy-land) (aka FL).
+[Fantasy Land](https://github.com/fantasyland/fantasy-land)（又名 FL）是函数式编程世界中十分重要的学习资源之一，与其说它是一个库，不如说它是一本百科全书。
 
-This is definitely not light reading for the faint of heart. It's a complete detailed roadmap of all of FP as it's interpreted in JavaScript. FL has become a de facto standard for JavaScript FP libraries to adhere to, to ensure maximum interoperability.
+FL 不是一份为弱者准备的轻量级读物，而是一个完整而详细的 JavaScript 函数式编程路线图。为了尽可能提升互通性，FL 已经成为 JavaScript 函数式编程库遵循的实际标准。
 
-Fantasy Land is pretty much the exact opposite of "functional-light". It's the full-on no holds barred approach to FP in JavaScript. That said, as you venture beyond this book, it's undeniable that FL will be down that road for you. I'd recommend you bookmark it, and go back to it after you've had at least 6 months of real world practice with this book's concepts.
+FL 与“轻量级函数式编程”的概念相反，它广而深地覆盖了 JavaScript 函数式编程世界。也就是说，在结束了本书的冒险之后，FL 将会成为你接下来前进的方向。我建议您将其保存在收藏夹中，并在您使用本书的概念进行至少 6 个月的实战练习之后再回来。
 
 ## Ramda (0.23.0)
 
-From the [Ramda documentation](http://ramdajs.com/):
+摘自 [Ramda 文档](http://ramdajs.com/):
 
-> Ramda functions are automatically curried.
+> Ramda 的函数自动地被柯里化。
 >
-> The parameters to Ramda functions are arranged to make it convenient for currying. The data to be operated on is generally supplied last.
+> Ramda 函数的参数经过优化，更便于柯里化。需要被操作的数据往往放在最后提供。
 
-I find that design decision to be one of Ramda's strengths. It's also important to note that Ramda's form of currying (as with most libraries, it seems) is the "loose currying" we talked about in Chapter 3.
+我认为合理的设计是 Ramda 的优势之一。值得注意的是，Ramda 的柯里化形式（似乎大多数的库都是这种形式）是我们在第 3 章中讨论过的“松散柯里化”。
 
-The final example of Chapter 3 -- recall defining a point-free `printIf(..)` utility -- can be done with Ramda like this:
+第 3 章里面最后的例子——我们定义无值（point-free）工具函数 printIf()——可以在 Ramda 中这样实现：
 
 ```js
 function output(msg) {
@@ -64,23 +64,23 @@ printIf( isLongEnough, msg1 );
 printIf( isLongEnough, msg2 );			// Hello World
 ```
 
-A few differences to point out compared to Chapter 3's approach:
+与我们在第 3 章中的实现相比有几处不同：
 
-* We use `R.complement(..)` instead of `not(..)` to create a negating function `isLongEnough(..)` around `isShortEnough(..)`.
+* 使用 R.complement(..) 代替 not(..) 函数来创建 isShortEnough(..) 的含义对立函数 isLongEnough(..).
 
-* We use `R.flip(..)` instead of `reverseArgs(..)`. It's important to note that `R.flip(..)` only swaps the first two arguments, whereas `reverseArgs(..)` reverses all of them. In this case, `flip(..)` is more convenient for us, so we don't need to do `partialRight(..)` or any of that kind of juggling.
+* 使用 R.flip(..) 代替 reverseArgs(..) 函数，值得一提的是，R.flip(..) 仅交换头两个参数，而 reverseArgs(..) 会将所有参数反向。在这种情景下，flip(..) 更加方便——我们不再需要使用 partialRight(..) 或其他方式进行再判断。
 
-* `R.partial(..)` takes all of its subsequent arguments (beyond the function) as a single array.
+* R.partial(..) 所有的后续参数以单个数组的形式存在。
 
-* Because Ramda is using loose currying, we don't need to use `R.uncurryN(..)` to get a `printIf(..)` that takes both its arguments. If we did, it would look like `R.uncurryN( 2, .. )` wrapped around the `R.partial(..)` call; but, that's not necessary.
+* 因为 Ramda 使用松散柯里化，因此我们不需要使用 R.uncurryN(..) 来反柯里化printIf(..) 以获得其参数。如果我们这样做了，就相当于 R.uncurryN(2, ..) 包裹 R.partial(..) 进行调用，完全没有必要。
 
-Ramda is a very popular and powerful library. It's a really good place to start if you're practicing adding FP to your code base.
+Ramda 是一个受欢迎的、功能强大的库。如果你想要在你的代码中实践函数式编程，从 Ramda 开始是个不错的选择。
 
 ## Lodash/fp (4.17.4)
 
-Lodash is one of the most popular libraries in the entire JS ecosystem. They publish an "FP friendly" version of their API as ["lodash/fp"](https://github.com/lodash/lodash/wiki/FP-Guide).
+Lodash 是整个 JavaScript 生态系统中最受欢迎的库。Lodash 团队发布了一个“函数式编程友好”的版本—— ["lodash/fp"](https://github.com/lodash/lodash/wiki/FP-Guide).
 
-In Chapter 8, we looked at composing standalone list operations (`map(..)`, `filter(..)`, and `reduce(..)`). Here's how we could do it with "lodash/fp":
+在第 8 章中，我们讨论了合并独立列表操作（map(..), filter(..) 以及 reduce(..)）。使用 "lodash/fp" 时，你可以这样做：
 
 ```js
 var sum = (x,y) => x + y;
@@ -95,17 +95,17 @@ fp.compose( [
 ( [1,2,3,4,5] );					// 18
 ```
 
-Instead of the more familiar `_.` namespace prefix, "lodash/fp" defines its methods with `fp.` as the namespace prefix. I find that a helpful distinguisher, and also generally more easy on my eyes than `_.` anyway!
+与我们所熟知的 _. 命名空间不同，"lodash/fp" 以 fp. 作为其命名空间。我认为使用 fp. 能够很好的和 _. 进行区分，并且相比 _. 来说，fp. 对我的眼睛也“更友好”。
 
-Notice that `fp.compose(..)` (also known as `_.flowRight(..)` in lodash proper) takes an array of functions instead of individual arguments.
+注意 fp.compose(..)（在 proper 中又名 _.flowRight(..)）接受一个填充函数的数组，而不是独立的函数作为参数。
 
-You cannot beat the stability, widespread community support, and performance of lodash. It's a solid bet for your FP explorations.
+lodash 拥有良好的稳定性、广泛的社区支持以及优秀的性能，是你探索函数式编程世界时坚实的后盾。
 
 ## Mori (0.3.2)
 
-In Chapter 6, we already briefly glanced at the Immutable.js library, probably the most well-known for immutable data structures.
+在第 6 章中，我们已经快速浏览了一下 Immutable.js 库，该库可能是最广为人知的不可变数据结构库了。
 
-Let's instead look at another popular library: [Mori](https://github.com/swannodette/mori). Mori is designed with a different (ostensibly more FP-like) take on API: it uses standalone functions instead of methods directly on the values.
+不过让我们再看一个流行的库：[Mori](https://github.com/swannodette/mori). Mori 设计了一套与众不同（从表面上看更像函数式编程）的 API：它使用独立的函数而不直接在值上操作。
 
 ```js
 var state = mori.vector( 1, 2, 3, 4 );
@@ -127,22 +127,22 @@ mori.get( newState, 42 );				// "meaning of life"
 mori.toJs( newState ).slice( 1, 3 );	// [2,3]
 ```
 
-Some interesting things to point out about Mori for this example:
+上面的例子中，有些地方值得一提：
 
-* We're using a `vector` instead of a `list` (as one might assume), mostly because the documentation says it behaves more like we expect JS arrays to be.
+* 使用 vector 代替 list（正如你所假设），主要是因为文档说它的行为更像 JavaScript 中的数组。
 
-* We cannot just randomly set a position past the end of the vector like we can with JS arrays; that throws an exception. So we have to first "grow" the vector using `mori.into(..)` with an array of the appropriate size of extra slots we want. Once we have a vector with 43 slots (4 + 39), we can set the final slot (position `42`) to the `"meaning of life"` value using the `mori.assoc(..)` method.
+* 不能像在操作原生 JavaScript 数组那样在任意位置设置值，在 vector 结构中，这将会抛出异常。因此我们必须使用 mori.into(..)，传入一个合适长度的数组来扩展 vector 的长度。在上例中，vector 有 43 个可用坑位（4 + 39），所以我们可以在最后一个坑位（索引为 43）上写入 "meaning of life" 这个值。
 
-* The intermediate step of creating a larger vector with `mori.into(..)` and then creating another from it with `mori.assoc(..)` might sound inefficient. But the beauty of immutable data structures is that no cloning is going on here. Each time a "change" is made, the new data structure is just tracking the difference from the previous state.
+* 使用 mori.into(..) 创建一个较大的 vector，再用 mor.assoc(..) 根据这个 vector 创建另一个 vector 的做法听起来效率低下。但是，不可变数据结构的好处在于数据不会进行克隆，每次“改变”发生，新的数据结构只会追踪其与旧数据结构的不同之处。
 
-Mori is heavily inspired by ClojureScript. Its API will be very familiar if you have experience (or currently work in!) that language. Since I don't have that experience, I find the method names a little strange to get used to.
+Mori 大量受到 ClojureScript 启发。如果您有 ClojureScript 编程经验，那您应该对 Mori 的 API 感到非常熟悉。由于我没有这种编程经验，因此我感觉 Mori 中的方法名有点奇怪。
 
-But I really like the standalone function design instead of methods on values. Mori also has some functions that automatically return regular JS arrays, which is a nice convenience.
+但相比于在数据上直接调用方法，我真的很喜欢调用独立方法这样的设计。Mori 还有一些自动返回原生 JavaScript 数组的方法，用起来非常方便。
 
 ## Summary
 
-JavaScript is not particularly designed as an FP language. However, it does have enough of the basics (like function values, closures, etc) for us to make it FP-friendly. And the libraries we've examined here will help you do that.
+JavaScript 并不是一个设计来专门进行函数式编程的语言。但是其自身的很多特性（例如函数值，闭包等）都对函数式编程非常友好。本章提及的库将使你更方便的进行函数式编程。
 
-Armed with the concepts from this book, you're ready to start tackling real world code. Find a good FP library and jump in. Practice, practice, practice!
+有了本书中函数式编程概念的武装，相信你已经准备好开始探索现实世界的代码了。找一个优秀的函数式编程库来用，然后练习、练习、再练习。
 
-So... that's it. I've shared what I have for you, for now. I hereby officially certify you as a "Functional-Light JavaScript" programmer! It's time to close out this "chapter" of our story of learning FP together. But my learning journey continues; I hope your's does, too!
+恩……就是这样。我已经将我目前所知道的知识分享给你了。我在此正式认证您为“轻量级 JavaScript 函数式编程程序员”！好了，是时候结束我们“一起学习函数式编程”这个部分了，但我的学习之旅还将继续——我希望，你也是！
