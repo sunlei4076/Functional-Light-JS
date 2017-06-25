@@ -3,7 +3,7 @@
 # 第 4 章：组合函数
 
 By now, I hope you're feeling much more comfortable with what it means to use functions for functional programming.
-到目前为止，我希望你对在函数式编程中使用函数的重要性上，能感到更舒服些。
+到目前为止，我希望你对理解在函数式编程中使用函数的重要性上，能感到更舒服些。
 
 A functional programmer sees every function in their program like a little simple lego piece. They recognize the blue 2x2 brick at a glance, and know exactly how it works and what they can do with it. As they go about building a bigger complex lego model, as they need each next piece, they already have an instinct for which of their many spare pieces to grab.
 一个函数式编程者，会将他们程序中的每一个函数当成一小块简单的乐高部件。他们能一眼辨别出蓝色的2x2方块，并准确的知道它是如何工作的、能用它做些什么。当他们打算构建一个更大、更复杂的乐高模型时，当他们每一次需要下一块部件的时候，他们能够准确的做到从备用部件中找到并拿过来使用。
