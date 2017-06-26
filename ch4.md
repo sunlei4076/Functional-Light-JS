@@ -480,7 +480,7 @@ Others will find the recursive approach quite a bit more daunting to mentally ju
 其他人可能会觉得递归的方法在智力上的困扰有点更让人畏惧。我建议你作出自己的评估。
 
 ## Reordered Composition
-## 
+## 重排序组合
 
 We talked earlier about the right-to-left ordering of standard `compose(..)` implementations. The advantage is in listing the arguments (functions) in the same order they'd appear if doing the composition manually.
 我们早期谈及的是从右往左顺序的标准 `compose(..)` 实现。这么做的好处是能够和手工组合列出参数（函数）的顺序保持一致。
@@ -671,7 +671,7 @@ Aside from generalization vs specialization, I think there's another more useful
 > https://books.google.com/books?id=jM-cBAAAQBAJ&pg=PA115&lpg=PA115&dq=%22making+it+possible+for+the+programmer+to+focus+on+a+manageable+subset%22&source=bl&ots=yrJ3a-Tvi6&sig=XZwYoWwbQxP2w5qh2k2uMAPj47k&hl=en&sa=X&ved=0ahUKEwjKr-Ty35DSAhUJ4mMKHbPrAUUQ6AEIIzAA#v=onepage&q=%22making%20it%20possible%20for%20the%20programmer%20to%20focus%20on%20a%20manageable%20subset%22&f=false
 
 // TODO: make a proper reference to this book/quote, or at least find a better online link
-// TODO: 对这本书或引用弄一个更好的参照，至少找到一个更好的在线链接
+// TODO: 给这本书或引用弄一个更好的参照，至少找到一个更好的在线链接
 
 The point this quote makes is that abstraction -- generally, pulling out some piece of code into its own function -- serves the primary purpose of separating apart two pieces of functionality so that each piece can be focused on independent of the other.
 这段引用表述的观点是抽象 -- 通常来说，是指把一些代码片段放到自己的函数中 -- 是围绕着能将两部分功能分离，以达到可以专注于某一独立的部分为主要目的来服务的。
@@ -782,10 +782,10 @@ Composition is a powerful tool for abstraction that transforms imperative code i
 组合是一个抽象的强力工具，它能够将命令式代码抽象为更可读的声明式代码。
 
 ## Revisiting Points
-## 回顾点
+## 回顾“点”
 
 Now that we've thoroughly covered composition -- a trick that will be immensely helpful in many areas of FP -- let's watch it in action by revisiting point-free style from "No Points" in Chapter 3 with a scenario that's a fair bit more complex to refactor:
-既然我们已经把组合都了解了一遍 -- 那么是时候抛出函数式编程中很多地方都有用的小技巧了 -- 让我们通过在某个场景下回顾第 3 章的“无点”段落中的无点代码，并把它重构的稍微复杂点来观察这种小技巧。
+既然我们已经把组合都了解了一遍 -- 那么是时候抛出函数式编程中很多地方都有用的小技巧了 -- 让我们通过在某个场景下回顾第 3 章的“无点”（译者注：“无点”指的是隐藏函数的参数变量）段落中的无点代码，并把它重构的稍微复杂点来观察这种小技巧。
 
 ```js
 // given: ajax( url, data, cb )
