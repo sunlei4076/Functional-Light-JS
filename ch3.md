@@ -719,7 +719,7 @@ var spreadArgs =
 bar( spreadArgs( foo ) );			// 12
 ```
 
-It won't seem clear yet why these occassions will arise, but trust me, they do. Essentially, `spreadArgs(..)` will allow us to define functions that `return` multiple values via an array, but still have those multiple values treated independently as inputs to another function.
+相信我，虽然我不能讲清楚这些问题出现的原因，但它们一定会出现的。本质上，`spreadArgs(..)` 函数使我们能够定义一个借助数组 `return` 多个值的函数，不过，它让这些值仍然能分别作为其他函数的输入参数来处理。
 
 When function output becomes input to another function, this is called composition; we'll cover this topic in detail in Chapter 4.
 
