@@ -646,7 +646,7 @@ var constant =
 			v;
 ```
 
-这个微小而简洁实用函数可以解决我们关于 `then(..)` 的烦恼：
+这个微小而简洁的实用函数可以解决我们关于 `then(..)` 的烦恼：
 
 ```js
 p1.then( foo ).then( () => p2 ).then( bar );
@@ -656,11 +656,12 @@ p1.then( foo ).then( () => p2 ).then( bar );
 p1.then( foo ).then( constant( p2 ) ).then( bar );
 ```
 
-**Warning:** Although the `() => p2` arrow function version is shorter than `constant(p2)`, I would encourage you to resist the temptation to use it. The arrow function is returning a value from outside of itself, which is a bit worse from the FP perspective. We'll cover the pitfalls of such actions later in the text, Chapter 5 "Reducing Side Effects".
+**警告：**尽管使用 `() => p2` 箭头函数的版本比使用 `constant(p2)` 的版本更简短，但我建议你忍住别用前者。该箭头函数返回了一个来自外作用域的值，这和 FP 的理念有些矛盾。我们将会在后面第 5 章的 “减少副作用” 小节中提到这种行为带来的陷阱。
 
 ## Spread 'Em Out
+## 扩展
 
-In Chapter 2, we briefly looked at parameter array destructuring. Recall this example:
+在第二章中，我们简要地讲到了形参数组解构。回顾一下该示例：
 
 ```js
 function foo( [x,y,...args] ) {
@@ -670,11 +671,11 @@ function foo( [x,y,...args] ) {
 foo( [1,2,3] );
 ```
 
-In the parameter list of `foo(..)`, we declare that we're expecting a single array argument that we want to break down -- or in effect, spread out -- into individually named parameters `x` and `y`. Any other values in the array beyond those first two positions are gathered into an `args` array with the `...` operator.
+在 `foo(..)` 函数的形参列表中，我们期望接收单一数组实参，我们要把这个数组拆解 —— 或者更贴切地说，扩展（spread out）—— 成独立的实参 `x` 和 `y`。除了头两个位置以外的参数值我们都会通过 `...` 操作将它们收集在 `args` 数组中。
 
-This trick is handy if an array must be passed in but you want to treat its contents as individual parameters.
+当函数必须接收一个数组，而你却想把数组内容当成单独形参来处理的时候，这个技巧十分有用。
 
-However, sometimes you won't have the ability to change the declaration of the function to use parameter array destructuring. For example, imagine these functions:
+然而，有的时候，你无法改变原函数的定义，但想使用形参数组解构。举个例子，请思考下面的函数：
 
 ```js
 function foo(x,y) {
@@ -685,16 +686,16 @@ function bar(fn) {
 	fn( [ 3, 9 ] );
 }
 
-bar( foo );			// fails
+bar( foo );			// 失败
 ```
 
-Do you spot why `bar(foo)` fails?
+你注意到为什么 `bar(foo)` 函数失败了吗？
 
-The array `[3,9]` is sent in as a single value to `fn(..)`, but `foo(..)` expects `x` and `y` separately. If we could change the declaration of `foo(..)` to be `function foo([x,y]) { ..`, we'd be fine. Or, if we could change the behavior of `bar(..)` to make the call as `fn(...[3,9])`, the values `3` and `9` would be passed in individually.
+我们将 `[3,9]` 数组作为单一值传入 `fn(..)` 函数，但 `foo(..)` 期望接收单独的 `x` 和 `y` 形参。如果我们可以把 `foo(..)` 的函数声明改变成 `function foo([x,y]) { ..` 那就好办了。或者，我们可以改变 `bar(..)` 函数的行为，把调用改成 `fn(...[3,9])`，这样就能将 `3` 和 `9` 分别传入 `foo(..)` 函数了。
 
-There will be occasions when you have two functions that are imcompatible in this way, and you won't be able to change their declarations/definitions for various external reasons. So, how do you use them together?
+假设有两个在此方法上互不兼容的函数，而且由于各种原因你无法改变它们的声明和定义。那么你该如何一并使用它们呢？
 
-We can define a helper to adapt a function so that it spreads out a single received array as its individual arguments:
+为了调整一个函数，让它能把接收的单一数组扩展成各自独立的实参，我们可以定义一个辅助函数：
 
 ```js
 function spreadArgs(fn) {
@@ -703,16 +704,16 @@ function spreadArgs(fn) {
 	};
 }
 
-// or the ES6 => arrow form
+// ES6 箭头函数的形式：
 var spreadArgs =
 	fn =>
 		argsArr =>
 			fn( ...argsArr );
 ```
 
-**Note:** I called this helper `spreadArgs(..)`, but in libraries like Ramda it's often called `apply(..)`.
+**注意：**我把这个辅助函数叫做 `spreadArgs(..)`，但一些库，比如 Ramda，经常把它叫做 `apply(..)`。
 
-Now we can use `spreadArgs(..)` to adapt `foo(..)` to work as the proper input to `bar(..)`:
+现在我们可以使用 `spreadArgs(..)` 来调整 `foo(..)` 函数，使其作为一个合适的输入参数并正常地工作：
 
 ```js
 bar( spreadArgs( foo ) );			// 12
