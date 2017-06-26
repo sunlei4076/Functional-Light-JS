@@ -199,7 +199,7 @@ function reverseArgs(fn) {
 	};
 }
 
-// or the ES6 => arrow form
+// ES6 箭头函数形式
 var reverseArgs =
 	fn =>
 		(...args) =>
@@ -526,7 +526,7 @@ function unary(fn) {
 	};
 }
 
-// or the ES6 => arrow form
+// ES6 箭头函数形式
 var unary =
 	fn =>
 		arg =>
@@ -577,7 +577,7 @@ function identity(v) {
 	return v;
 }
 
-// or the ES6 => arrow form
+// ES6 箭头函数形式
 var identity =
 	v =>
 		v;
@@ -658,8 +658,7 @@ p1.then( foo ).then( constant( p2 ) ).then( bar );
 
 **警告：**尽管使用 `() => p2` 箭头函数的版本比使用 `constant(p2)` 的版本更简短，但我建议你忍住别用前者。该箭头函数返回了一个来自外作用域的值，这和 FP 的理念有些矛盾。我们将会在后面第 5 章的 “减少副作用” 小节中提到这种行为带来的陷阱。
 
-## Spread 'Em Out
-## 扩展
+## 扩展在参数中的妙用
 
 在第二章中，我们简要地讲到了形参数组解构。回顾一下该示例：
 
@@ -721,9 +720,9 @@ bar( spreadArgs( foo ) );			// 12
 
 相信我，虽然我不能讲清楚这些问题出现的原因，但它们一定会出现的。本质上，`spreadArgs(..)` 函数使我们能够定义一个借助数组 `return` 多个值的函数，不过，它让这些值仍然能分别作为其他函数的输入参数来处理。
 
-When function output becomes input to another function, this is called composition; we'll cover this topic in detail in Chapter 4.
+一个函数的输出作为另外一个函数的输入被称作组合（composition），我们将在第四章详细讨论这个话题。
 
-While we're talking about a `spreadArgs(..)` utility, let's also define a utility to handle the opposite action:
+尽管我们在谈论 `spreadArgs(..)` 实用函数，但我们也可以定义一下实现相反功能的实用函数：
 
 ```js
 function gatherArgs(fn) {
@@ -732,16 +731,16 @@ function gatherArgs(fn) {
 	};
 }
 
-// or the ES6 => arrow form
+// ES6 箭头函数形式
 var gatherArgs =
 	fn =>
 		(...argsArr) =>
 			fn( argsArr );
 ```
 
-**Note:** In Ramda, this utility is referred to as `unapply(..)`, being that it's the opposite of `apply(..)`. I think the "spread" / "gather" terminology is a little more descriptive for what's going on.
+**注意：** 在 Ramda 中，该实用函数被称作 `unapply(..)`，是与 `apply(..)` 功能相反的函数。我认为术语 “扩展（spread）” 和 “聚集（gather）” 可以把这两个函数发生的事情解释得更好一些。
 
-We can use this utility to gather individual arguments into a single array, perhaps because we want to adapt a function with array parameter destructuring to another utility that passes arguments separately. We will cover `reduce(..)` in Chapter 8, but briefly: it repeatedly calls its reducer function with two individual parameters, which we can now *gather* together:
+因为有时我们可能要调整一个函数，解构其数组形参，使其成为另一个分别接收单独实参的函数，所以我们可以通过使用 `gatherArgs(..)` 实用函数来将单独的实参聚集到一个数组中。我们将在第 8 章中细说 `reduce(..)` 函数，这里我们简要说一下：它重复调用传入的 reducer 函数，其中 reducer 函数有两个形参，现在我们可以将这两个形参**聚集**起来：
 
 ```js
 function combineFirstTwo([ v1, v2 ]) {
@@ -752,7 +751,7 @@ function combineFirstTwo([ v1, v2 ]) {
 // 15
 ```
 
-## Order Matters
+## 参数顺序的那些事儿
 
 One of the frustrating things about currying and partial application of functions with multiple parameters is all the juggling we have to do with our arguments to get them into the right order. Sometimes we define a function with parameters in the order that we would want to curry them, but other times that order is incompatible and we have to jump through hoops to reorder.
 
@@ -979,7 +978,7 @@ function not(predicate) {
 	};
 }
 
-// or the ES6 => arrow form
+// ES6 箭头函数形式
 var not =
 	predicate =>
 		(...args) =>
