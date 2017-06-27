@@ -801,7 +801,7 @@ function curryProps(fn,arity = 1) {
 
 我们甚至不需要设计一个 `partialPropsRight(..)` 函数了，因为我们根本不需要考虑属性的映射顺序，通过命名来映射形参完全解决了我们有关于顺序的烦恼！
 
-Here's how we use those utilities:
+我们这样使用这些使用函数：
 
 ```js
 function foo({ x, y, z } = {}) {
@@ -818,9 +818,11 @@ f2( { z: 3, x: 1 } );
 // x:1 y:2 z:3
 ```
 
-Order doesn't matter anymore! We can now specify which arguments we want in whatever sequence makes sense. No more `reverseArgs(..)` or other nuisances. Cool!
+我们不用再为参数顺序而烦恼了！现在，我们能指定我们想传入的实参，而不用管它们的顺序如何。再也不需要类似 `reverseArgs(..)` 的函数或其他麻烦了。赞！
+
 
 ### Spreading Properties
+### 展开属性
 
 Unfortunately, this only works because we have control over the signature of `foo(..)` and defined it to destructure its first parameter. What if we wanted to use this technique with a function that had its parameters indivdually listed (no parameter destructuring!), and we couldn't change that function signature?
 
