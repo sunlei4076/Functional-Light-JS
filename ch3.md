@@ -753,13 +753,13 @@ function combineFirstTwo([ v1, v2 ]) {
 
 ## 参数顺序的那些事儿
 
-One of the frustrating things about currying and partial application of functions with multiple parameters is all the juggling we have to do with our arguments to get them into the right order. Sometimes we define a function with parameters in the order that we would want to curry them, but other times that order is incompatible and we have to jump through hoops to reorder.
+对于多形参函数的柯里化和偏应用，我们不得不通过许多令人懊恼的技巧来修正这些形参的顺序。有时我们把一个函数的形参顺序定义成柯里化需求的形参顺序，但这种顺序没有兼容性，我们不得不绞尽脑汁来重新调整它。
 
-The frustration is not merely that we need to use some utility to juggle the properties, but the fact that the usage of it clutters up our code a little bit with some extra noise. These kinds of things are like little paper cuts; one here or there isn't a showstopper, but the pain can certainly add up.
+让人沮丧的可不仅是我们需要使用实用函数来委曲求全，在此之外，这种做法还会导致我们的代码被无关代码混淆。这种东西就像碎纸片，这一片那一片的，而不是一整个突出问题，但这些问题的细碎丝毫不会减少它们带来的苦恼。
 
-Is there anything we can do to free ourselves from this argument ordering tyranny!?
+难道就没有能让我们从修正参数顺序这件事里解脱出来的方法吗！？
 
-In Chapter 2, we looked at the named-argument destructuring pattern. Recall:
+在第 2 章里，我们讲到了命名实参（named-argument）解构模式。回顾一下：
 
 ```js
 function foo( {x,y} = {} ) {
@@ -771,9 +771,9 @@ foo( {
 } );					// undefined 3
 ```
 
-We destructure the first parameter of the `foo(..)` function -- it's expected to be an object -- into individual parameters `x` and `y`. Then, at the call-site, we pass in that single object argument, and provide properties as desired, "named arguments" to map to parameters.
+我们将 `foo(..)` 函数的第一个形参 —— 它被期望是一个对象 —— 解构成单独的形参 `x` 和 `y`。接着在调用时传入一个对象实参，并且提供函数期望的属性，这样就可以把 “命名实参” 映射到相应形参上。
 
-The primary advantage of named arguments is not needing to juggle argument ordering, thereby improving readability. We can exploit this to improve currying/partial application if we invent alternate utilities that work with object properties:
+命名实参主要的好处就是不用再纠结实参传入的顺序，因此提高了可读性。我们可以发掘一下看看是否能设计一个等效的实用函数来处理对象属性，以此提高柯里化和偏应用的可读性：
 
 ```js
 function partialProps(fn,presetArgsObj) {
@@ -799,7 +799,7 @@ function curryProps(fn,arity = 1) {
 }
 ```
 
-We don't even need a `partialPropsRight(..)` because we don't need care about what order properties are being mapped; the name mappings make that ordering concern moot!
+我们甚至不需要设计一个 `partialPropsRight(..)` 函数了，因为我们根本不需要考虑属性的映射顺序，通过命名来映射形参完全解决了我们有关于顺序的烦恼！
 
 Here's how we use those utilities:
 
