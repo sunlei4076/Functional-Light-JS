@@ -818,13 +818,13 @@ f2( { z: 3, x: 1 } );
 // x:1 y:2 z:3
 ```
 
-我们不用再为参数顺序而烦恼了！现在，我们能指定我们想传入的实参，而不用管它们的顺序如何。再也不需要类似 `reverseArgs(..)` 的函数或其他麻烦了。赞！
+我们不用再为参数顺序而烦恼了！现在，我们可以指定我们想传入的实参，而不用管它们的顺序如何。再也不需要类似 `reverseArgs(..)` 的函数或其它妥协了。赞！
 
 
 ### Spreading Properties
 ### 展开属性
 
-Unfortunately, this only works because we have control over the signature of `foo(..)` and defined it to destructure its first parameter. What if we wanted to use this technique with a function that had its parameters indivdually listed (no parameter destructuring!), and we couldn't change that function signature?
+不幸的是，只有在我们可以掌控 `foo(..)` 的调用方式，并且可以定义该函数的行为，使其解构第一个参数的时候，以上技术才能起作用。如果一个函数，其形参是各自独立的（没有经过形参解构），而且不能改变它的调用方式，那我们应该如何运用这个技术呢？
 
 ```js
 function bar(x,y,z) {
@@ -832,15 +832,15 @@ function bar(x,y,z) {
 }
 ```
 
-Just like the `spreadArgs(..)` utility earlier, we could define a `spreadArgProps(..)` helper that takes the `key: value` pairs out of an object argument and "spreads" the values out as individual arguments.
+就像之前的 `spreadArgs(..)` 实用函数一样，我们也可以定义一个 `spreadArgProps(..)` 辅助函数，它接收对象实参的 `key: value` 键值对，并将其 “扩展” 成独立实参。
 
-There are some quirks to be aware of, though. With `spreadArgs(..)`, we were dealing with arrays, where ordering is well defined and obvious. However, with objects, property order is less clear and not necessarily reliable. Depending on how an object is created and properties set, we cannot be absolutely certain what enumeration order properties would come out.
+不过，我们需要注意某些异常的地方。我们使用 `spreadArgs(..)` 函数处理数组实参时，参数的顺序是明确的。然而，对象属性的顺序是不太明确且不可靠的。由于对象的创建方式和属性设置方式，我们无法完全确认对象会产生什么顺序的属性枚举。
 
-Such a utility needs a way to let you define what order the function in question expects its arguments (e.g., property enumeration order). We can pass an array like `["x","y","z"]` to tell the utility to pull the properties off the object argument in exactly that order.
+针对这个问题，我们定义的实用函数需要让你能够指定函数期望的实参顺序（比如属性枚举的顺序）。我们可以传入一个类似 `["x","y","z"]` 的数组，通知实用函数基于该数组的顺序来获取对象实参的属性值。
 
-That's decent, but it's also unfortunate that we kinda *have* to do add that property-name array even for the simplest of functions. Is there any kind of trick we could use to detect what order the parameters are listed for a function, in at least the common simple cases? Fortunately, yes!
+这着实不错，但还是有点瑕疵，就算是最简单的函数，我们也**免不了**为其增添一个由属性名构成的数组。难道我们就没有一种可以探知函数形参顺序的技巧吗？哪怕给一个普通而简单的例子？还真有！
 
-JavaScript functions have a `.toString()` method that gives a string representation of the function's code, including the function declaration signature. Dusting off our regular expression parsing skills, we can parse the string representation of the function, and pull out the individually named parameters. The code looks a bit gnarly, but it's good enough to get the job done:
+JavaScript 的函数对象上有一个 `.toString()` 方法，它返回函数代码的字符串形式，其中包括函数声明的签名（译注：JS 中，函数签名一般包含函数名和形参等函数关键信息，例如 `foo(a, b = 1, c)`）。先忽略其正则表达式分析技巧，我们可以通过解析函数字符串来获取每个单独的命名形参。虽然这段代码看起来有些粗暴，但它足以满足我们的需求：
 
 ```js
 function spreadArgProps(
