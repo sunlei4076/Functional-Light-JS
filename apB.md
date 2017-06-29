@@ -243,8 +243,9 @@ learner
 .chain( learn( "map/reduce" ) )
 .map( introduction );
 // Learned closures.
-// Learned side effects.
-// Learned recursion.
+// 学习闭包
+// 学习副作用
+// 歇息递归
 ```
 
 不幸的是，学习过程看起来已经缩短了。我发现学习一大堆东西而不和别人分享，会使自我太膨胀，这对你的技术是不利的。
@@ -264,15 +265,15 @@ learner
 .chain( learn( "map/reduce" ) )
 .chain( share( "map/reduce" ) )
 .map( introduction );
-// Learned closures.
-// Shared closures.
-// Learned side effects.
-// Shared side effects.
-// Learned recursion.
-// Shared recursion.
-// Learned map/reduce.
-// Shared map/reduce.
-// I'm just a learner like you! :)
+// 学习闭包
+// 分享闭包
+// 学习副作用
+// 分享副作用
+// 学习递归
+// 分享递归
+// 学习 map/reduce
+// 分享 map/reduce
+// 我只是一个像你一样的学习者 :)
 ```
 
 在学习中分享。是学习学习更多并且能够学的更好的最佳方法。
