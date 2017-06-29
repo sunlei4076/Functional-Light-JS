@@ -1,5 +1,5 @@
 # Functional-Light JavaScript
-# 轻函数式JavaScript
+# 轻量函数式 JavaScript
 # Preface
 # 前言
 
