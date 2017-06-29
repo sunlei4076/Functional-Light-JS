@@ -961,7 +961,7 @@ printIf( isShortEnough, msg1 );			// Hello
 printIf( isShortEnough, msg2 );
 ```
 
-Now let's say you want to print a message only if it's long enough; in other words, if it's `!isShortEnough(..)`. Your first thought is probably this:
+现在，我们要求打印足够长的信息，换而言之，我们需要一个 `!isShortEnough(..)` 断言。你可能会首先想到：
 
 ```js
 function isLongEnough(str) {
@@ -972,9 +972,10 @@ printIf( isLongEnough, msg1 );
 printIf( isLongEnough, msg2 );			// Hello World
 ```
 
-Easy enough... but "points" now! See how `str` is passed through? Without re-implementing the `str.length` check, can we refactor this code to point-free style?
+这太简单了...但现在我们的重点来了！你看到了 `str` 形参是如何传递的吗？我们能否不通过重新实现 `str.length` 的检查逻辑，而重构代码并使其变成无形参风格呢？
 
 Let's define a `not(..)` negation helper (often referred to as `complement(..)` in FP libraries):
+我们定义一个 `not(..)` 取反辅助函数（在 FP 库中又被称作 `complement(..)`）：
 
 ```js
 function not(predicate) {
@@ -990,7 +991,7 @@ var not =
 			!predicate( ...args );
 ```
 
-Next, let's use `not(..)` to alternately define `isLongEnough(..)` without "points":
+接着，我们使用 `not(..)` 函数来定义无形参的 `isLongEnough(..)` 函数：
 
 ```js
 var isLongEnough = not( isShortEnough );
@@ -998,9 +999,10 @@ var isLongEnough = not( isShortEnough );
 printIf( isLongEnough, msg2 );			// Hello World
 ```
 
-That's pretty good, isn't it? But we *could* keep going. The definition of the `printIf(..)` function can actually be refactored to be point-free itself.
+目前为止已经不错了，但**还能**更进一步。我们实际上可以将 `printIf(..)` 函数本身重构成无形参风格。
 
 We can express the `if` conditional part with a `when(..)` utility:
+我们
 
 ```js
 function when(predicate,fn) {
