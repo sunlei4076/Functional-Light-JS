@@ -902,7 +902,7 @@ function double(x) {
 // [2,4,6,8,10]
 ```
 
-Can you see that `mapper(..)` and `double(..)` have the same (or compatible, anyway) signatures? The parameter ("point") `v` can directly map to the corresponding argument in the `double(..)` call. As such, the `mapper(..)` function wrapper is unnecessary. Let's simplify with point-free style:
+可以看到 `mapper(..)` 函数和 `double(..)` 函数有相同（或相互兼容）的函数签名。形参（也就是所谓的 “point“）`v` 可以直接映射到 `double(..)` 函数调用里相应的实参上。这样，`mapper(..)` 函数包裹层是非必需的。我们可以将其简化为无形参风格：
 
 ```js
 function double(x) {
@@ -913,7 +913,7 @@ function double(x) {
 // [2,4,6,8,10]
 ```
 
-Let's revisit an example from earlier:
+回顾之前的一个例子：
 
 ```js
 ["1","2","3"].map( function mapper(v){
@@ -922,22 +922,24 @@ Let's revisit an example from earlier:
 // [1,2,3]
 ```
 
-In this example, `mapper(..)` is actually serving an important purpose, which is to discard the `index` argument that `map(..)` would pass in, because `parseInt(..)` would incorrectly interpret that value as a `radix` for the parsing. This was an example where `unary(..)` helps us out:
+该例中，`mapper(..)` 实际上起着重要作用，它排除了 `map(..)` 函数传入的 `index` 实参，因为如果不这么做的话，`parseInt(..)` 函数会错把 `index` 当作 `radix` 来进行整数解析。该例子中我们可以借助 `unary(..)` 函数：
 
 ```js
 ["1","2","3"].map( unary( parseInt ) );
 // [1,2,3]
 ```
 
-The key thing to look for is if you have a function with parameter(s) that is/are directly passed to an inner function call. In both the above examples, `mapper(..)` had the `v` parameter that was passed along to another function call. We were able to replace that layer of abstraction with a point-free expression using `unary(..)`.
+使用无形参风格的关键，是找到你代码中，有哪些地方的函数直接将其形参作为内部函数调用的实参。以上提到的两个例子中，`mapper(..)` 函数拿到形参 `v` 单独传入了另一个函数调用。我们可以借助 `unary(..)` 函数将提取形参的逻辑层替换成无参数形式表达式。
 
-**Warning:** You might have been tempted, as I was, to try `map(partialRight(parseInt,10))` to right-partially apply the `10` value as the `radix`. However, as we saw earlier, `partialRight(..)` only guarantees that `10` will be the last argument passed in, not that it will be specifically the second argument. Since `map(..)` itself passes three arguments (`value`, `index`, `arr`) to its mapping function, the `10` value would just be the fourth argument to `parseInt(..)`; it only pays attention to the first two.
+**注意：**你可能跟我一样，已经尝试着使用 `map(partialRight(parseInt,10))` 来将 `10` 右偏应用为 `parseInt(..)` 的 `radix` 实参。然而，就像我们之前看到的那样，`partialRight(..)` 仅仅保证将 `10` 当作最后一个实参传入原函数，而不是将其指定为第二个实参。因为 `map(..)` 函数本身会将 3 个实参（`value`、`index` 和 `arr`）传入它的映射函数，所以 `10` 就会被当成第四个实参传入 `parseInt(..)` 函数，而这个函数只会对头两个实参作出反应。
 
-Here's another example:
+来看另一个例子：
 
 ```js
-// convenience to avoid any potential binding issue
-// with trying to use `console.log` as a function
+
+// 将 `console.log` 当成一个函数使用
+// 便于避免潜在的绑定问题
+
 function output(txt) {
 	console.log( txt );
 }
