@@ -857,9 +857,9 @@ function spreadArgProps(
 }
 ```
 
-**Note:** This utility's parameter parsing logic is far from bullet-proof; we're using regular expressions to parse code, which is already a faulty premise! But our only goal here is to handle the common cases, which this does reasonably well. We only need a sensible default detection of parameter order for functions with simple parameters (as well as those with default parameter values). We don't, for example, need to be able to parse out a complex destructured parameter, because we wouldn't likely be using this utility with such a function, anyway. So, this logic gets the 80% job done; it lets us override the `propOrder` array for any other more complex function signature that wouldn't otherwise be correctly parsed. That's the kind of pragmatic balance this book seeks to find wherever possible.
+**注意：**该实用函数的参数解析逻辑并非无懈可击，使用正则来解析代码这个前提就已经很不靠谱了！但处理一般情况是我们的唯一目标，从这点来看这个实用函数还是挺称手的。我们需要的只是对简单形参（包括带默认值的形参）函数的形参顺序做一个恰当的默认检测。例如，我们的实用函数不需要把复杂的解构形参给解析出来，因为无论如何我们不太可能对拥有这种复杂形参的函数使用 `spreadArgProps()` 函数。因此该逻辑能搞定 80% 的需求，它允许我们在其它不能正确解析复杂函数签名的情况下覆盖 `propOrder` 数组形参。这是本书尽可能寻找的一种实用性平衡。
 
-Let's illustrate using our `spreadArgProps(..)` utility:
+让我们看看 `spreadArgProps(..)` 使用函数是怎么用的：
 
 ```js
 function bar(x,y,z) {
@@ -876,19 +876,20 @@ f4( { z: 3, x: 1 } );
 // x:1 y:2 z:3
 ```
 
-A word of caution: the object parameters/named arguments pattern I'm showing here clearly improves readability by reducing the clutter of argument order juggling, but to my knowledge, no mainstream FP libraries are using this approach. It comes at the expense of being far less familiar than how most JavaScript FP is done.
+听我一言：本文中呈现的对象形参（object parameters）和命名实参（named arguments）模式，通过减少因调整实参顺序带来的干扰，明显地提高了代码的可读性，不过据我所知，没有哪个主流的 FP 库使用该方案。作为代价，它与大多数 JavaScript FP 的做法很不一样.
 
 Also, usage of functions defined in this style requires you to know what each argument's name is. You can't just remember, "oh, the function goes in as the first argument" anymore. Instead you have to remember, "the function parameter is called 'fn'."
+此外，使用在这种风格下定义的函数要求你知道每个实参的名字。你必须记住：“这个函数形参叫作 ‘fn’ ”，而不是只记得：“噢，把这个函数作为第一个实参传进去”。
 
-Weigh these tradeoffs carefully.
+请小心地权衡它们。
 
-## No Points
+## 无形参风格
 
-A popular style of coding in the FP world aims to reduce some of the visual clutter by removing unnecessary parameter-argument mapping. This style is formally called tacit programming, or more commonly: point-free style. The term "point" here is referring to a function's parameter.
+在 FP 的世界中，有一种流行的代码风格，其目的是通过移除不必要的形参-实参映射来减少视觉上的干扰。这种风格的正式名称为 “隐性编程（tacit programming）”，一般则称作 “无形参（point-free）” 风格。术语 “point” 在这里指的是函数形参。
 
-**Warning:** Stop for a moment. Let's make sure we're careful not to take this discussion as an unbounded suggestion that you go overboard trying to be point-free in your FP code at all costs. This should be a technique for improving readability, when used in moderation. But as with most things in software development, you can definitely abuse it. If your code gets harder to understand because of the hoops you have to jump through to be point-free, stop. You won't win a blue ribbon just because you found some clever but esoteric way to remove another "point" from your code.
+**警告：** 且慢，先说明我们这次的讨论是一个有边界的提议，我不建议你在 FP 代码里不惜代价地滥用无形参风格。该技术是用于在适当情况下提升可读性。但你完全可能像滥用软件开发里大多数东西一样滥用它。如果你由于必须迁移到无参数风格而让代码难以理解，请打住。你不会因此获得小红花，因为你用看似聪明但晦涩难懂的方式抹除形参这个点的同时，还抹除了代码的重点。
 
-Let's start with a simple example:
+我们从一个简单的例子开始：
 
 ```js
 function double(x) {
