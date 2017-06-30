@@ -1002,7 +1002,7 @@ printIf( isLongEnough, msg2 );			// Hello World
 目前为止已经不错了，但**还能**更进一步。我们实际上可以将 `printIf(..)` 函数本身重构成无形参风格。
 
 We can express the `if` conditional part with a `when(..)` utility:
-我们
+我们可以用 `when(..)` 实用函数来表示 `if` 条件句：
 
 ```js
 function when(predicate,fn) {
@@ -1013,24 +1013,24 @@ function when(predicate,fn) {
 	};
 }
 
-// or the ES6 => form
+// ES6 箭头函数形式
 var when =
 	(predicate,fn) =>
 		(...args) =>
 			predicate( ...args ) ? fn( ...args ) : undefined;
 ```
 
-Let's mix `when(..)` with a few other helper utilities we've seen earlier in this chapter, to make the point-free `printIf(..)`:
+我们把本章前面讲到的另一些辅助函数和 `when(..)` 函数结合起来搞定无形参风格的 `printIf(..)` 函数：
 
 ```js
 var printIf = uncurry( rightPartial( when, output ) );
 ```
 
-Here's how we did it: we right-partially applied the `output` method as the second (`fn`) argument for `when(..)`, which leaves us with a function still expecting the first argument (`predicate`). *That* function when called produces another function expecting the message string; it would look like this: `fn(predicate)(str)`.
+我们是这么做的：将 `output` 方法右偏应用为 `when(..)` 函数的第二个（`fn` 形参）实参，这样我们得到了一个仍然期望接收第一个实参（`predicate` 形参）的函数。当**该函数**被调用时，会产生另一个期望接收（译注：需要被打印的）信息字符串的函数，看起来就是这样：`fn(predicate)(str)`。
 
-A chain of multiple (two) function calls like that looks an awful lot like a curried function, so we `uncurry(..)` this result to produce a single function that expects the two `str` and `predicate` arguments together, which matches the original `printIf(predicate,str)` signature.
+多个（两个）链式函数的调用看起来很挫，就像被柯里化的函数。于是我们用 `uncurry(..)` 函数处理它，得到一个期望接收 `str` 和 `predicate` 两个实参的函数，这样该函数的签名就和 `printIf(predicate,str)` 原函数一样了。
 
-Here's the whole example put back together (assuming various utilities we've already detailed in this chapter are present):
+我们把整个例子复盘一下（假设我们本章已经讲解的实用函数都在这里了）：
 
 ```js
 function output(msg) {
@@ -1055,18 +1055,18 @@ printIf( isLongEnough, msg1 );
 printIf( isLongEnough, msg2 );			// Hello World
 ```
 
-Hopefully the FP practice of point-free style coding is starting to make a little more sense. It'll still take a lot of practice to train yourself to think this way naturally. **And you'll still have to make judgement calls** as to whether point-free coding is worth it, as well as what extent will benefit your code's readability.
+但愿无形参风格编程的 FP 实践逐渐变得更有意义。你仍然可以通过大量实践来训练自己，让自己接受这种风格。**再次提醒，请三思而后行**，掂量一下是否值得使用无形参风格编程，以及使用到什么程度会益于提高代码的可读性。
 
-What do you think? Points or no points for you?
+有形参还是无形参，你怎么选？
 
-**Note:** Want more practice with point-free style coding? We'll revisit this technique in "Revisiting Points" in Chapter 4, based on new-found knowledge of function composition.
+**注意：** 还有什么无形参风格编程的实践呢？我们将在第 4 章的 “回顾形参” 小节里，站在新学习的组合函数知识之上来回顾这个技术。
 
-## Summary
+## 总结
 
-Partial Application is a technique for reducing the arity -- expected number of arguments to a function -- by creating a new function where some of the arguments are preset.
+偏应用是用来减少函数的参数数量 —— 一个函数期望接收的实参数量 —— 的技术，它减少参数数量的方式是创建一个预设了部分实参的新函数。
 
-Currying is a special form of partial application where the arity is reduced to 1, with a chain of successive chained function calls, each which takes one argument. Once all arguments have been specified by these function calls, the original function is executed with all the collected arguments. You can also undo a currying.
+柯里化是偏应用的一种特殊形式，其参数数量降低为 1，这种形式包含一串连续的链式函数调用，每个调用接收一个实参。当这些链式调用指定了所有实参时，原函数就会拿到收集好的实参并执行。你同样可以将柯里化还原。
 
-Other important operations like `unary(..)`, `identity(..)`, and `constant(..)` are part of the base toolbox for FP.
+其它类似 `unary(..)`、`identity(..)` 以及 `constant(..)` 的重要函数操作，是 FP 基础工具库的一部分。
 
-Point-free is a style of writing code that eliminates unnecessary verbosity of mapping parameters ("points") to arguments, with the goal of making easier to read/understand code.
+无形参是一种书写代码的风格，这种风格移除了非必需的形参映射实参逻辑，其目的在于提高代码的可读性和可理解性。
