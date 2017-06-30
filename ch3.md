@@ -626,7 +626,7 @@ simpleOutput( "Hello World" );		// Hello World
 
 你也可能会看到 `identity(..)` 被当作 `map(..)` 函数调用的默认转换函数，或者作为某个函数数组的 `reduce(..)` 函数的初始值。我们将会在第 8 章中提到这两个实用函数。
 
-### Unchanging One
+### 恒定参数
 
 Certain API 禁止直接给方法传值，而要求我们传入一个函数，就算这个函数只是返回一个值。JS Promise 中的 `then(..)` 方法就是一个 Certain API。很多人声称 ES6 箭头函数可以当作这个问题的 “解决方案”。但我这有一个 FP 实用函数可以完美胜任该任务：
 
