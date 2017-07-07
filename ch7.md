@@ -1,5 +1,5 @@
 # JavaScript轻量级函数式编程
-# 章节7: 闭包 vs 对象
+# 章节 7: 闭包 vs 对象
 
 数年前，Anton Van Straaten 创造了一个非常有名且被常常引用的[禅理](https://www.merriam-webster.com/dictionary/koan) 来举例和证实一个闭包和对象之间重要的关系。
 
