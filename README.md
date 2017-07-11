@@ -35,7 +35,7 @@
 
 ## 关于出版
 
-本书主要在 [on Leanpub](https://leanpub.com/fljs/) 平台上以电子版本的形式进行出版。我也尝试出售本书的纸质版本，然而仍然没有确实的方案。
+本书主要在 [on Leanpub](https://leanpub.com/fljs/) 平台上以电子版本的形式进行出版。我也尝试出售本书的纸质版本，但没有确实的方案。
 
 如果除了购买本书以外，你想要对本书作一些物质上的捐赠，请在 [patreon](https://www.patreon.com/getify) 上进行操作。本书作者感谢你的慷慨解囊。
 
@@ -47,7 +47,7 @@
 
 [http://getify.me](http://getify.me)
 
-如果你喜欢本书的内容，并希望组织此类课程，或者组织关于其他 JS／HTML5/Node.js 课程，请通过以下方式联系我：
+如果你喜欢本书的内容，并希望组织此类课程，或者组织关于其他 JS／HTML5／Node.js 课程，请通过以下方式联系我：
 [http://getify.me](http://getify.me)
 
 ## 在线视频课程
