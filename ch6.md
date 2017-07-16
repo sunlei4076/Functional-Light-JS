@@ -16,7 +16,7 @@
 2 = 2.5;
 ```
 
-然而在 JavaScript 中，的的确确存在着这样的一些行为，这些行为看起来像是允许开发者改变诸如“boxing”这样原始数据类型的值。当你访问原始类型数据时——特别是 `number`、`string` 和 `boolean`——JavaScript 会自动的把它们包裹（或者说“包装”）在它们对象形式的副本中（分别使用 `Number`、`String` 以及 `Boolean`）。
+然而在 JavaScript 中，的的确确存在着这样的一些行为，这些行为看起来像是允许开发者改变诸如“boxing”这样原始数据类型的值。当你访问原始类型数据时——特别是 `number`、`string` 和 `boolean` —— JS 会自动的把它们包裹（或者说“包装”）在它们对象形式的副本中（分别使用 `Number`、`String` 以及 `Boolean`）。
 
 考虑下面的代码：
 
