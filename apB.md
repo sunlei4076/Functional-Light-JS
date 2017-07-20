@@ -39,17 +39,17 @@ Recall in Chapter 8 that we talked about functors: a value along with a map-like
 
 例如，你可能阅读 "Identity Monad"、"IO Monad"、"Maybe Monad"、"Either Monad" 或其他形形色色的字眼。他们中的每一个都有基本的 Monad 行为定义，但是它根据每个不同类型的 Monad 用例来继承或者重写交互行为。
 
-它不仅仅是一个接口，因为它不只是使一个对象成为 Monad 的某些 API 方法的实现。对这些方法的交互的保障是必须的，是 monadic 的。这些众所周知的常量对于使用 Monad 提高可读性是至关重要的；另外，它是一个特殊的数据结构，读者必须全部阅读才能明白。
+可是它不仅仅是一个接口，因为它不只是使对象成为 Monad 的某些 API 方法的实现。对这些方法的交互的保障是必须的，是 monadic 的。这些众所周知的常量对于使用 Monad 提高可读性是至关重要的；另外，它是一个特殊的数据结构，读者必须全部阅读才能明白。
 
-事实上，这些 monadic 方法的名字甚至没有一个统一的标准，一个真正的接口应该是被命名的；Monad 更像是一个 loose interface。有些人称这些方法为 `bind(..)`,有些称它为 `chain(..)`，有些称它为 `flatMap(..)`，等等。
+事实上，这些 Monad 方法的名字和真实接口授权的方式甚至没有一个统一的标准；Monad 更像是一个 loose interface。有些人称这些方法为 `bind(..)`,有些称它为 `chain(..)`，还有些称它为 `flatMap(..)`，等等。
 
-所以，Monad 是一个对象数据类型，并且有充足的方法（几乎任何名称或排序），至少满足了 Monad 定义的主要行为需求。每一种 Monad 在最小值上都有不同程度的延伸。但是，因为它们在行为上都有重叠，所以一起使用两种不同的 Monad 仍然是可控的。
+所以，Monad 是一个对象数据结构，并且有充足的方法（几乎任何名称或排序），至少满足了 Monad 定义的主要行为需求。每一种 Monad 都基于最少数量的方法来进行不同的扩展。但是，因为它们在行为上都有重叠，所以一起使用两种不同的 Monad 仍然是直截了当和可控的。
 
 从某种意义上说，Monad 更像是接口。
 
 ## Maybe
 
-在 FP 的资料中，像 Maybe 这样涵盖 Monad 是很普遍的。事实上，Maybe monad 真的是另外两个更简单的 Monad 的配对：Just 和 Nothing。 
+在有关 FP 的资料中，像 Maybe 这样涵盖 Monad 是很普遍的。事实上，Maybe monad 真的是另外两个更简单的 Monad 的搭配：Just 和 Nothing。 
 
 由于 Monad 是一个类型，你可能认为我们应该定义 `Maybe` 作为类的实例。这是一种有效的方法，但是它在我不想玩的方法中引入了 `this` 绑定问题；相反，我打算只使用一个简单的函数／对象方法。
 
