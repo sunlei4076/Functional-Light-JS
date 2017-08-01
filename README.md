@@ -1,6 +1,6 @@
 # 轻量级函数式编程
 
-本书主要探索函数式编程(FP)的核心思想。在此过程中，作者不会执着于使用大量复杂的概念来进行诠释，这也是本书的特别之处。我们在 JavaScript 中应用的仅仅是一套基本的函数式编程概念的子集。我称之为“轻量级函数式编程(FLP)”。
+本书主要探索函数式编程<sup>[\[1\]](#note1)</sup>(FP)的核心思想。在此过程中，作者不会执着于使用大量复杂的概念来进行诠释，这也是本书的特别之处。我们在 JavaScript 中应用的仅仅是一套基本的函数式编程概念的子集。我称之为“轻量级函数式编程(FLP)”。
 
 **注释：** 题目中使用了“轻量”二字，然而这并不是一本“轻松的”“入门级”书籍。本书是严谨的，充斥着各种复杂的细节，适合拥有扎实 JS 知识基础的阅读者进行研读。“轻量”意味着范围缩小。通常来说，关于函数式编程的 JavaScript 书籍都热衷于拓展阅读者的知识面，并企图覆盖更多的知识点。而本书则对于每一个话题都进行了深入的探究，尽管这种探究是小范围进行的。
 
@@ -67,3 +67,6 @@
 本书所有的材料和内容都归属 (c) 2016-2017 Kyle Simpson 所有。
 
 <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png" /></a><br />本书根据<a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">Creative Commons Attribution-NonCommercial-NoDerivs 4.0 Unported License</a> 进行授权许可.
+
+1. <a name="note1"></a > FP，本书统称为函数式编程。
+
