@@ -78,7 +78,7 @@ Ramda 是一个受欢迎的、功能强大的库。如果你想要在你的代�
 
 ## Lodash/fp (4.17.4)
 
-Lodash 是整个 JS 生态系统中最受欢迎的库。Lodash 团队发布了一个“FP 友好”的 API 版本—— ["lodash/fp"](https://github.com/lodash/lodash/wiki/FP-Guide)。
+Lodash 是整个 JS 生态系统中最受欢迎的库。Lodash 团队发布了一个“FP 友好”的 API 版本 —— ["lodash/fp"](https://github.com/lodash/lodash/wiki/FP-Guide)。
 
 在第 8 章中，我们讨论了合并独立列表操作（`map(..)`、`filter(..)` 以及 `reduce(..)`）。使用“lodash/fp”时，你可以这样做：
 
@@ -105,7 +105,7 @@ lodash 拥有良好的稳定性、广泛的社区支持以及优秀的性能，�
 
 在第 6 章中，我们已经快速浏览了一下 Immutable.js 库，该库可能是最广为人知的不可变数据结构库了。
 
-让我们来看一下另一个流行的库：[Mori](https://github.com/swannodette/mori). Mori 设计了一套与众不同（从表面上看更像函数式编程）的 API：它使用独立的函数而不直接在值上操作。
+让我们来看一下另一个流行的库：[Mori](https://github.com/swannodette/mori)。Mori 设计了一套与众不同（从表面上看更像函数式编程）的 API：它使用独立的函数而不直接在值上操作。
 
 ```js
 var state = mori.vector( 1, 2, 3, 4 );
