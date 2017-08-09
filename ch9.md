@@ -137,7 +137,7 @@ function fib(n) {
 }
 ```
 
-**注意：** `fib(..)` 相互递归的实现方式改编自 “用相互递归来实现斐波纳契数列” 研究报告(https://www.researchgate.net/publication/246180510_Fibonacci_Numbers_Using_Mutual_Recursion)。
+**注意：** `fib(..)` 相互递归的实现方式改编自 “用相互递归来实现斐波纳契数列” 研究报告(https://www.researchgate.net/publication/246180510_Fibonacci_Numbers_Using_Mutual_Recursion) 。
 
 虽然这些相互递归的示例有点不切实际，但是在更复杂的使用场景下，相互递归是非常有用的。
 
