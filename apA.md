@@ -470,9 +470,7 @@ words
 
 **注意**：我们应该好好观察下前面两个片段中的 `compose(..)` 顺序，这地方有点难理解。回想一下，在我们的原始示例中，我们先 `map(strUppercase)` 然后 `filter(isLongEnough)` ，最后 `filter(isShortEnough)`；这些操作实际上也确实按照这个顺序执行的。但在第 4 章中，我们了解到，`compose(..)` 通常是以相反的顺序运行。那么为什么我们不需要反转这里的顺序来获得同样的期望结果呢？来自每个 reducer 的 `combinationFn(..)` 的抽象反转了操作顺序。所以和直觉相反，当组合一个 tranducer 时，你只需要按照实际的顺序组合就好！
 
-#### List Combination: Pure vs Impure
-
-### 列表组合：纯与不纯
+#### 列表组合：纯与不纯
 
 我们再来看一下我们的 `listCombination(..)` 组合函数的实现：
 
@@ -621,7 +619,7 @@ transducers.transduce( transformer, strConcat, "", words );
 
 看起来几乎与上述相同。
 
-**注意：**上面的代码段使用 `transformers.comp(..)` ，因为这个库提供这个 API，但在这种情况下，我们从第 4 章的 `compose(..)` 也将产生相同的结果。换句话说，组合本身不是 transducing 敏感的操作。
+**注意：** 上面的代码段使用 `transformers.comp(..)` ，因为这个库提供这个 API，但在这种情况下，我们从第 4 章的 `compose(..)` 也将产生相同的结果。换句话说，组合本身不是 transducing 敏感的操作。
 
 该片段中的组合函数被称为 `transformer` ，而不是 `transducer`。那是因为如果我们直接调用 `transformer(listCombination)`（或 `transformer(strConcat)`），那么我们不会像以前那样得到一个直观的 transduce-reducer 函数。
 
