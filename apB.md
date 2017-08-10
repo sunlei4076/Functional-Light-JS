@@ -54,7 +54,7 @@ Monad 是一种数据结构。是一种类型。它是一组使处理某个值�
 以下是 Maybe 的最简单的实现：
 
 ```js
-var Maybe = { Just, Nothing, of/* aka: unit, pure */: Just };
+var Maybe = { Just, Nothing, of/* 又称：unit，pure */: Just };
 
 function Just(val) {
 	return { map, chain, ap, inspect };
@@ -62,7 +62,7 @@ function Just(val) {
 	// *********************
 
 	function map(fn) { return Just( fn( val ) ); }
-	// 又叫：bind, flatMap
+	// 又称：bind, flatMap
 	function chain(fn) { return fn( val ); }
 	function ap(anotherMonad) { return anotherMonad.map( val ); }
 
