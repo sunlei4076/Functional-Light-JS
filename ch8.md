@@ -19,7 +19,7 @@
 
 通过与／或链接组合列表操作，中间结果被隐式地跟踪，并在很大程度上避免了这些风险。
 
-**注意** 相比前面几章，为了代码片段更加简练，我们将采用 ES6 的箭头函数。尽管第 2 章中对于箭头函数的建议依旧普遍适用于编码中。
+**注意：** 相比前面几章，为了代码片段更加简练，我们将采用 ES6 的箭头函数。尽管第 2 章中对于箭头函数的建议依旧普遍适用于编码中。
 
 ## 非函数式编程列表处理
 
@@ -60,7 +60,7 @@ var x = 2, y;
 // 转换／投影
 y = multiplyBy3( x );
 ```
-我们可以自然的将映射的概念从单个值扩展到值的集合。map(..) 操作将列表中所有的值转换为新列表中的列表项，如下图所示：
+我们可以自然的将映射的概念从单个值扩展到值的集合。`map(..)` 操作将列表中所有的值转换为新列表中的列表项，如下图所示：
 
 <p align="center">
 	<img src="fig9.png" width="400">
@@ -81,7 +81,7 @@ function map(mapperFn,arr) {
 	return newList;
 }
 ```
-**注意** `mapperFn, arr` 的参数顺序，乍一看像是在倒退。但是这种方式在函数式编程类库中非常常见。因为这样做，可以让这些实用函数更容易被组合。
+**注意：** `mapperFn, arr` 的参数顺序，乍一看像是在倒退。但是这种方式在函数式编程类库中非常常见。因为这样做，可以让这些实用函数更容易被组合。
 
 `mapperFn(..)` 自然地将传入的列表项做映射／转换，并且也传入了 `idx` 和 `arr`。这样做，可以和内置的数组的 `map(..)` 保持一致。在某些情况下，这些额外的参数非常有用。
 
@@ -96,7 +96,7 @@ map( ["1","2","3"], unary( parseInt ) );
 
 Javascript 提供了内置的数组操作方法 `map(..)`，这个方法使得列表中的链式操作更为便利。
 
-**注意** Javascript 数组中的原型中定义的操作( `map(..)`、`filter(..)` 和 `reduce(..)` )的最后一个可选参数可以被用于绑定 “this” 到当前函数。我们在第二章中曾经讨论过“什么是 this？”，以及在函数式编程的最佳实践中应该避免使用 `this`。基于这个原因，在这章中的示例中，我们不采用 `this` 绑定功能。
+**注意：** Javascript 数组中的原型中定义的操作( `map(..)`、`filter(..)` 和 `reduce(..)` )的最后一个可选参数可以被用于绑定 “this” 到当前函数。我们在第二章中曾经讨论过“什么是 this？”，以及在函数式编程的最佳实践中应该避免使用 `this`。基于这个原因，在这章中的示例中，我们不采用 `this` 绑定功能。
 
 除了明显的字符和数字操作外，你可以对列表中的这些值类型进行操作。我们可以采用 `map(..)` 方法来通过函数列表转换得到这些函数返回的值，示例代码如下:
 
@@ -181,9 +181,9 @@ arr.addEventListener( "value", multiplyBy3 );
 function uppercaseLetter(c) {
 	var code = c.charCodeAt( 0 );
 
-	// lowercase letter?
+	// 小写字母?
 	if (code >= 97 && code <= 122) {
-		// uppercase it!
+		// 转换为大写!
 		code = code - 32;
 	}
 
@@ -195,7 +195,7 @@ function stringMap(mapperFn,str) {
 }
 
 stringMap( uppercaseLetter, "Hello World!" );
-// HELLO WORLD!
+// 你好，世界!
 ```
 
 `stringMap(..)` 允许字符串作为函子。你可以定义一个映射函数用于任何数据类型。只要实用函数满足这些规则，该数据结构就是一个函子。
@@ -505,7 +505,7 @@ var double = v => v * 2;
 // [2,4,6,8,10]
 ```
 
-**注意** 我们欺骗了这个缩减器，并允许采用 `list.push(..)` 去改变传入的列表所带来的副作用。一般来说，这并不是一个好主意，但我们清楚创建和传入 `[]` 列表，这样就不那么危险了。创建一个新的列表，并将 val 合并到这个列表的最后面。这样更有条理，并且性能开销较小。我们将在附录 A 中讨论这种欺骗。
+**注意：** 我们欺骗了这个缩减器，并允许采用 `list.push(..)` 去改变传入的列表所带来的副作用。一般来说，这并不是一个好主意，但我们清楚创建和传入 `[]` 列表，这样就不那么危险了。创建一个新的列表，并将 val 合并到这个列表的最后面。这样更有条理，并且性能开销较小。我们将在附录 A 中讨论这种欺骗。
 
 通过 `reduce(..)` 实现 `map(..)`，并不是表面上的明显的步骤，甚至是一种改善。然而，这种能力对于理解更高级的技术是至关重要的，如在附录 A 中的“转换”。
 
@@ -528,7 +528,7 @@ var isOdd = v => v % 2 == 1;
 // [1,3,5]
 ```
 
-**注意** 这里有更加不纯的缩减器欺骗。不采用 `list.push(..)`，我们也可以采用 `list.concat(..)` 并返回合并后的新列表。我们将在附录 A 中继续介绍这个欺骗。
+**注意：** 这里有更加不纯的缩减器欺骗。不采用 `list.push(..)`，我们也可以采用 `list.concat(..)` 并返回合并后的新列表。我们将在附录 A 中继续介绍这个欺骗。
 
 ## 高级列表操作
 
@@ -562,7 +562,7 @@ var unique =
 		, [] );
 ```
 
-**注意** 这里还有很多其他的方式实现这个去重算法，比如循环，并且其中不少还更高效，实现方式更聪明。然而，这两种方式的优点是，它们使用了内建的列表操作，它们能更方便的和其他列表操作链式／组合调用。我们会在本章的后面进一步讨论这些。
+**注意：** 这里还有很多其他的方式实现这个去重算法，比如循环，并且其中不少还更高效，实现方式更聪明。然而，这两种方式的优点是，它们使用了内建的列表操作，它们能更方便的和其他列表操作链式／组合调用。我们会在本章的后面进一步讨论这些。
 
 `unique(..)` 令人满意地产生去重后的新列表：
 
@@ -596,7 +596,7 @@ var flatten =
 		, [] );
 ```
 
-**注意** 这种处理嵌套列表的实现方式依赖于递归，我们将在后面的章节中进一步讨论。
+**注意：** 这种处理嵌套列表的实现方式依赖于递归，我们将在后面的章节中进一步讨论。
 
 在嵌套数组（任意嵌套层次）中使用 `flatten(..)`：
 
@@ -733,7 +733,7 @@ function zip(arr1,arr2) {
 ```
 采用 `arr1.slice()` 和 `arr2.slice()` 可以确保 `zip(..)` 是纯的，不会因为接受到到数组引用造成副作用。
 
-**注意** 这个实现明显存在一些非函数式编程的思想。这里有一个命令式的 `while` 循环并且采用 `shift()` 和 `push(..)` 改变列表。在本书前面，我认为在纯函数中使用非纯的行为（通常是为了性能）是有道理的，只要其产生的副作用完全包含在这个函数内部。这种实现是安全纯净的。
+**注意：** 这个实现明显存在一些非函数式编程的思想。这里有一个命令式的 `while` 循环并且采用 `shift()` 和 `push(..)` 改变列表。在本书前面，我认为在纯函数中使用非纯的行为（通常是为了性能）是有道理的，只要其产生的副作用完全包含在这个函数内部。这种实现是安全纯净的。
 
 ### 合并
 
@@ -781,18 +781,18 @@ function mergeLists(arr1,arr2) {
 }
 ```
 
-**注意** 许多函数式编程类库并不会定义 `mergeLists(..)`，反而会定义 `merge(..)` 方法来合并两个对象的属性。这种 `merge(..)` 返回的结果和我们的 `mergeLists(..)` 不同。
+**注意：** 许多函数式编程类库并不会定义 `mergeLists(..)`，反而会定义 `merge(..)` 方法来合并两个对象的属性。这种 `merge(..)` 返回的结果和我们的 `mergeLists(..)` 不同。
 
 另外，这里有一些选择采用缩减器实现合并列表的方法：
 
 ```js
-// via @rwaldron
+// 来自 @rwaldron
 var mergeReducer =
 	(merged,v,idx) =>
 		(merged.splice( idx * 2, 0, v ), merged);
 
 
-// via @WebReflection
+// 来自 @WebReflection
 var mergeReducer =
 	(merged,v,idx) =>
 		merged
@@ -823,7 +823,7 @@ var mergeReducer =
 .map( double )
 .reduce( sum, 0 );					// 18
 
-// vs.
+//  采用独立的方法.
 
 reduce(
 	map(
@@ -848,7 +848,7 @@ reduce(
 ```js
 var partialThis =
 	(fn,...presetArgs) =>
-		// intentionally `function` to allow `this`-binding
+		// 故意采用 function 来为了 this 绑定
 		function partiallyApplied(...laterArgs){
 			return fn.apply( this, [...presetArgs, ...laterArgs] );
 		};
@@ -988,7 +988,7 @@ var flatten =
 让我们将里面的 `reducer(..)` 函数抽取成独立的实用函数（并且调整它，让其独立于外部的 `flatten(..)` 运行）：
 
 ```js
-// intentionally a function to allow recursion by name
+// 刻意使用具名函数用于递归中的调用
 function flattenReducer(list,v) {
 	return list.concat(
 		Array.isArray( v ) ? v.reduce( flattenReducer, [] ) : v
@@ -1222,7 +1222,7 @@ words
 
 在这个插图中，我们将我们的二叉树描述为二叉搜索树（BST）。然而，树的操作和其他非二叉搜索树没有区别。
 
-**注意** 二叉搜索树是特定的二叉树，该树中的节点值彼此之间存在特定的约束关系。每个树中的左子节点的值小于根节点的值，跟子节点的值也小于右子节点的值。这里“小于”的概念是相对于树中存储数据的类型。它可以是数字的数值，也可以是字符串在词典中的顺序，等等。二叉搜索树的价值在于在处理在树中搜索一个值非常高效便捷，采用一个递归的二叉搜索算法。
+**注意：** 二叉搜索树是特定的二叉树，该树中的节点值彼此之间存在特定的约束关系。每个树中的左子节点的值小于根节点的值，跟子节点的值也小于右子节点的值。这里“小于”的概念是相对于树中存储数据的类型。它可以是数字的数值，也可以是字符串在词典中的顺序，等等。二叉搜索树的价值在于在处理在树中搜索一个值非常高效便捷，采用一个递归的二叉搜索算法。
 
 让我们采用这个工厂函数创建二叉树对象：
 
@@ -1259,7 +1259,7 @@ var grape = cucumber.right = BinaryTree( "grape", cucumber );
 现在，你不能仅仅通过像在数组中用 `console.log(..)` 打印出二叉树。我们先定义一个便利的方法，主要用来打印。定义的 `forEach(..)` 方法能像和数组一样的方式来访问二叉树：
 
 ```js
-// in-order traversal
+// 顺序遍历
 BinaryTree.forEach = function forEach(visitFn,node){
 	if (node) {
 		if (node.left) {
@@ -1275,7 +1275,7 @@ BinaryTree.forEach = function forEach(visitFn,node){
 };
 ```
 
-**注意** 采用递归处理二叉树更自然。我们的 `forEach(..)` 实用函数采用递归调用自身来处理左右字节点。我们将在后续的章节章深入讨论递归。
+**注意：** 采用递归处理二叉树更自然。我们的 `forEach(..)` 实用函数采用递归调用自身来处理左右字节点。我们将在后续的章节章深入讨论递归。
 
 回顾在本章开头描述的 `forEach(..)`，它存在有用的副作用，通常函数式编程期望有这个副作用。在这种情况下，我们仅仅在 I／O 的副作用下使用 `forEach(..)`，因此它是完美的理想的辅助函数。
 
@@ -1285,7 +1285,7 @@ BinaryTree.forEach = function forEach(visitFn,node){
 BinaryTree.forEach( node => console.log( node.value ), banana );
 // apple apricot avocado banana cantelope cherry cucumber grape
 
-// visit only the `cherry`-rooted subtree
+// 仅访问根节点为 `cherry` 的子树
 BinaryTree.forEach( node => console.log( node.value ), cherry );
 // cantelope cherry cucumber grape
 ```
@@ -1337,7 +1337,7 @@ BinaryTree.forEach( node => console.log( node.value ), BANANA );
 ```js
 BinaryTree.reduce = function reduce(reducerFn,initialValue,node){
 	if (arguments.length < 3) {
-		// shift the parameters since `initialValue` was omitted
+		// 移动参数，直到 `initialValue` 被删除
 		node = initialValue;
 	}
 
@@ -1471,12 +1471,12 @@ var vegetables = [ "asparagus", "avocado", "brocolli", "carrot",
 	"zucchini" ];
 
 var whatToBuy = BinaryTree.filter(
-	// filter the produce list only for vegetables
+	// 将蔬菜从农产品清单中过滤出来
 	node => vegetables.indexOf( node.value ) != -1,
 	banana
 );
 
-// shopping list
+// 购物清单
 BinaryTree.reduce(
 	(result,node) => result.concat( node.value ),
 	[],
