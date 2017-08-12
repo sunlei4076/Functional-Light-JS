@@ -260,7 +260,7 @@ wordsUsed;
 然后，我们能够通过多次调用 `filterWords(..)` 来完成组合，但是每次的第一参数却各不相同。
 
 ```js
-// 注意： 使用 a `<= 4` 来检查，而不是 `skipShortWords(..)` 中用到的 `> 4`
+// 注意： 使用 a <= 4 来检查，而不是 skipShortWords(..) 中用到的 > 4
 function skipLongWords(list) { /* .. */ }
 
 var filterWords = partialRight( compose, unique, words );
@@ -391,7 +391,6 @@ var compose =
 
 我认为递归实现的好处是更加概念化。我个人觉得相较于不得不在循环里跟踪运行结果，通过递归的方式进行重复的动作反而更易懂。所以我更喜欢以这种方式的代码来表达。
 
-Others will find the recursive approach quite a bit more daunting to mentally juggle. I invite you to make your own evaluations.
 其他人可能会觉得递归的方法在智力上造成的困扰更让人有些畏惧。我建议你作出自己的评估。
 
 ## 重排序组合
