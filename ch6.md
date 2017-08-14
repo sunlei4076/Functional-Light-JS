@@ -1,24 +1,24 @@
-# Functional-Light JavaScript
-# Chapter 6: Value Immutability
+# JavaScript 轻量级函数式编程
+# 第 6 章：值的不可变性
 
-In Chapter 5, we talked about the importance of reducing side causes/effects: the ways that your application's state can change unexpectedly and cause surprises (bugs). The fewer places we have with such landmines, the more confidence we have over our code, and the more readable it will be. Our topic for this chapter follows directly from that same effort.
+在第 5 章中，我们探讨了减少副作用的重要性：副作用是引起程序意外状态改变的原因，同时也可能会带来意想不到的惊喜（bugs）。这样的暗雷在程序中出现的越少，开发者对程序的信心无疑就会越强，同时代码的可读性也会越高。本章的主题，将继续朝减少程序副作用的方向努力。
 
-If programming-style idempotence is about defining a value change operation so that it can only affect state once, we now turn our attention to the goal of reducing the number of change occurrences from one to zero.
+如果编程风格幂等性是指定义一个数据变更操作以便只影响一次程序状态，那么现在我们将注意力转向将这个影响次数从 1 降为 0。
 
-Let's now explore value immutability, the notion that we use only values in our programs that cannot be changed.
+现在我们开始探索值的不可变性，即只在我们的程序中使用不可被改变的数据。
 
-## Primitive Immutability
+## 原始值的不可变性
 
-Values of the primitive types (`number`, `string`, `boolean`, `null`, and `undefined`) are already immutable; there's nothing you can do to change them.
+原始数据类型（`number`、`string`、`boolean`、`null` 和 `undefined`）本身就是不可变的；无论如何你都没办法改变它们。
 
 ```js
-// invalid, and also makes no sense
+// 无效，且毫无意义
 2 = 2.5;
 ```
 
-However, JS does have an peculiar behavior which seems like it allows mutating such primitive type values: "boxing". When you access a property on certain primitive type values -- specifically `number`, `string`, and `boolean` -- under the covers JS automatically wraps (aka "boxes") the value in its object counterpart (`Number`, `String`, and `Boolean`, respectively).
+然而 JS 确实有一个特性，使得看起来允许我们改变原始数据类型的值, 即“boxing”特性。当你访问原始类型数据时 —— 特别是 `number`、`string` 和 `boolean` —— 在这种情况下，JS 会自动的把它们包裹（或者说“包装”）成这个值对应的对象（分别是 `Number`、`String` 以及 `Boolean`）。
 
-Consider:
+思考下面的代码：
 
 ```js
 var x = 2;
@@ -29,22 +29,22 @@ x;				// 2
 x.length;		// undefined
 ```
 
-Numbers do not normally have a `length` property available, so the `x.length = 4` setting is trying to add a new property, and it silently fails (or is ignored/discarded, depending on your point-of-view); `x` continues to hold the simple primitive `2` number.
+数值本身并没有可用的 `length` 属性，因此 `x.length = 4` 这个赋值操作正试图添加一个新的属性，不过它静默地失败了（也可以说是这个操作被忽略了或被抛弃了，这取决于你怎么看）；变量 `x` 继续承载那个简单的原始类型数据 —— 数值 `2`。
 
-But the fact that JS allows the `x.length = 4` statement to run at all can seem troubling, if for no other reason than its potential confusion to readers. The good news is, if you use strict mode (`"use strict";`), such a statement will throw an error.
+但是 JS 允许 `x.length = 4` 这条语句正常执行的事实着实令人困惑。如果这种现象真的无缘无故出现，那么代码的阅读者无疑会摸不着头脑。好消息是，如果你使用了严格模式（`"use strict";`），那么这条语句就会抛出异常了。
 
-What if you try to mutate the explicitly-boxed object representation of such a value?
+那么如果尝试改变那些明确被包装成对象的值呢？
 
 ```js
 var x = new Number( 2 );
 
-// works fine
+// 没问题
 x.length = 4;
 ```
 
-`x` in this snippet is holding a reference to an object, so custom properties can be added and changed without issue.
+这段代码中的 `x` 保存了一个对象的引用，因此可以正常地添加或修改自定义属性。
 
-The immutability of simple primitives like `number`s probably seems fairly obvious. But what about `string` values? JS developers have a very common misconception that strings are like arrays and can thus be changed. JS syntax even hints at them being "array like" with the `[ ]` access operator. However, strings are also immutable.
+像 `number` 这样的原始数型，值的不可变性看起来相当明显，但字符串呢？JS 开发者有个共同的误解 —— 字符串和数组很像，所以应该是可变的。JS 使用 `[]` 访问字符串成员的语法甚至还暗示字符串真的就像数组。不过，字符串的确是不可变的：
 
 ```js
 var s = "hello";
@@ -57,9 +57,9 @@ s.length = 10;
 s;					// "hello"
 ```
 
-Despite being able to access `s[1]` like it's an array, JS strings are not real arrays. Setting `s[1] = "E"` and `s.length = 10` both silently fail, just as `x.length = 4` did above. In strict mode, these assignments will fail, because both the `1` property and the `length` property are read-only on this primitive `string` value.
+尽管可以使用 `s[1]` 来像访问数组元素一样访问字符串成员，JS 字符串也并不是真的数组。`s[1] = "E"` 和 `s.length = 10` 这两个赋值操作都是失败的，就像刚刚的 `x.length = 4` 一样。在严格模式下，这些赋值都会抛出异常，因为 `1` 和 `length` 这两个属性在原始数据类型字符串中都是只读的。
 
-Interestingly, even the boxed `String` object value will act (mostly) immutable as it will throw errors in strict mode if you change existing properties:
+有趣的是，即便是包装后的 `String` 对象，其值也会（在大部分情况下）表现的和非包装字符串一样 —— 在严格模式下如果改变已存在的属性，就会抛出异常：
 
 ```js
 "use strict";
@@ -74,13 +74,13 @@ s[42] = "?";		// OK
 s;					// "hello"
 ```
 
-## Value To Value
+## 从值到值
 
-We'll unpack this idea more throughout the chapter, but just to start with a clear understanding in mind: value immutability does not mean we can't have values change over the course of our program. A program without changing state is not a very interesting one! It also doesn't mean that our variables can't hold different values. These are all common misconceptions about value immutability.
+我们将在本节详细展开从值到值这个概念。但在开始之前应该心中有数：值的不可变性并不是说我们不能在程序编写时不改变某个值。如果一个程序的内部状态从始至终都保持不变，那么这个程序肯定相当无趣！它同样不是指变量不能承载不同的值。这些都是对值的不可变这个概念的误解。
 
-Value immutability means that *when* we need to change the state in our program, we must create and track a new value rather than mutate an existing value.
+值的不可变性是指当需要改变程序中的状态时，我们不能改变已存在的数据，而是必须创建和跟踪一个新的数据。
 
-For example:
+例如：
 
 ```js
 function addValue(arr) {
@@ -91,17 +91,17 @@ function addValue(arr) {
 addValue( [1,2,3] );	// [1,2,3,4]
 ```
 
-Notice that we did not change the array that `arr` references, but rather created a new array (`newArr`) that contains the existing values plus the new `4` value.
+注意我们没有改变数组 `arr` 的引用，而是创建了一个新的数组（`newArr`），这个新数组包含数组 `arr` 中已存在的值，并且新增了一个新值 `4`。
 
-Analyze `addValue(..)` based on what we discussed in Chapter 5 about side causes/effects. Is it pure? Does it have referential transparency? Given the same array, will it always produce the same output? Is it free of both side causes and side effects? **Yes.**
+使用我们在第 5 章讨论的副作用的相关概念来分析 `addValue(..)`。它是纯的吗？它是否具有引用透明性？给定相同的数组作为输入，它会永远返回相同的输出吗？它无副作用吗？**答案是肯定的。**
 
-Imagine the `[1,2,3]` array represents a sequence of data from some previous operations and we stored in some variable. It is our current state. If we want to compute what the next state of our application is, we call `addValue(..)`. But we want that act of next-state computation to be direct and explicit. So the `addValue(..)` operation takes a direct input, returns a direct output, and avoids creating a side effect by mutating the original array that `arr` references.
+设想这个数组 `[1, 2, 3]`, 它是由先前的操作产生，并被我们保存在一个变量中，它代表着程序当前的状态。我们想要计算出程序的下一个状态，因此调用了 `addValue(..)`。但是我们希望下一个状态计算的行为是直接的和明确的，所以 `addValue(..)` 操作简单的接收一个直接输入，返回一个直接输出，并通过不改变 `arr` 引用的原始数组来避免副作用。
 
-This means we can calculate the new state of `[1,2,3,4]` and be fully in control of that transition of states. No other part of our program can unexpectedly transition us to that state early, or to another state entirely, like `[1,2,3,5]`. By being disciplined about our values and treating them as immutable, we drastically reduce the surface area of surprise, making our programs easier to read, reason about, and ultimately trust.
+这就意味着我们既可以计算出新状态 `[1, 2, 3, 4]`，也可以掌控程序的状态变换。程序不会出现过早的过渡到这个状态或完全转变到另一个状态（如 `[1, 2, 3, 5]`）这样的意外情况。通过规范我们的值并把它视为不可变的，我们大幅减少了程序错误，使我们的程序更易于阅读和推导，最终使程序更加可信赖。
 
-The array that `arr` references is actually mutable. We just chose not to mutate it, so we practiced the spirit of value immutability.
+`arr` 所引用的数组是可变的，只是我们选择不去改变他，我们实践了值不可变的这一精神。
 
-We can use the copy-instead-of-mutate strategy for objects, too. Consider:
+同样的，可以将“以拷贝代替改变”这样的策略应用于对象，思考下面的代码：
 
 ```js
 function updateLastLogin(user) {
@@ -117,9 +117,9 @@ var user = {
 user = updateLastLogin( user );
 ```
 
-### Non-Local
+### 消除本地影响
 
-The importance of an immutable value can be seen if you do something like this:
+下面的代码能够体现不可变性的重要性：
 
 ```js
 var arr = [1,2,3];
@@ -129,114 +129,114 @@ foo( arr );
 console.log( arr[0] );
 ```
 
-Ostensibly, you're expecting `arr[0]` to still be the value `1`. But is it? You don't know, because `foo(..)` *might* mutate the array using the reference you pass to it.
+从表面上讲，你可能认为 `arr[0]` 的值仍然为 `1`。但事实是否如此不得而知，因为 `foo(..)` 可能会改变你传入其中的 `arr` 所引用的数组。
 
-We already saw a cheat in the previous chapter to avoid such a surprise:
+在之前的章节中，我们已经见到过用下面这种带有欺骗性质的方法来避免意外：
 
 ```js
 var arr = [1,2,3];
 
-foo( arr.slice() );			// ha! a copy!
+foo( arr.slice() );			// 哈！一个数组副本！
 
 console.log( arr[0] );		// 1
 ```
 
-Of course, that assertion holds true only if `foo` doesn't skip its parameter and reference our same `arr` via free variable lexical reference!
+当然，使得这个断言成立的前提是 `foo` 函数不会忽略我们传入的参数而直接通过相同的 `arr` 这个自由变量词法引用来访问源数组。
 
-In a little bit, we'll see another strategy for protecting ourselves from a value being mutated out from underneath us unexpectedly.
+对于防止数据变化负面影响，稍后我们会讨论另一种策略。
 
-## Reassignment
+## 重新赋值
 
-How would you describe what a "constant" is? Think about that for a moment before you move onto the next paragraph.
+在进入下一个段落之前先思考一个问题 —— 你如何描述“常量”？
 
-...
+…
 
-Some of you may have conjured descriptions like, "a value that can't change", "a variable that can't be changed", etc. These are all approximately in the neighborhood, but not quite at the right house. The precise definition we should use for a constant is: a variable that cannot be reassigned.
+你可能会脱口而出“一个不能改变的值就是常量”，“一个不能被改变的变量”等等。这些回答都只能说接近正确答案，但却并不是正确答案。对于常量，我们可以给出一个简洁的定义：一个无法进行重新赋值（reassignment）的变量。
 
-This nitpicking is really important, because it clarifies that a constant actually has nothing to do with the value, except to say that whatever value a constant holds, that variable cannot be reassigned to any other value. But it says nothing about the nature of the value itself.
+我们刚刚在“常量”概念上的吹毛求疵其实是很有必要的，因为它澄清了常量与值无关的事实。无论常量承载何值，该变量都不能使用其他的值被进行重新赋值。但它与值的本质无关。
 
-Consider:
+思考下面的代码：
 
 ```js
 var x = 2;
 ```
 
-Like we discussed earlier, the value `2` is an unchangeable (immutable) primitive. If I change that code to:
+我们刚刚讨论过，数据 `2` 是一个不可变的原始值。如果将上面的代码改为：
 
 ```js
 const x = 2;
 ```
 
-The presence of the `const` keyword, known familiarly as a "constant declaration", actually does nothing at all to change the nature of `2`; it's already unchangeable, and it always will be.
+`const` 关键字的出现，作为“常量声明”被大家熟知，事实上根本没有改变 `2` 的本质，因为它本身就已经不可改变了。
 
-It's true that this later line will fail with an error:
+下面这行代码会抛出错误，这无可厚非：
 
 ```js
-// try to change `x`, fingers crossed!
-x = 3;		// Error!
+// 尝试改变 x，祝我好运！
+x = 3;		// 抛出错误！
 ```
 
-But again, we're not changing anything about the value. We're attempting to reassign the variable `x`. The values involved are almost incidental.
+但再次重申，我们并不是要改变这个数据，而是要对变量 `x` 进行重新赋值。数据被卷进来纯属偶然。
 
-To prove that `const` has nothing to do with the nature of the value, consider:
+为了证明 `const` 和值的本质无关，思考下面的代码：
 
 ```js
 const x = [ 2 ];
 ```
 
-Is the array a constant? **No.** `x` is a constant because it cannot be reassigned. But this later line is totally OK:
+这个数组是一个常量吗？**并不是。** `x` 是一个常量，因为它无法被重新赋值。但下面的操作是完全可行的：
 
 ```js
 x[0] = 3;
 ```
 
-Why? Because the array is still totally mutable, even though `x` is a constant.
+为何？因为尽管 `x` 是一个常量，数组却是可变的。
 
-The confusion around `const` and "constant" only dealing with assignments and not value semantics is a long and dirty story. It seems a high degree of developers in just about every language that has a `const` stumble over the same sorts of confusions. Java in fact deprecated `const` and introduced a new keyword `final` at least in part to separate itself from the confusion over "constant" semantics.
+关于 `const` 关键字和“常量”只涉及赋值而不涉及数据语义的特性是个又臭又长的故事。几乎所有语言的高级开发者都踩 `const` 地雷。事实上，Java 最终不赞成使用 `const` 并引入了一个全新的关键词 `final` 来区分“常量”这个语义。
 
-Setting aside the confusion detractions, what importance does `const` hold for the FPer, if not to have anything to do with creating an immutable value?
+抛开混乱之后开始思考，如果 `const` 并不能创建一个不可变的值，那么它对于函数式编程者来说又还有什么重要的呢？
 
-### Intent
+### 意图
 
-The use of `const` tells the reader of your code that *that* variable will not be reassigned. As a signal of intent, `const` is often highly lauded as a welcome addition to JavaScript and universal improvement in code readability.
+`const` 关键字可以用来告知阅读你代码的读者该变量不会被重新赋值。作为一个表达意图的标识，`const` 被加入 JavaScript 不仅常常受到称赞，也普遍提高了代码可读性。
 
-In my opinion, this is mostly hype; there's not much substance to these claims. I see only the mildest of faint benefit in signaling your intent in this way. And when you match that up against decades of precedent around confusion about it implying value immutability, I don't think `const` comes even close to carrying its own weight.
+在我看来，这是夸大其词，这些说法并没有太大的实际意义。我只看到了使用这种方法来表明意图的微薄好处。如果使用这种方法来声明值的不可变性，与已使用几十年的传统方式相比，`const` 简直太弱了。
 
-To back up my assertion, let's take a reality check. `const` creates a block scoped variable, meaning that variable only exists in that one localized block:
+为了证明我的说法，让我们来做一个实践。`const` 创建了一个在块级作用域内的变量，这意味着该变量只能在其所在的代码块中被访问：
 
 ```js
-// lots of code
+// 大量代码
 
 {
 	const x = 2;
 
-	// a few lines of code
+	// 少数几行代码
 }
 
-// lots of code
+// 大量代码
 ```
 
-Typically, blocks are considered best designed to be only a few lines long. If you have blocks of more than say 10 lines, most developers will advise you to refactor. So `const x = 2` only applies to those next 9 lines of code at most.
+通常来说，代码块的最佳实践是用于仅包裹少数几行代码的场景。如果你有一个包含了超过 10 行的代码块，那么大多数开发者会建议你重构这一段代码。因此 `const x = 2` 只作用于下面的9行代码。
 
-No other part of the program can ever affect the assignment of `x`. **Period.**
+程序的其他部分不会影响 `x` 的赋值。
 
-My claims is: that program has basically the same magnitude of readability as this one:
+我要说的是：上述程序的可读性与下面这样基本相同：
 
 ```js
-// lots of code
+// 大量代码
 
 {
 	let x = 2;
 
-	// a few lines of code
+	// 少数几行代码
 }
 
-// lots of code
+// 大量代码
 ```
 
-If you look at the next few lines of code after `let x = 2;`, you'll be able to easily tell that `x` is not in fact reassigned. That to me is a **much stronger signal** -- actually not reassigning it -- than the use of some confusable `const` declaration to say "won't reassign it".
+其实只要查看一下在 `let x = 2`; 之后的几行代码，就可以判断出 x 这个变量是否被重新赋值过了。对我来说，“实际上不进行重新赋值”相对“使用容易迷惑人的 `const` 关键字告诉读者‘不要重新赋值’”**是一个更明确的信号**。
 
-Moreover, let's consider what this code is likely to communicate to a reader at first glance:
+此外，让我们思考一下，乍看这段代码起来可能给读者传达什么：
 
 ```js
 const magicNums = [1,2,3,4];
@@ -244,53 +244,53 @@ const magicNums = [1,2,3,4];
 // ..
 ```
 
-Isn't it at least possible (probable?) that the reader of your code will assume (wrongly) that your intent is to never mutate the array? That seems like a reasonable inference to me. Imagine their confusion if you do in fact allow the array value referenced by `magicNums` to be mutated. That will create quite a surprise, won't it!?
+读者可能会（错误地）认为，这里使用 `const` 的用意是你永远不会修改这个数组 —— 这样的推断对我来说合情合理。想象一下，如果你的确允许 `magicNums` 这个变量所引用的数组被修改，那么这个 `const` 关键词就极具混淆性了 —— 的很确容易发生意外，不是吗？
 
-Worse, what if you intentionally mutate `magicNums` in some way that turns out to not be obvious to the reader? Later in the code, they see a usage of `magicNums` and assume (again, wrongly) that it's still `[1,2,3,4]` because they read your intent as, "not gonna change this".
+更糟糕的是，如果你在某处故意修改了 `magicNums`，但对读者而言不够明显呢？读者会在后面的代码里（再次错误地）认为 `magicNums` 的值仍然是 `[1, 2, 3, 4]`。因为他们猜测你之前使用 `const` 的目的就是“这个变量不会改变”。
 
-I think you should use `var` or `let` for declaring variables to hold values that you intend to mutate. I think that actually is a **much clearer signal** than using `const`.
+我认为你应该使用 `var` 或 `let` 来声明那些你会去改变的变量，它们确实相比 `const` 来说**是一个更明确的信号**。
 
-But the troubles with `const` don't stop there. Remember we asserted at the top of the chapter that to treat values as immutable means that when our state needs to change, we have to create a new value instead of mutating it? What are you going to do with that new array once you've created it? If you declared your reference to it using `const`, you can't reassign it. So... what next?
+`const` 所带来的问题还没讲完。还记得我们在本章开头所说的吗？值的不可变性是指当需要改变某个数据时，我们不应该直接改变它，而是应该使用一个全新的数据。那么当新数组创建出来后，你会怎么处理它？如果你使用 `const` 声明变量来保存引用吗，这个变量的确没法被重新赋值了，那么……然后呢？
 
-In this light, I see `const` as actually making our efforts to adhere to FP harder, not easier. My conclusion: `const` is not all that useful. It creates unnecessary confusion and restricts us in inconvenient ways. I only use `const` for simple constants like:
+从这方面来讲，我认为 `const` 反而增加了函数式编程的困难度。我的结论是：`const` 并不是那么有用。它不仅造成了不必要的混乱，也以一种很不方便的形式限制了我们。我只用 `const` 来声明简单的常量，例如：
 
 ```js
 const PI = 3.141592;
 ```
 
-The value `3.141592` is already immutable, and I'm clearly signaling, "this `PI` will always be used as stand-in placeholder for this literal value." To me, that's what `const` is good for. And to be frank, I don't use many of those kinds of declarations in my typical coding.
+`3.141592` 这个值本身就已经是不可变的，并且我也清楚地表示说“`PI` 标识符将始终被用于代表这个字面量的占位符”。对我来说，这才是 `const` 所擅长的。坦白讲，我在编码时并不会使用很多这样的声明。
 
-I've written and seen a lot of JavaScript, and I just think it's an imagined problem that very many of our bugs come from accidental reassignment.
+我写过很多，也阅读过很多 JavaScript 代码，我认为由于重新赋值导致大量的 bug 这只是个想象中的问题，实际并不存在。
 
-The thing we need to worry about is not whether our variables get reassigned, but **whether our values get mutated**. Why? Because values are portable; lexical assignments are not. You can pass an array to a function, and it can be changed without you realizing it. But you cannot have a reassignment happen unexpectedly caused by some other part of your program.
+我们应该担心的，并不是变量是否被重新赋值，而是**值是否会发生改变**。为什么？因为值是可被携带的，但词法赋值并不是。你可以向函数中传入一个数组，这个数组可能会在你没意识到的情况下被改变。但是你的其他代码在预期之外重新给变量赋值，这是不可能发生的。
 
-### It's Freezing In Here
+### 冻结
 
-There's a cheap and simple way to turn a mutable object/array/function into an "immutable value" (of sorts):
+这是一种简单廉价的（勉强）将像对象、数组、函数这样的可变的数据转为“不可变数据”的方式：
 
 ```js
 var x = Object.freeze( [2] );
 ```
 
-The `Object.freeze(..)` utility goes through all the properties/indices of an object/array and marks them as read-only, so they cannot be reassigned. It's sorta like declaring properties with a `const`, actually! `Object.freeze(..)` also marks the properties as non-reconfigurable, and it marks the object/array itself as non-extensible (no new properties can be added). In effect, it makes the top level of the object immutable.
+`Object.freeze(..)` 方法遍历对象或数组的每个属性和索引，将它们设置为只读以使之不会被重新赋值，事实上这和使用 `const` 声明属性相差无几。`Object.freeze(..)` 也会将属性标记为“不可配置（non-reconfigurable）”，并且使对象或数组本身不可扩展（即不会被添加新属性）。实际上，而就可以将对象的顶层设为不可变。
 
-Top level only, though. Be careful!
+注意，仅仅是顶层不可变！
 
 ```js
 var x = Object.freeze( [ 2, 3, [4, 5] ] );
 
-// not allowed:
+// 不允许改变：
 x[0] = 42;
 
-// oops, still allowed:
+// oops，仍然允许改变：
 x[2][0] = 42;
 ```
 
-`Object.freeze(..)` provides shallow, naive immutability. You'll have to walk the entire object/array structure manually and apply `Object.freeze(..)` to each sub-object/array if you want a deeply immutable value.
+`Object.freeze(..)` 提供浅层的、初级的不可变性约束。如果你希望更深层的不可变约束，那么你就得手动遍历整个对象或数组结构来为所有后代成员应用 `Object.freeze(..)`。
 
-But contrasted with `const` which can confuse you into thinking you're getting an immutable value when you aren't, `Object.freeze(..)` *actually* gives you an immutable value.
+与 `const` 相反，`Object.freeze(..)` 并不会误导你，让你得到一个“你以为”不可变的值，而是真真确确给了你一个不可变的值。
 
-Recall the protection example from earlier:
+回顾刚刚的例子：
 
 ```js
 var arr = Object.freeze( [1,2,3] );
@@ -300,31 +300,32 @@ foo( arr );
 console.log( arr[0] );			// 1
 ```
 
-Now `arr[0]` is quite reliably `1`.
+可以非常确定 `arr[0]` 就是 `1`。
 
-This is so important because it makes reasoning about our code much easier when we know we can trust that a value doesn't change when passed somewhere that we do not see or control.
+这是非常重要的，因为这可以使我们更容易的理解代码，当我们将值传递到我们看不到或者不能控制的地方，我们依然能够相信这个值不会改变。
 
-## Performance
+## 性能
 
-Whenever we start creating new values (arrays, objects, etc) instead of mutating existing ones, the obvious next question is: what does that mean for performance?
+每当我们开始创建一个新值（数组、对象等）取代修改已经存在的值时，很明显迎面而来的问题就是：这对性能有什么影响？
 
-If we have to reallocate a new array each time we need to add to it, that's not only churning CPU time and consuming extra memory, the old values (if no longer referenced) are being garbage collected; That's even more CPU burn.
+如果每次想要往数组中添加内容时，我们都必须创建一个全新的数组，这不仅占用 CPU 时间并且消耗额外的内存。不再存在任何引用的旧数据将会被垃圾回收机制回收；更多的 CPU 资源消耗。
 
-Is that an acceptable trade-off? It depends. No discussion or optimization of code performance should happen **without context.**
+这样的取舍能接受吗？视情况而定。对代码性能的优化和讨论**都应该有个上下文**。
 
-If you have a single state change that happens once (or even a couple of times) in the whole life of the program, throwing away an old array/object for a new one is almost certainly not a concern. The churn we're talking about will be so small -- probably mere microseconds at most -- as to have no practical effect on the performance of your application. Compared to the minutes or hours you will save not having to track down and fix a bug related to unexpected value mutation, there's not even a contest here.
+如果在你的程序中，只会发生一次或几次单一的状态变化，那么扔掉一个旧对象或旧数组完全没必要担心。性能损失会非常非常小 —— 顶多只有几微秒 —— 对你的应用程序影响甚小。追踪和修复由于数据改变引起的 bug 可能会花费你几分钟甚至几小时的时间，这么看来那几微秒简直没有可比性。
 
-Then again, if such an operation is going to occur frequently, or specifically happen in a *critical path* of your application, then performance -- consider both performance and memory! -- is a totally valid concern.
+但是，如果频繁的进行这样的操作，或者这样的操作出现在应用程序的核心逻辑中，那么性能问题 —— 即性能和内存 —— 就有必要仔细考虑一下了。
 
-Think about a specialized data structure that's like an array, but that you want to be able to make changes to and have each change behave implicitly as if the result was a new array. How could you accomplish this without actually creating a new array each time? Such a special array data structure could store the original value and then track each change made as a delta from the previous version.
+以数组这样一个特定的数据结构来说，我们想要在每次操作这个数组时使每个更改都隐式地进行，就像结果是一个新数组一样，但除了每次都真的创建一个数组之外，还有什么其他办法来完成这个任务呢？像数组这样的数据结构，我们期望除了能够保存其最原始的数据，然后能追踪其每次改变并根据之前的版本创建一个分支。
 
-Internally, it might be like a linked-list tree of object references where each node in the tree represents a mutation of the original value. Actually, this is conceptually similar to how **git** version control works.
+在内部，它可能就像一个对象引用的链表树，树中的每个节点都表示原始值的改变。从概念上来说，这和 **git** 的版本控制原理类似。
+
 
 <p align="center">
 	<img src="fig18.png" width="490">
 </p>
 
-Imagine using this hypothetical specialized array data structure like this:
+想象一下使用这个假设的、专门处理数组的数据结构：
 
 ```js
 var state = specialArray( 1, 2, 3, 4 );
@@ -342,11 +343,11 @@ newState.get( 42 );					// "meaning of life"
 newState.slice( 1, 3 );				// [2,3]
 ```
 
-The `specialArray(..)` data structure would internally keep track of each mutation operation (like `set(..)`) as a *diff*, so it won't have to reallocate memory for the original values (`1`, `2`, `3`, and `4`) just to add the `"meaning of life"` value to the list. But importantly, `state` and `newState` point at different versions of the array value, so **the value immutability semantic is preserved.**
+`specialArray(..)` 这个数据结构会在内部追踪每个数据更新操作（例如 `set(..)`），类似 *diff*，因此不必要为原始的那些值（`1`、`2`、`3` 和 `4`）重新分配内存，而是简单的将 `"meaning of life"` 这个值加入列表。重要的是，`state` 和 `newState` 分别指向两个“不同版本”的数组，因此**值的不变性这个语义得以保留**。
 
-Inventing your own performance-optimized data structures is an interesting challenge. But pragmatically, you should probably use a library that already does this well. One great option is **Immutable.js** (http://facebook.github.io/immutable-js), which provides a variety of data structures, including `List` (like array) and `Map` (like object).
+发明你自己的性能优化数据结构是个有趣的挑战。但从实用性来讲，找一个现成的库会是个更好的选择。**Immutable.js**（http://facebook.github.io/immutable-js） 是一个很棒的选择，它提供多种数据结构，包括 `List`（类似数组）和 `Map`（类似普通对象）。
 
-Consider the above `specialArray` example but using `Immutable.List`:
+思考下面的 `specialArray` 示例，这次使用 `Immutable.List`：
 
 ```js
 var state = Immutable.List.of( 1, 2, 3, 4 );
@@ -364,15 +365,15 @@ newState.get( 42 );					// "meaning of life"
 newState.toArray().slice( 1, 3 );	// [2,3]
 ```
 
-A powerful library like Immutable.js employs very sophisticated performance optimizations. Handling all the details and corner-cases manually without such a library would be quite difficult.
+像 Immutable.js 这样强大的库一般会采用非常成熟的性能优化。如果不使用库而是手动去处理那些细枝末节，开发的难度会相当大。
 
-When changes to a value are few or infrequent and performance is less of a concern, I'd recommend the lighter-weight solution, sticking with built-in `Object.freeze(..)` as discussed earlier.
+当改变值这样的场景出现的较少且不用太关心性能时，我推荐使用更轻量级的解决方案，例如我们之前提到过的内置的 `Object.freeze(..)`。
 
-## Treatment
+## 以不可变的眼光看待数据
 
-What if we receive a value to our function and we're not sure if it's mutable or immutable? Is it ever OK to just go ahead and try to mutate it? **No.** As we asserted at the beginning of this chapter, we should treat all received values as immutable -- to avoid side effects and remain pure -- regardless of whether they are or not.
+如果我们从函数中接收了一个数据，但不确定这个数据是可变的还是不可变的，此时该怎么办？去修改它试试看吗？**不要这样做。** 就像在本章最开始的时候所讨论的，不论实际上接收到的值是否可变，我们都应以它们是不可变的来对待，以此来避免副作用并使函数保持纯度。
 
-Recall this example from earlier:
+回顾一下之前的例子：
 
 ```js
 function updateLastLogin(user) {
@@ -382,7 +383,7 @@ function updateLastLogin(user) {
 }
 ```
 
-This implementation treats `user` as a value that should not be mutated; whether it *is* immutable or not is irrelevant to reading this part of the code. Contrast that with this implementation:
+该实现将 `user` 看做一个不应该被改变的数据来对待；`user` 是否真的不可变完全不会影响这段代码的阅读。对比一下下面的实现：
 
 ```js
 function updateLastLogin(user) {
@@ -391,11 +392,11 @@ function updateLastLogin(user) {
 }
 ```
 
-That version is a lot easier to write, and even performs better. But not only does this approach make `updateLastLogin(..)` impure, it also mutates a value in a way that makes both the reading of this code, as well as the places it's used, more complicated.
+这个版本更容易实现，性能也会更好一些。但这不仅让 `updateLastLogin(..)` 变得不纯，这种方式改变的值使阅读该代码，以及使用它的地方变得更加复杂。
 
-**We should treat `user` as immutable**, always, because at this point of reading the code we do not know where the value comes from, or what potential issues we may cause if we mutate it.
+**应当总是将 user 看做不可变的值**，这样我们就没必要知道数据从哪里来，也没必要担心数据改变会引发潜在问题。
 
-Nice examples of this approach can be seen in various built-in methods of the JS array, such as `concat(..)` and `slice(..)`:
+JavaScript 中内置的数组方法就是一些很好的例子，例如 `concat(..)` 和 `slice(..)` 等：
 
 ```js
 var arr = [1,2,3,4,5];
@@ -411,20 +412,20 @@ arr2;					// [1,2,3,4,5,6]
 arr3;					// [2,3,4,5,6]
 ```
 
-Other array prototype methods that treat the value instance as immutable and return a new array instead of mutating: `map(..)` and `filter(..)`. The `reduce(..)` / `reduceRight(..)` utilities also avoid mutating the instance, though they also don't by default return a new array.
+其他一些将参数看做不可变数据且返回新数组的原型方法还有：`map(..)` 和 `filter(..)` 等。`reduce(..)` / `reduceRight(..)` 方法也会尽量避免改变参数，尽管它们并不默认返回新数组。
 
-Unfortunately, for historical reasons, quite a few other array methods are impure mutators of their instance: `splice(..)`, `pop(..)`, `push(..)`, `shift(..)`, `unshift(..)`, `reverse(..)`, `sort(..)`, and `fill(..)`.
+不幸的是，由于历史问题，也有一部分不纯的数组原型方法：`splice(..)`、`pop(..)`、`push(..)`、`shift(..)`、`unshift(..)`、`reverse(..)` 以及 `fill(..)`。
 
-It should not be seen as *forbidden* to use these kinds utilities, as some claim. For reasons such as performance optimization, sometimes you will want to use them. But you should never use such a method on an array value that is not already local to the function you're working in, to avoid creating a side effect on some other remote part of the code.
+有些人建议禁止使用这些不纯的方法，但我不这么认为。因为一些性能面的原因，某些场景下你仍然可能会用到它们。不过你也应当注意，如果一个数组没有被本地化在当前函数的作用域内，那么不应当使用这些方法，避免它们所产生的副作用影响到代码的其他部分。
 
-Be disciplined and always treat *received values* as immutable, whether they are or not. That effort will improve the readability and trustability of your code.
+不论一个数据是否是可变的，永远将他们看做不可变。遵守这样的约定，你程序的可读性和可信赖度将会大大提升。
 
-## Summary
+## 总结
 
-Value immutability is not about unchanging values. It's about creating and tracking new values as the state of the program changes, rather than mutating existing values. This approach leads to more confidence in reading the code, because we limit the places where our state can change in ways we don't readily see or expect.
+值的不可变性并不是不改变值。它是指在程序状态改变时，不直接修改当前数据，而是创建并追踪一个新数据。这使得我们在读代码时更有信心，因为我们限制了状态改变的场景，状态不会在意料之外或不易观察的地方发生改变。
 
-`const` declarations (constants) are commonly mistaken for their ability to signal intent and enforce immutability. In reality, `const` has basically nothing to do with value immutability, and its usage will likely create more confusion than it solves. Instead, `Object.freeze(..)` provides a nice built-in way of setting shallow value immutability on an array or object. In many cases, this will be sufficient.
+由于其自身的信号和意图，`const` 关键字声明的常量通常被误认为是强制规定数据不可被改变。事实上，`const` 和值的不可变性声明无关，而且使用它所带来的困惑似乎比它解决的问题还要大。另一种思路，内置的 `Object.freeze(..)` 方法提供了顶层值的不可变性设定。大多数情况下，使用它就足够了。
 
-For performance sensitive parts of the program, or in cases where changes happen frequently, creating a new array or object (especially if it contains lots of data) is undesirable, for both processsing and memory concerns. In these cases, using immutable data structures from a library like **Immutable.js** is probably the best idea.
+对于程序中性能敏感的部分，或者变化频繁发生的地方，处于对计算和存储空间的考量，每次都创建新的数据或对象（特别是在数组或对象包含很多数据时）是非常不可取的。遇到这种情况，通过类似 **Immutable.js** 的库使用不可变数据结构或许是个很棒的主意。
 
-The importance of value immutability on code readability is less in the inability to change a value, and more in the discipline to treat a value as immutable.
+值不变在代码可读性上的意义，不在于不改变数据，而在于以不可变的眼光看待数据这样的约束。
