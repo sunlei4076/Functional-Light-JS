@@ -1,130 +1,130 @@
-# Functional-Light JavaScript
-# Chapter 1: Why Functional Programming?
+# JavaScript 轻量级函数式编程
+# 第 1 章：为什么使用函数式编程？
 
-> Functional programmer: (noun) One who names variables "x", names functions "f", and names code patterns "zygohistomorphic prepromorphism"
+> 函数式编程人员: 没有任何一个函数式编程者会把变量命名为 x，函数命名为 f，模块代码命名为“zygohistomorphic prepromorphism”。
 >
 > James Iry ‏@jamesiry 5/13/15
 >
 > https://twitter.com/jamesiry/status/598547781515485184
 
-Functional Programming (FP) is not a new concept by any means. It's been around almost the entire history of programming. However -- and I'm not sure it's fair to say, but! -- it sure hasn't seemed like as mainstream of a concept in the overall developer world until perhaps the last few years. I think FP has more been the realm of academics.
+函数式编程（FP），不是一个新的概念，它几乎贯穿了整个编程史。我不确定这么说是否合理，但是很确定的一点是：直到最近几年，函数式编程才成为整个开发界的主流观念。所以我觉得函数式编程领域更像学者的领域。
 
-But that's all changing. A groundswell of interest is growing around FP, not just at the languages level but even in libraries and frameworks. You very well might be reading this text because you've finally realized FP is something you can't ignore any longer. Or maybe you're like me and you've tried to learn FP many times before but struggled to wade through all the terms or mathematical notation.
+然而一切都在变。不只是从编程语言的角度，一些库和框架都对函数式编程的兴趣空前高涨。你很可能也在读相关内容，因为你终于意识到函数式编程是不容忽视的东西。或者你跟我一样，已经尝试很多次去学函数式编程，但却很难理解所有的术语或数学符号。
 
-Whatever your reason for reading this book, welcome to the party!
+无论你出于何目的翻阅本书，欢迎加入我们！
 
-## Confidence
+## 置信度
 
-I have a very simple premise that sort of underlies everything I do as a teacher of software development (in JavaScript): code that you cannot trust is code that you do not understand. And furthermore, if you cannot trust or understand your code, then you can have no confidence whatsoever that the code you write is suitable to the task. You run the program and cross your fingers.
+我有一个非常简单的前提，这是我作为软件开发老师（JavaScript）所做的一切基础：你不能信任的代码是你不明白的代码。此外，对你不信任或不明白的代码，你将不能确定这些代码是否符合你的业务场景。代码运行时也只能祈求好运。
 
-What do I mean by trust? I mean that you can verify, by reading, not just running, that you understand what a piece of code *will* do, not just relying on what it *should* do. Perhaps more often than we should, we tend to rely on verification of our program's correctness by running test suites. I don't mean to suggest tests are bad. But I do think we should aspire to be able to understand our code well enough that we know the test suite will pass before it runs.
+信任是什么意思？信任是指你通过读代码，不仅是跑代码，就能理解这段代码能干什么事，而不只是停留在它可能是干什么的层面。也许我们不应该总倾向于通过运行测试程序，来验证程序的正确性。我并不是说测试不好，而是说我们应该对代码了如指掌，这样我们在运行测试代码之前就会知道它肯定能跑通。
 
-I believe the techniques that form the foundation of FP are designed from the mindset of having far more confidence over our programs just by reading them. Someone who understands FP, and who diligently uses it in their programs, will write code that they can read and verify, by the principles they have already proven to be true, that the program will do what they want.
+通过读代码就能对我们的程序更有信心，我相信函数式编程技术的基础构成，是本着这种心态设计的。理解函数式编程并在程序中用心实践的人，得益于函数式编程已经被证实的原则，能够写出可读性高和可验证的代码，来达到他们想要的目的。
 
-It is my hope that you will begin to develop more confidence in the code you write, and that these functional-light programming principles will begin your journey in that direction.
+我希望你能通过理解轻量级函数式编程的原则，对你编写的代码更有信心，并且能在之后的路上越走越好。
 
-## Communication
+## 交流渠道
 
-Why is functional programming important? To answer that, we need to take a bigger step back and talk about why programming itself is important.
+函数式编程为何如此重要？为了回答这个问题，我们退一万步先来讨论一下编程本身的重要性。
 
-It may surprise you to hear this, but I don't believe that code is primarily a set of instructions for the computer. As a matter of fact, I think the fact that code instructs the computer is almost a happy accident.
+我认为代码不是电脑中的一堆指令，这么说你可能感到很奇怪。事实上，代码能指示电脑运行就是一个意外的惊喜。
 
-I believe very deeply that the vastly more important role of code is as a means of communication with other human beings.
+我深信代码的主要作用是方便人与人交流。
 
-You probably know by experience that an awful lot of your time spent "coding" is actually spent reading existing code. Very few of us are so privileged as to spend all or most of our time simply banging out all new code and never dealing with code that others (or our past selves) wrote.
+根据以往经验你可能知道，有时候花很多时间“编程”其实只是读现有的代码。我们的大部分时间其实都是在维护别人的代码（或自己的老代码），只有少部分时间是在敲新代码。
 
-Did you know that researchers who've studied this topic say that 70% of the time we spend maintaining code is just spent reading it to understand it? I find that shocking. 70%. No wonder the global average for a programmer's lines of code written per day is around 5. We spend the other 7 hours and 30 minutes of the day just reading the code to figure out where those 5 lines should go!
+你知道研究过这个话题的专家给出了怎样的数据吗？我们在维护代码过程中 70％ 的时间花在了阅读和理解代码上。 也难怪全球程序员每天的平均代码行数是 5 行。我们一天花七个半小时用来读代码，然后找出这 5 行代码应该写在哪里。
 
-I think we should focus a lot -- a LOT! -- more on the readability of our code. Like, a lot more. And by the way, readability is not about least number of characters. Readability is actually most affected by familiarity (yes, that's been studied, too).
+我想我们应该更多的关注一下代码的可读性。可能的话，不妨多花点时间在可读性上。顺便提一句，可读性并不意味着最少的代码量，对代码的熟悉程度也会影响代码的可读性（这一点也是被证实过的）。
 
-So, if we are going to spend more time concerned with making code that will be more readable and understandable, FP turns out to be a really handy pattern in that effort. The principles of FP are well established, deeply studied and vetted, and provably verifiable.
+因此，如果我们要花费更多的时间来关注代码的可读性和可理解性，那么函数式编程为我们提供了一种非常方便的模式。函数式编程的原则是完善的，经过了深入的研究和审查，并且可以被验证。
 
-If we use FP principles, I believe we will create code that is easier to reason about. Once we know these principles, they will be recognizable and familiar in the code, meaning we'll spend less time figuring that part out when we read a piece of code. Our focus will be spent on how all the well-known, established lego pieces are assembled, not on what those lego pieces mean.
+如果我们使用函数式编程原则，我相信我们将写出更容易理解的代码。一旦我们知道这些原则，它们将在代码中被识别和熟悉，这意味着当我们读取一段代码时，我们将花费更少的时间来进行定位。我们的重点将在于如何组建所有已知的“乐高片段”，而不是这些“乐高片段”是什么意思。
 
-FP (at least, without all the terminology weighing it down) is one of the most effective tools for writing readable code. *That* is why it's so important.
+函数式编程是编写可读代码的最有效工具之一（可能还有其他）。这就是为什么函数式编程如此重要。
 
-### Readability Curve
+### 可读性曲线
 
-It's really important I take a moment to call out a phenomena that has derailed and frustrated me many times over the years, and was especially acute while writing this book.
+很重要的是，我先花点时间来讲述一种多年来让我感到困惑和沮丧的现象，在写本书时该问题尤为尖锐。
 
-I also think it's probably something that many developers have a tendency to run into. You, dear reader, may just find yourself in this same boat as you work through this text. But take heart; if you stick this out, the curve comes back.
+这也可能是许多开发人员会遇到的问题。亲爱的读者，当你读这篇文章的时候，你可能会发现自己也会遇到同样的状况。但是要振作起来，坚持下去，陡峭的学习曲线总会过去。
 
 <p align="center">
 	<img src="fig17.png" width="600">
 </p>
 
-We'll cover this more in the next chapter, but imperative code is the code you probably already write, like `if` statements and `for`-loops. It's focused on precisely instructing the computer *how* to do something. Declarative code, and moreover the kind of code we'll be striving to learn to write that adheres to FP principles, is code that's more focused on describing the *what* outcome.
+我们将在下一章更深入的讨论这个问题。但是你可能写过一些命令式的代码，像 `if` 语句和 `for` 循环这样的语句。这些语句旨在精确地指导计算机**如何**完成一件事情。声明式代码，以及我们努力遵循函数式编程原则所写出的代码，更专注于描述最终的结果。
 
-Let me just clue you into a painful fact, one that I've been trying to swallow the whole time I've worked on this book: it takes a lot more effort, and often a lot more code, to improve the readability of your code and to minimize or eliminate most of the places where you might write bugs.
+还有个残酷的问题摆在眼前，我在写本书时花费了很多时间在此问题上：我需要花费更多的精力和编写更多的代码来提高代码的可读性，尽量减少乃至消除可能会引入程序错误的代码部分。
 
-If you're hoping that your FP code refactoring will immediately make your code more graceful, elegant, clever, and concise, that's just not a realistic expectation -- at least not at first.
+如果你期望用函数式编程重构过的代码能够立刻变得更美观、优雅、智能和简洁的话，这个有点不太现实，这个变化是需要一个过程的。
 
-FP is a very different way of thinking about how code should be structured, to make the flow of data much more obvious and to help your reader follow your thinking. This effort is eminently worthwhile, but it can be an arduous journey and the code you end up with will not seem more readable until you've spent a lot more time conditioning yourself to FP.
+函数式编程以另一种方式来思考代码应该如何组织才能使数据流更加明显，并能让读者很快理解你的思想。这种努力是非常值得的，然而过程很艰辛，你可能需要花很多时间基于函数式编程来调整代码直到代码可读性变得好一些。
 
-Also, my experience has been that it takes about a half dozen attempts at turning a snippet of imperative code into more declarative FP, before I end up with something that's clear enough for me to understand. For me, writing FP is more like a process than a binary flip from one paradigm to another.
+另外，我的经验是，转换为声明式的代码之前，大约需要做六次尝试。对我来说，编写符合函数式编程的代码更像是一个过程，而不是从一个范例到另一个范例的二进制转换。
 
-I also apply the "read it later" test to every piece of FP code I write. I write it, then leave the code alone for a few hours or a day, then come back and try to read it with fresh eyes. Usually, it's confusing as hell, so I tweak it and repeat.
+我也会经常对写过的代码进行重构。就是说，写完一段代码，过几个小时或一天再看会有不一样的感觉。通常，重构之前的代码是比较混乱不堪，所以需要反复调整。
 
-Functional programming has not been for me achieving a single elegant brush stroke on the artist's canvas that leaves the audience in awe. Rather, it's a painstaking, detailed, sometimes treacherous hack through the weeds of a neglected field.
+函数式编程的过程并没有让我在艺术的画布上笔下生辉，让观众拍案叫好。相反，编程的过程很艰辛且历历在目，感觉像坐在一辆不靠谱的马车穿过一片杂草丛生的灌木树林。
 
-But I'm not trying to dampen your spirits. I really want you to hack through those weeds. I am glad I have. I can finally start to see the curve bending upward towards more readability. The effort has been worth it. I believe it will be for you, too.
+我并不是试图打消你的激情，而是真切希望你也能够在编程的道路上披荆斩棘。过后我终于看到可读性曲线向上延伸，所有付出都是值得的，我相信你也会有同样的感受。
 
-## Take
+## 接受
 
-We're going to approach FP from the ground up, and uncover the basic foundational principles that I believe formal FPers would admit are the scaffolding for everything they do. But for the most part we'll stay arms length away from most of the intimidating terminology or mathematical notation that can so easily frustrate learners.
+我们要系统的学习函数式编程，探索发现最基本的原则，我相信规范的函数式编程编程者会遵循这些原则并把它们作为开发的框架。但在大多数情况下，我们大都选择避开晦涩的术语或数学符号，否则很容易使学习者受挫。
 
-I believe it's less important what you call something and more important that you understand what it is and how it works. That's not to say there's no importance to shared terminology -- it undoubtedly eases communication among seasoned professionals. But for the learner, I've found it can be somewhat distracting.
+我觉得一项技术你怎么称呼它不重要，重要的是理解它是什么并且它是怎么工作的。这并不是说共享术语不重要，它无疑可以简化经验丰富的专业人士之间的交流。但对学习者来说，它有点分散人的注意力。
 
-So I hope this book can focus more on the base concepts and less on the fancy terminology. That's not to say there won't be terminology; there definitely will be. But don't get too wrapped up in the fancier words. Look beyond them to the ideas. That's what this book is trying to be about.
+所以我希望这本书能更多地关注基本概念而不是花哨的术语。这并不是说没有术语，肯定会有。但不要太沉迷于华丽的词藻，追寻其背后的含义，这正是本书的目的。
 
-I call the less formal practice herein "Functional-Light Programming" because I think where the formalism of true FP suffers is that it can be quite overwhelming if you're not already accustomed to formal thought. I'm not just guessing; this is my own personal story. Even after teaching FP and writing this book, I can still say that the formalism of terms and notation in FP is very, very diffcult for me to process. I've tried, and tried, and I can't seem to get through much of it.
+我把这种欠缺正式实践的编程思想称为“轻量级函数式编程”，因为我认为真正的函数式编程的形式主义在于， 因为我认为如果你还不习惯函数式编程主张的思想，你可能很难用它。这不仅仅只是猜测，而是我的亲身经历。即使在传教函数式编程过程和完成这本书之后，我仍然可以说，函数式编程中术语和符号的形式化对于我来说是非常非常困难的。我已经再三尝试，发现大部分都是很难掌握的。
 
-I know many FPers who believe that the formalism itself helps learning. But I think there's clearly a cliff where that only becomes true once you reach a certain comfort with the formalism. If you happen to already have a math background or even some flavors of CS experience, this may come more naturally to you. But some of us don't, and no matter how hard we try, the formalism keeps getting in the way.
+我知道很多函数式编程编程者会认为形式主义本身有助于学习。但我认为这是一个坑，当你试图用形式主义获得某种安慰时，你就会踩坑。但如果碰巧你有数学背景，甚至还有一些 CS 经验，这些问题对你来说就可能驾轻就熟。但是我们中的一些人不具备这些条件，不管我们怎么努力，形式主义总是阻碍我们前进。
 
-So this book introduces the concepts that I believe FP is built on, but comes at it by giving you a boost to climb up the cliff wall rather than throwing you straight at it to figure out how to climb as you go.
+因此，这本书介绍了一些我认为函数式编程会涉及到的概念，虽然不能直接让你受益但可以帮你逐步理解函数式编程整个过程。 
 
-## YAGNI
+## 你不需要它
 
-If you've been around programming for very long, chances are you've heard the phrase "YAGNI" before: "You Ain't Gonna Need It". This principle primarily comes from extreme programming, and stresses the high risk and cost of building a feature before it's needed.
+如果你规划一个项目花了很长时间，那么别人一定会告诉你“YAGNI” —— “你不需要它”。这个原则主要来自极限编程，强调构建特性的高风险和成本，这个风险和成本源自于项目本身是否需要。
 
-Sometimes we guess we'll need a feature in the future, build it now believing it'll be easier to do as we build other stuff, then realize we guessed wrong and the feature wasn't needed, or needed to be quite different. Other times we guess right, but build a feature too early, and suck up time from the features that are genuinely needed now; we incur an opportunity cost in diluting our energy.
+有时我们考虑到将来可能会用到一个功能，并且认为现在构建它能够使得构建其他应用时更容易，后来意识到我们猜错了，原来这个功能并不需要，或者需要的完全是另外一套。另外一种情形是我们预估的功能是正确的，但构建得太早的话，相当于占用了开发现有功能的时间。有点像赔了夫人又折兵。
 
-YAGNI challenges us to remember: even if it's counter intuitive in a situation, we often should postpone building something until it's presently needed. We tend to exaggerate our mental estimates of the future refactoring cost of adding it later when it is needed. Odds are, it won't be as hard to do later as we might assume.
+YAGNI 挑战，告诉我们：即使有的功能在某种情况下是反直觉的，我们也常常应该推迟构建,直到当前需要这个功能。我们倾向于夸大一个功能未来重构成本的心理估计，但往往这个重构是在将来需要时才会做。
 
-As it applies to functional programming, I would give this admonition: there will be plenty of interesting and compelling patterns discussed in this text, but just because you find some pattern exciting to apply, it may not necessarily be appropriate to do so in a given part of your code.
+上述情况对函数式编程也同样适用，不过我还是要先敲个警钟: 本书包含了大量你想去尝试的有趣的开发模式，但这不意味着你的代码一定要使用这些模式。
 
-This is where I will differ from many more formal FPers: just because you *can* FP something doesn't mean you *should* FP it. Moreover, there are many ways to slice a problem, and even though you may have learned a more sophisticated approach that is more "future-proof" to maintenance and extensibility, a simpler FP pattern might be more than sufficient in that spot.
+我与很多函数式编程开发人员的不同之处在于：你掌握了函数式编程并不意味着你一定得用它。此外，解决问题的方法很多，即使你掌握了更精炼的方法，能对维护和可扩展性更"经得起未来的考验"，但更轻量的函数式编程模式可能更适合该场景。
 
-Generally, I'd recommend to seek balance in what you code, and to be conservative in your application of FP concepts as you get the hang of things. Default to the YAGNI principle in deciding if a certain pattern or abstraction will help that part of the code be more readable or if it's just introducing more clever sophistication that isn't (yet) warranted.
+一般来说，我建议你在代码中寻求平衡，并且当你掌握函数式编程的诀窍时，在应用的过程中也应保持谨慎。在决定某个模式或抽象概念是否能使得部分代码可读性提高，或是否只是引入更智能的库时，YAGNI 的原则同样适用。
 
-> Reminder, any extensibility point that’s never used isn’t just wasted effort, it’s likely to also get in your way as well
+> 提醒一句，一些未曾用过的扩展点不仅浪费精力，而且可能妨碍你的工作。
 >
 > Jeremy D. Miller @jeremydmiller 2/20/15
 >
 > https://twitter.com/jeremydmiller/status/568797862441586688
 
-Remember, every single line of code you write has a reader cost associated with it. That reader may be another team member, or even your future self. Neither of those readers will be impressed with overly clever unnecessary sophistication to show off your FP agility.
+记住，你编写的每一行代码之后都要有人来维护，这个人可能是你的团队成员，也可能是未来的你。如果代码写的太过复杂，那么无论谁来维护都会对你炫技式的故作聪明的做法倍感压力。
 
-The best code is the code that is most readable in the future because it strikes exactly the right balance between what it can/should be (idealism) and what it must be (pragmatism).
+最好的代码是可读性高的代码，因为它在正确的（理想主义）和必然的（正确的）之间寻求到了恰到好处的平衡。
 
-## Resources
+## 资源
 
-I have drawn on a great many different resources to be able to compose this text. I believe you too may benefit from them, so I wanted to take a moment to point them out.
+我撰写这篇文章的过程参考了许多不同的资源。我相信你也会从中受益，所以我想花点时间把它们列出来。
 
-### Books
+### 书籍推荐
 
-Some FP/JavaScript books that you should definitely read:
+一些你务必要阅读的函数式编程 / JavaScript 书籍：
 
 * [Professor Frisby's Mostly Adequate Guide to Functional Programming](https://drboolean.gitbooks.io/mostly-adequate-guide/content/ch1.html) by [Brian Lonsdorf](https://twitter.com/drboolean)
 * [JavaScript Allongé](https://leanpub.com/javascript-allonge) by [Reg Braithwaite](https://twitter.com/raganwald)
 * [Functional JavaScript](http://shop.oreilly.com/product/0636920028857.do) by [Michael Fogus](https://twitter.com/fogus)
 
-### Blogs/Sites
+### 博客和站点
 
-Some other authors and content you should check out:
+一些其他作者和相关内容供查阅：
 
 * [Fun Fun Function Videos](https://www.youtube.com/watch?v=BMUiFMZr7vk) by [Mattias P Johansson](https://twitter.com/mpjme)
-* [Awesome FP JS](https://github.com/stoeffel/awesome-fp-js)
+* [Awesome函数式编程JS](https://github.com/stoeffel/awesome-fp-js)
 * [Kris Jenkins](http://blog.jenkster.com/2015/12/what-is-functional-programming.html)
 * [Eric Elliott](https://medium.com/@_ericelliott)
 * [James A Forbes](https://james-forbes.com/)
@@ -133,21 +133,21 @@ Some other authors and content you should check out:
 * [Functional Programming Jargon](https://github.com/hemanth/functional-programming-jargon#functional-programming-jargon)
 * [Functional Programming Exercises](https://github.com/InceptionCode/Functional-Programming-Exercises)
 
-### Libraries
+### 一些库
 
-The code snippets in this book do not use libraries. Each operation that we discover, we'll derive how to implement it in standalone, plain ol' JavaScript. However, as you begin to build more of your real code with FP, you'll quickly want a library to provide optimized and highly reliable versions of these commonly accepted utilities.
+本书中的代码段不使用库。我们发现的每一个操作，将派生出如何在独立的、普通的 JavaScript 中实现它。然而，当你开始使用函数式编程构建更多的真正代码时，你很快就会使用现有库中所提供的更可靠高效的通用功能。
 
-By the way, you'll want to make sure you check the documentation for the library functions you use to make sure you know how they work. There will be a lot of similarities in many of them to the code we build on in this text, but there will undoubtedly be some differences, even between popular libraries.
+顺便说一下，你要确保检查你所使用的库函数的文档，以确保你知道它们是如何工作的。它与本文中构建的代码有许多相似之处，但毫无疑问即便跟最流行的库相比还是会存在一些差异。
 
-Here are a few popular FP libraries for JavaScript that are a great place to start your exploration with:
+下面是一些流行的 JavaScript 版本的函数式编程库，可以开启你的探索之路：
 
 * [Ramda](http://ramdajs.com)
 * [lodash/fp](https://github.com/lodash/lodash/wiki/FP-Guide)
 * [functional.js](http://functionaljs.com/)
 * [Immutable.js](https://github.com/facebook/immutable-js)
 
-Appendix C illustrates some of these libraries using various examples from the text.
+附录 C 展示了用到了本书中一些示例的库。
 
-## Summary
+## 总结
 
-This is Functional-Light JavaScript. The goal is to learn to communicate with our code but not suffocate under mountains of notation or terminology to get there. I hope this book jumpstarts your journey!
+这就是 JavaScript 轻量级函数式编程。我们的目标是学会与代码交流，而不是在符号或术语的大山下被压的喘不过气。希望这本书能开启你的旅程！
