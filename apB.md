@@ -1,60 +1,60 @@
-# Functional-Light JavaScript
-# Appendix B: The Humble Monad
+# JavaScript 轻量级函数式编程
+# 附录 B: 谦虚的 Monad
 
-Let me just start off this appendix by admitting: I did not know much about what a monad was before starting to write the following. And it took a lot of mistakes to get something sensible. If you don't believe me, go look at the commit history of this appendix in the Git repo for this book (https://github.com/getify/Functional-Light-JS)!
+首先，我坦白：在开始写以下内容之前我并不太了解 Monad 是什么。我为了确认一些事情而犯了很多错误。如果你不相信我，去看看 [这本书 Git 仓库](https://github.com/getify/Functional-Light-JS) 中关于本章的提交历史吧！
 
-I am including the topic of monads in the book because it's part of the journey that every developer will encounter while learning FP, just as I have in this book writing.
+我在本书中囊括了所有涉及 Monad 的话题。就像我写书的过程一样，每个开发者在学习函数式编程的旅程中都会经历这个部分。
 
-We're basically ending this book with a brief glimpse at monads, whereas most other FP literature kinda almost starts with monads! I do not encounter in my "functional light" programming much of a need to think explicitly in terms of monads, so that's why this material is more bonus than main core. But that's not to say monads aren't useful or prevalent -- they very much are.
+尽管其他函数式编程的著作差不多都把 Monad 作为开始，而我们却只对它做了简要说明，并基本以此结束本书。在轻量级函数式编程中我确实没有遇到太多需要仔细考虑 Monad 的问题，这就是本文更有价值的原因。但是并不是说 Monad 是没用的或者是不普遍的 —— 恰恰相反，它很有用，也很流行。
 
-There's a bit of a joke around the JavaScript FP world that pretty much everybody has to write their own tutorial or blog post on what a monad is, like the writing of it alone is some rite-of-passage. Over the years, monads have variously been depicted as burritos, onions, and all sorts of other wacky conceptual abstractions. I hope there's none of that silly business going on here!
+函数式编程界有一个小笑话，几乎每个人都不得不在他们的文章或者博客里写 Monad 是什么，把它拎出来写就像是一个仪式。在过去的几年里，人们把 Monad 描述为卷饼、洋葱和各种各样古怪的抽象概念。我肯定不会重蹈覆辙！
 
-> A monad is just a monoid in the category of endofunctors.
+> 一个 Monad 仅仅是自函子 (endofunctor) 范畴中的一个 monoid
 
-We started the preface with this quote, so it seems fitting we come back to it here. But no, we won't be talking about monoids, endofunctors, or category theory. That quote is not only condescending, but totally unhelpful.
+我们引用这句话来开场，所以把话题转到这个引言上面似乎是很合适的。可是才不会这样，我们不会讨论 Monad 、endofunctor 或者范畴论。这句引言不仅故弄玄虚而且华而不实。
 
-My only hope for what you get out of this discussion is to not be scared of the term monad or the concept anymore -- I have been, for years! -- and to be able to recognize them when you see them. You might, just maybe, even use them on occassion.
+我只希望通过我们的讨论，你不再害怕 Monad 这个术语或者这个概念了 —— 我曾经怕了很长一段时间 —— 并在看到该术语时知道它是什么。你可能，也只是可能，会正确地使用到它们。
 
-## Type
+## 类型
 
-There's a huge area of interest in FP that we've basically stayed entirely away from throughout this book: type theory. I'm not going to get very deep into type theory, because quite frankly I'm not qualified to do so. And you wouldn't appreciate it even if I did.
+在函数式编程中有一个巨大的兴趣领域：类型论，本书基本上完全远离了该领域。我不会深入到类型论，坦白的说，我没有深入的能力，即使干了也吃力不讨好。
 
-But what I will say is that a monad is basically a value type.
+但是我要说，Monad 基本上是一个值类型。
 
-The number `42` has a value type (number!) that brings with it certain characteristics and capabilities that we rely on. The string `"42"` may look very similar, but it has a different purpose in our program.
+数字 `42` 有一个值类型（number），它带有我们依赖的特征和功能。字符串 `"42"` 可能看起来很像，但是在编程里它有不同的用途。
 
-In object oriented programming, when you have a set of data (even a single discrete value) and you have some behavior you want to bundle with it, you create an object/class to represent that "type". Instances are then members of that type. This practice generally goes by the name "Data Structures".
+在面向对象编程中，当你有一组数据（甚至是一个单独的离散值），并且想要给它绑上一些行为，那么你将创建一个对象或者类来表示 "type"。接着实例就成了该类型的一员。这种做法通常被称为 “数据结构”。
 
-I'm going to use the notion of data structures very loosely here, and assert that we may find it useful in a program to define a set of behaviors and constraints for a certain value, and bundle them together with that value into a single abstraction. That way, as we work with one or more of those kinds of values in our program, their behaviors come along for free and will make working with them more convenient. And by convenient, I mean more declarative and approachable for the reader of your code!
+我将会非常宽泛的使用数据结构这个概念，而且我断定，当我们在编程中为一个特定的值定义一组行为以及约束条件，并且将这些特征与值一起绑定在一个单一抽象概念上时，我们可能会觉得很有用。这样，当我们在编程中使用一个或多个这种值的时候，它们的行为会自然的出现，并且会使它们更方便的工作。方便的是，对你的代码的读者来说，是更有描述性和声明性的。
 
-A monad is a data structure. It's a type. It's a set of behaviors that are specifically designed to make working with a value predictable.
+Monad 是一种数据结构。是一种类型。它是一组使处理某个值变得可预测的特定行为。
 
-Recall in Chapter 8 that we talked about functors: a value along with a map-like utility to perform an operation on all its constitute data members. A monad is a functor that includes some additional behavior.
+回顾第 8 章，我们谈到了函子（functor）：包括一个值和一个用来对构成函子的数据执行操作的类 map 实用函数。Monad 是一个包含一些额外行为的函子（functor）。
 
-## Loose Interface
+## 松散接口
 
-Actually, a monad isn't a single data type, it's really more like a related collection of data types. It's kind of an interface that's implemented differently depending on the needs of different values. Each implementation is a different type of monad.
+实际上，Monad 并不是单一的数据类型，它更像是相关联的数据类型集合。它是一种根据不同值的需要而用不同方式实现的接口。每种实现都是一种不同类型的 Monad。
 
-For example, you may read about the "Identity Monad", the "IO Monad", the "Maybe Monad", the "Either Monad", or a variety of others. Each of these has the basic monad behavior defined, but it extends or overrides the interactions according to the use cases for each different type of monad.
+例如，你可能阅读 "Identity Monad"、"IO Monad"、"Maybe Monad"、"Either Monad" 或其他形形色色的字眼。他们中的每一个都有基本的 Monad 行为定义，但是它根据每个不同类型的 Monad 用例来继承或者重写交互行为。
 
-It's a little more than an interface though, because it's not just the presence of certain API methods that makes an object a monad. There's a certain set of guarantees about the interactions of these methods that is necessary, to be monadic. These well-known invariants are critical to usage of monads improving readability by familiarity; otherwise, it's just an ad hoc data structure that must be fully read to be understood by the reader.
+可是它不仅仅是一个接口，因为它不只是使对象成为 Monad 的某些 API 方法的实现。对这些方法的交互的保障是必须的，是 monadic 的。这些众所周知的常量对于使用 Monad 提高可读性是至关重要的；另外，它是一个特殊的数据结构，读者必须全部阅读才能明白。
 
-As a matter of fact, there's not even just one single unified agreement on the names of these monadic methods, the way a true interface would mandate; a monad is more like a loose interface. Some people call a certain method `bind(..)`, some call it `chain(..)`, some call it `flatMap(..)`, etc.
+事实上，这些 Monad 方法的名字和真实接口授权的方式甚至没有一个统一的标准；Monad 更像是一个松散接口。有些人称这些方法为 `bind(..)`,有些称它为 `chain(..)`，还有些称它为 `flatMap(..)`，等等。
 
-So a monad is an object data structure with sufficient methods (of practically any name or sort) that at a minimum satisfy the main behavioral requirements of the monad definition. Each kind of monad has a different kind of extension above the minimum. But, because they all have an overlap in behavior, using two different kinds of monads together is still straightforward and predictable.
+所以，Monad 是一个对象数据结构，并且有充足的方法（几乎任何名称或排序），至少满足了 Monad 定义的主要行为需求。每一种 Monad 都基于最少数量的方法来进行不同的扩展。但是，因为它们在行为上都有重叠，所以一起使用两种不同的 Monad 仍然是直截了当和可控的。
 
-It's in that sense that monads are sort of like an interface.
+从某种意义上说，Monad 更像是接口。
 
 ## Maybe
 
-It's very common in FP material to cover well-known monads like Maybe. And actually, the Maybe monad is really a pairing of two other simpler monads: Just and Nothing.
+在函数式编程中，像 Maybe 这样涵盖 Monad 是很普遍的。事实上，Maybe Monad 是另外两个更简单的 Monad 的搭配：Just 和 Nothing。
 
-Since a monad is a type, you might think we'd define `Maybe` as a class to be instantiated. That's a valid way of doing it, but it introduces `this`-binding issues in the methods that I don't want to juggle; instead I'm going to stick with just a simple function / object approach.
+既然 Monad 是一个类型，你可能认为我们应该定义 `Maybe` 作为一个要被实例化的类。这虽然是一种有效的方法，但是它引入了 `this` 绑定的问题，所以在这里我不想讨论；相反，我打算使用一个简单的函数和对象的实现方式。
 
-Here's a minimal implementation of Maybe:
+以下是 Maybe 的最简单的实现：
 
 ```js
-var Maybe = { Just, Nothing, of/* aka: unit, pure */: Just };
+var Maybe = { Just, Nothing, of/* 又称：unit，pure */: Just };
 
 function Just(val) {
 	return { map, chain, ap, inspect };
@@ -62,7 +62,7 @@ function Just(val) {
 	// *********************
 
 	function map(fn) { return Just( fn( val ) ); }
-	// aka: bind, flatMap
+	// 又称：bind, flatMap
 	function chain(fn) { return fn( val ); }
 	function ap(anotherMonad) { return anotherMonad.map( val ); }
 
@@ -82,26 +82,26 @@ function Nothing() {
 }
 ```
 
-**Note:** The `inspect(..)` method is included here only for our demonstration purposes. It serves no direct role in the monadic sense.
+**注意：** `inspect(..)` 方法只用于我们的示例中。从 Monad 的角度来说，它并没有任何意义。
 
-Don't worry if most of this doesn't make sense right now. We're not gonna obsess much over the details or the math/theory behind the design of the Monad. Instead, we'll focus more on illustrating what we can do with it.
+如果现在大部分都没有意义的话，不要担心。我们将会更专注的说明我们可以用它做什么，而不是过多的深入 Monad 背后的设计细节和理论。
 
-Any monad instances of both `Just(..)` and `Nothing()` will all have `map(..)`, `chain(..)` (also called `bind(..)` or `flatMap(..)`), and `ap(..)` methods, as do all monads. The purpose of these methods and their behavior is to provide a standardized way of multiple monad instances working together. You'll notice that whatever `val` value a `Just(..)` instance holds, it's never changed. All methods create new monad instances instead of mutating it.
+所有的 Monad 一样，任何含有 `Just(..)` 和 `Nothing()` 的 Monad 实例都有 `map(..)`、`chain(..)`（也叫 `bind(..)` 或者 `flatMap(..)`）和 `ap(..)` 方法。这些方法及其行为的目的在于提供多个 Monad 实例一起工作的标准化方法。你将会注意到，无论 `Just(..)` 实例拿到的是怎样的一个 `val` 值， `Just(..)` 实例都不会去改变它。所有的方法都会创建一个新的 Monad 实例而不是改变它。
 
-Maybe is the pairing of these two monads. If a value is non-empty, it's represented by an instance of `Just(..)`; if it's empty, it's represented by an instance of `Nothing()`. Notice there's no imposition here of what "empty" means -- your code gets to decide that. More on that in the next section.
+Maybe 是这两个 Monad 的结合。如果一个值是非空的，它是 `Just(..)` 的实例；如果该值是空的，它则是 `Nothing()` 的实例。注意，这里由你的代码来决定 "空" 的意思，我们不做强制限制。下一节会详细介绍这一点。
 
-But the value of this kind of monad representation is that whether we have a `Just(..)` instance of a `Nothing()` instance, we'll use it the same. `Nothing()` instances have no-op definitions for all methods. So if such a monad instance shows up in our monadic operations, it has the effect of basically short-circuiting to ignore behavior.
+但是 Monad 的价值在于不论我们有 `Just(..)` 实例还是 `Nothing()` 实例，我们使用的方法都是一样的。`Nothing()` 实例对所有的方法都有空操作定义。所以如果 Monad 实例出现在 Monad 操作中，它就会对 Monad 操作起短路（short-circuiting）作用。
 
-The power of the Maybe abstraction is to encapsulate that behavior/no-op duality implicitly.
+Maybe 这个抽象概念的作用是隐式地封装了操作和无操作的二元性。
 
-### Different Maybes
+### 与众不同的 Maybe
 
-Many implementations of a JavaScript Maybe monad include a check (usually in `map(..)`) to see if the value is `null` / `undefined`, and skipping the behavior if so. In fact, Maybe is trumpeted as being valuable precisely because it sort of automatically short-circuits its behavior with the encapsulated empty-value check.
+JavaScript Maybe Monad 的许多实现都包含 `null` 和 `undefined` 的检查（通常在 `map(..)`中），如果是空的话，就跳过该 Monad 的特性行为。事实上，Maybe 被声称是有价值的，因为它自动地封装了空值检查得以在某种程度上短路了它的特性行为。
 
-Here's how Maybe is typically illustrated:
+这是 Maybe 的典型说明：
 
 ```js
-// instead of unsafe `console.log( someObj.something.else.entirely )`:
+// 代替不稳定的 `console.log( someObj.something.else.entirely )`：
 
 Maybe.of( someObj )
 .map( prop( "something" ) )
@@ -110,17 +110,17 @@ Maybe.of( someObj )
 .map( console.log );
 ```
 
-In other words, if at any point in the chain we get a `null` / `undefined` value, the Maybe magically switches into no-op mode -- it's now a `Nothing()` monad instance! -- and stops doing anything for the rest of the chain. That makes the nested property access safe against throwing JS exceptions if some property is missing/empty. That's cool, and a nice helpful abstraction for sure!
+换句话说，如果我们在链式操作中的任何一环得到一个 `null` 或者 `undefined` 值，Maybe 会智能的切换到空操作模式 —— 它现在是一个 `Nothing()` Monad 实例！ —— 把剩余的链式操作都停止掉。如果一些属性丢失或者是空的话，嵌套的属性访问能安全的抛出 JS 异常。这是非常酷的而且很实用。
 
-But... that approach to Maybe is not a pure monad.
+但是，我们这样实现的 Maybe 不是一个纯 Monad。
 
-The core spirit of a Monad says that it must be valid for all values and cannot do any inspection of the value, at all -- not even a null check. So those other implementations are cutting corners for the sake of convenience. It's not a huge deal, but when it comes to learning something, you should probably learn it in its purest form first before you go bending the rules.
+Monad 的核心思想是，它必须对所有的值都是有效的，不能对值做任何检查 —— 甚至是空值检查。所以为了方便，这些其他的实现都是走的捷径。这是无关紧要的。但是当学习一些东西的时候，你应该先学习它的最纯粹的形式，然后再学习更复杂的规则。
 
-The earlier implementation of the Maybe monad I provided differs from other Maybes primarily in that it does not have the null-check in it. Also, we present `Maybe` as a loose pairing of `Just(..)` / `Nothing()`.
+我早期提供的 Maybe Monad 的实现不同于其他的 Maybe，就是它没有空置检查。另外，我们将 `Maybe` 作为 `Just(..)` 和 `Nothing()` 的非严格意义上的结合。
 
-So wait. If we don't get the automatic short-circuting, why is Maybe useful at all?!? That seems like its whole point.
+等一下，如果我们没有自动短路，那 Maybe 是怎么起作用的呢？！？这似乎就是它的全部意义。
 
-Never fear! We can simply provide the empty-check externally, and the rest of the short-circuting behavior of the Maybe monad will work just fine. Here's how you could do the `someObj.something.else.entirely` nested-property access from before. But we'll do it more "correctly":
+不要担心，我们可以从外部提供简单的空值检查，Maybe Monad 其他的短路行为也还是可以很好的工作的。你可以在之前做一些 `someObj.something.else.entirely` 属性嵌套，但是我们可以做的更 “正确”：
 
 ```js
 function isEmpty(val) {
@@ -139,32 +139,32 @@ Maybe.of( someObj )
 .map( console.log );
 ```
 
-We made a `safeProp(..)` that does the empty-check, and selects either a `Nothing()` monad instance if so, or wraps the value in a `Just(..)` instance (via `Maybe.of(..)`). Then instead of `map(..)`, we use `chain(..)` which knows how to "unwrap" the monad that `safeProp(..)` returns.
+我们设计了一个用于空值检查的 `safeProp(..)` 函数，并选择了 `Nothing()` Monad 实例。或者把值包装在 `Just(..)` 实例中（通过 `Maybe.of(..)`）。然后我们用 `chain(..)` 替代 `map(..)`，它知道如何 “展开” `safeProp(..)` 返回的 Monad。
 
-We get the same chain short-circuiting upon encountering an empty value. We just don't embed that logic into the Maybe.
+当遇到空值的时候，我们得到了一连串相同的短路。只是我们把这个逻辑从 Maybe 中排除了。
 
-The benefit of the monad, and Maybe specifically, is that our `map(..)` and `chain(..)` methods have a consistent and predictable interaction regardless of which kind of monad comes back. That's pretty cool!
+不管返回哪种类型的 Monad，我们的 `map(..)` 和 `chain(..)` 方法都有不变且可预测的反馈，这就是 Monad，尤其是 Maybe Monad 的好处。这难道不酷吗？
 
 ## Humble
 
-Now that we have a little more understanding of Maybe and what it does, I'm going to put a little twist on it -- and add some self-deferential humor to our discussion -- by inventing the Maybe+Humble monad. Technically, `Humble(..)` is not a monad itself, but a factory function that produces a Maybe monad instance.
+现在我们对 Maybe 和它的作用有了更多的了解，我将会在它上面加一些小的改动 —— 我将通过设计 Maybe + Humble Monad 来添加一些转折并且加一些诙谐的元素。从技术上来说，`Humble(..)` 并不是一个 Monad，而是一个产生 Maybe Monad 实例的工厂函数。
 
-Humble is an admittedly contrived data structure wrapper that uses Maybe to track the status of an `egoLevel` number. Specifically, `Humble(..)`-produced monad instances only operate if their ego level value is low enough (less than `42`!) to be considered humble; otherwise it's a `Nothing()` no-op. That should sound a lot like Maybe; it's pretty similar!
+Humble 是一个使用 Maybe 来跟踪 `egoLevel` 数字状态的数据结构包装器。具体来说，`Humble(..)` 只有在他们自身的水平值足够低（少于 `42`）到被认为是 Humble 的时候才会执行生成的 Monad 实例；否则，它就是一个 `Nothing()` 空操作。这听起来真的和 Maybe 很像！
 
-Here's the factory function for our Maybe+Humble monad:
+这是一个 Maybe + Humble Monad 工厂函数：
 
 ```js
 function Humble(egoLevel) {
-	// accept anything other than a number that's 42 or higher
+	// 接收任何大于等于 42 的数字
 	return !(Number( egoLevel ) >= 42) ?
 		Maybe.of( egoLevel ) :
 		Maybe.Nothing();
 }
 ```
 
-You'll notice that this factory function is kinda like `safeProp(..)`, in that it uses a condition to decide if it should pick the `Just(..)` or the `Nothing()` part of the Maybe.
+你可能会注意到，这个工厂函数有点像 `safeProp(..)`，因为，它使用一个条件来决定是选择 Maybe 的 `Just(..)` 还是 `Nothing()`。
 
-Let's illustrate some basic usage:
+让我们来看一个基础用法的例子：
 
 ```js
 var bob = Humble( 45 );
@@ -174,7 +174,7 @@ bob.inspect();							// Nothing
 alice.inspect();						// Just(39)
 ```
 
-What if Alice wins a big award and is now a bit more proud of herself?
+如果 Alice 赢得了一个大奖，现在是不是在为自己感到自豪呢？
 
 ```js
 function winAward(ego) {
@@ -185,9 +185,9 @@ alice = alice.chain( winAward );
 alice.inspect();						// Nothing
 ```
 
-The `Humble( 39 + 3 )` call creates a `Nothing()` monad instance to return back from the `chain(..)` call, so now Alice doesn't qualify as humble anymore.
+`Humble( 39 + 3 )` 创建了一个 `chain(..)` 返回的 `Nothing()` Monad 实例，所以现在 Alice 不再有 Humble 的资格了。
 
-Now, let's use a few monads them together:
+现在，我们来用一些 Monad ：
 
 ```js
 var bob = Humble( 41 );
@@ -198,12 +198,12 @@ var teamMembers = curry( function teamMembers(ego1,ego2){
 } );
 
 bob.map( teamMembers ).ap( alice );
-// Our humble team's egos: 41 39
+// Humble 队列：41 39
 ```
 
-Since `teamMembers(..)` is curried, the `bob.map(..)` call passes in the `bob` ego level (`41`), and creates a monad instance with the remaining function wrapped up. Calling `ap(alice)` on *that* monad calls `alice.map(..)` and passes to it the function from the monad. The effect is that both monad's values have been provided to `teamMembers(..)` function, printing out the message as shown.
+由于 `teamMembers(..)` 是柯里化的，`bob.map(..)` 的调用传入了 `bob` 自身的级别（`41`），并且创建了一个被其余的方法包装的 Monad 实例。在 **这个** Monad 中调用的 `ap(alice)` 调用了 `alice.map(..)`，并且传递给来自 Monad 的函数。这样做的效果是，Monad 的值已经提供给了 `teamMembers(..)` 函数，并且把显示的结果给打印了出来。
 
-However, if either or both monads are actually `Nothing()` instances (because their ego level was too high):
+然而，如果一个 Monad 或者两个 Monad 实际上是 `Nothing()` 实例（因为它们本身的水平值太高了）：
 
 ```js
 var frank = Humble( 45 );
@@ -213,11 +213,11 @@ bob.map( teamMembers ).ap( frank );
 frank.map( teamMembers ).ap( bob );
 ```
 
-`teamMembers(..)` never gets called (and no message is printed), because `frank` is a `Nothing()` instance. That's the power of the Maybe monad, and our `Humble(..)` factory allows us to select based on the ego level. Cool!
+`teamMembers(..)` 永远不会被调用（也没有信息被打印出来），因为，`frank` 是一个 `Nothing()` 实例。这就是 Maybe monad 的作用，我们的 `Humble(..)` 工厂函数允许我们根据自身的水平来选择。赞！
 
 ### Humility
 
-One more example to illustrate the behaviors of our Maybe+Humble data structure:
+再来一个例子来说明 Maybe + Humble 数据结构的行为：
 
 ```js
 function introduction() {
@@ -239,14 +239,14 @@ learner
 .chain( learn( "recursion" ) )
 .chain( learn( "map/reduce" ) )
 .map( introduction );
-// Learned closures.
-// Learned side effects.
-// Learned recursion.
+// 学习闭包
+// 学习副作用
+// 歇息递归
 ```
 
-Unfortunately, the learning process seems to have been cut short. You see, I've found that learning a bunch of stuff without sharing with others: inflates your ego too much and is not good for your skills.
+不幸的是，学习过程看起来已经缩短了。我发现学习一大堆东西而不和别人分享，会使自我太膨胀，这对你的技术是不利的。
 
-Let's try a better approach:
+让我们尝试一个更好的方法：
 
 ```js
 var share = egoChange( -2 );
@@ -261,25 +261,25 @@ learner
 .chain( learn( "map/reduce" ) )
 .chain( share( "map/reduce" ) )
 .map( introduction );
-// Learned closures.
-// Shared closures.
-// Learned side effects.
-// Shared side effects.
-// Learned recursion.
-// Shared recursion.
-// Learned map/reduce.
-// Shared map/reduce.
-// I'm just a learner like you! :)
+// 学习闭包
+// 分享闭包
+// 学习副作用
+// 分享副作用
+// 学习递归
+// 分享递归
+// 学习 map/reduce
+// 分享 map/reduce
+// 我只是一个像你一样的学习者 :)
 ```
 
-Sharing while you learn. That's the best way to learn more and learn better.
+在学习中分享。是学习更多并且能够学的更好的最佳方法。
 
-## Summary
+## 总结
 
-What is a monad, anyway?
+说了这么多，那什么是 Monad ？
 
-A monad is a value type, an interface, an object data structure with encapsulated behaviors.
+Monad 是一个值类型，一个接口，一个有封装行为的对象数据结构。
 
-But none of those definitions are particularly useful. Here's an attempt at something better: a monad is how you organize behavior around a value in a more declarative way.
+但是这些定义中没有一个是有用的。这里尝试做一个更好的解释：Monad 是一个用更具有声明式的方式围绕一个值来组织行为的方法。
 
-As with everything else in this book, use monads where they are helpful but don't use them just because everyone else talks about them in FP. Monads aren't a universal silver bullet, but they do offer some utility when used conservatively.
+和这本书中的其他部分一样，在有用的地方使用 Monad，不要因为每个人都在函数式编程中讨论他们而使用他们。Monad 不是万金油，但它确实提供了一些有用的实用函数。
