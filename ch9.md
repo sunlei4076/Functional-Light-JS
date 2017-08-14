@@ -1,11 +1,11 @@
-# Functional-Light JavaScript
-# Chapter 9: Recursion
+# Javascript 轻量级函数式编程
+# 第 9 章：递归
 
-On the next page, we're going to jump into the topic of recursion.
+在下一页，我们将进入到递归的论题。
 
 <hr>
 
-*(rest of the page intentionally left blank)*
+**(本页剩余部分故意留白)**
 
 <p>&nbsp;</p>
 <p>&nbsp;</p>
@@ -21,21 +21,21 @@ On the next page, we're going to jump into the topic of recursion.
 
 <div style="page-break-after: always;"></div>
 
-Let's talk about recursion. Before we dive in, consult the previous page for the formal definition.
+我们来谈谈递归吧。在我们入坑之前，请查阅上一页的正式定义。
 
-Weak joke, I know. :)
+我知道，这个笑话弱爆了 :)
 
-Recursion is one of those programming techniques that most developers admit can be very powerful, but also most of them don't like to use it. I'd put it in the same category as regular expressions, in that sense. Powerful, but confusing, and thus seen as *not worth the effort*.
+大部分的开发人员都承认递归是一门非常强大的编程技术，但他们并不喜欢去使用它。在这个意义上，我把它放在与正则表达式相同的类别中。递归技术强大但又令人困惑，因此被视为 **不值得我们投入努力**。
 
-I'm a big fan of recursion, and you can, too! My goal in this chapter is to convince you that recursion is an important tool that you should bring with you in your FP approach to code. When used properly, recursion is powerfully declarative for complex problems.
+我是递归编程的超级粉丝，你，也可以的！在这一章节中我的目标就是说服你：递归是一个重要的工具，你应该将它用在你的函数式编程中。当你正确使用时，递归编程可以轻松地描述复杂问题。
 
-## Definition
+## 定义
 
-Recursion is when a function calls itself, and that call does the same, and this cycle continues until a base condition is satisfied and the call loop unwinds.
+所谓递归，是当一个函数调用自身，并且该调用做了同样的事情，这个循环持续到基本条件满足时，调用循环返回。
 
-**Warning:** If you don't ensure that a base condition is *eventually* met, recursion will run forever, and crash or lock up your program; the base condition is pretty important to get right!
+**警告：** 如果你不能确保基本条件是递归的 **终结者**，递归将会一直执行下去，并且会把你的项目损坏或锁死；恰当的基本条件十分重要！
 
-But... that definition is too confusing in its written form. We can do better. Consider this recursive function:
+但是... 这个定义的书面形式太让人疑惑了。我们可以做的更好些。思考下这个递归函数：
 
 ```js
 function foo(x) {
@@ -44,23 +44,24 @@ function foo(x) {
 }
 ```
 
-Let's visualize what happens with this function when we call `foo( 16 )`:
+设想一下，如果我们调用 `foo(16)` 将会发生什么：
 
 <p align="center">
 	<img src="fig13.png" width="850">
 </p>
 
-In step 2, `x / 2` produces `8`, and that's passed in as the argument so a recursive `foo(..)` call. In step 3, same thing, `x / 2` produces `4`, and that's passed in as the argument to yet another `foo(..)` call. That part is hopefully fairly straightforward.
+在 step 2 中, `x / 2` 的结果是 `8`， 这个结果以参数的形式传递到 `foo(..)` 并运行。同样的，在 step 3 中， `x / 2` 的结果是 `4`，这个结果以参数的形式传递到另一个 `foo(..)` 并运行。但愿我解释得足够直白。
 
-But where someone may often get tripped up is what happens in step 4. Once we've satisifed the base condition where `x` (value `4`) is `< 5`, we no longer make any more recursive calls, and just (effectively) do `return 4`. Specifically the dotted line return of `4` in this figure simplifies what's happening there, so let's dig into that last step and visualize it as these three sub-steps:
+但是一些人经常会在 step 4 中卡壳。一旦我们满足了基本条件 `x` (值为4) `< 5`，我们将不再调用递归函数，只是（有效地）执行了 `return 4`。
+特别是图中返回 `4` 的虚线那块，它简化了那里的过程，因此我们来深入了解最后一步，并把它折分为三个子步骤：
 
 <p align="center">
 	<img src="fig14.png" width="850">
 </p>
 
-Once the base condition is satisified, the returned value cascades back through all of the calls (and thus `return`s) in the call stack, eventually `return`ing the final result out.
+该次的返回值会回过头来触发调用栈中所有的函数调用（并且它们都执行 `return`）。
 
-Another recursion example:
+另外一个递归实例：
 
 ```js
 function isPrime(num,divisor = 2){
@@ -74,10 +75,9 @@ function isPrime(num,divisor = 2){
 	return true;
 }
 ```
+这个质数的判断主要是通过验证，从2到 `num` 的平方根之间的每个整数，看是否存在某一整数可以整除 `num` (`%` 求余结果为 `0`)。如果存在这样的整数，那么 `num` 不是质数。反之，是质数。`divisor + 1` 使用递归来遍历每个可能的 `divisor` 值。
 
-This prime checking basically works by trying each integer from `2` up to the square root of the `num` being checked, to see if any of them divide evenly (`%` mod returning `0`) into the number. If any do, it's not a prime. Otherwise, it must be prime. The `divisor + 1` uses the recursion to iterate through each possible `divisor` value.
-
-One of the most famous examples of recursion is calculating a Fibonacci number, where the sequence is defined as:
+递归的最著名的例子之一是计算斐波那契数，该数列定义如下：
 
 ```
 fib( 0 ): 0
@@ -86,9 +86,9 @@ fib( n ):
 	fib( n - 2 ) + fib( n - 1 )
 ```
 
-**Note:** The first several numbers of this sequence are: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, ... Each number is the addition of the previous two numbers in the sequence.
+**注意:** 数列的前几个数值是： 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, ... 每一个数字都是数列中前两个数字之和。
 
-The definition of fibonacci expressed directly in code:
+直接用代码来定义斐波那契：
 
 ```js
 function fib(n) {
@@ -97,17 +97,17 @@ function fib(n) {
 }
 ```
 
-`fib(..)` calls itself recursively twice, which is typically referred to as binary recursion. We'll talk more about binary recursion later.
+函数 `fib(..)` 对自身进行了两次递归调用，这通常叫作二分递归查找。后面我们将会更多地讨论二分递归查找。
 
-We'll use `fib(..)` variously throughout this chapter to illustrate ideas around recursion, but one downside to this particular form is that there's an awful lot of duplicated work. `fib(n-1)` and `fib(n-2)` don't share any of their work with each other, but overlap with each other almost entirely, over the entire integer space down to `0`.
+在整个章节中，我们将会用不同形式的 `fib(..)` 来说明关于递归的想法，但不太好的地方就是，这种特殊的方式会造成很多重复性的工作。 `fib(n-1)` 和 `fib(n-2)` 运行时候两者之间并没有任何的共享，但做的事情几乎又完全相同，这种情况一直持续到整个整数空间(译者注：形参 `n`)降到 `0` 。
 
-We briefly touched on memoization in the "Performance Effects" section of Chapter 5. Here, memoization would allow the `fib(..)` of any given number to be computed only once, instead of being recomputed many times. We won't go further into that topic here, but that performance caveat is important to keep in mind with any algorithm, recursive or not.
+在第五章的性能优化方面我们简单的谈到了记忆存储技术。本章中，记忆存储技术使得任意一个传入到 `fib(..)` 的数值只会被计算一次而不是多次。虽然我们不会在这里过多地讨论这个技术话题，但不论是递归或其它任何算法，我们都要谨记，性能优化是非常重要的。
 
-### Mutual Recursion
+### 相互递归
 
-When a function calls itself, specifically, this is referred to as direct recursion. That's what we saw in the previous section with `foo(..)`, `isPrime(..)`, and `fib(..)`. Two or more functions can call each other in a recursive cycle, and this is referred to as mutual recursion.
+当一个函数调用自身时，很明显，这叫作直接递归。比如前面部分我们谈到的 `foo(..)`，`isPrime(..)`以及 `fib(..)`。如果在一个递归循环中，出现两个及以上的函数相互调用，则称之为相互递归。
 
-These two functions are mutually recursive:
+这两个函数就是相互递归：
 
 ```js
 function isOdd(v) {
@@ -121,9 +121,9 @@ function isEven(v) {
 }
 ```
 
-Yes, this is a silly way to calculate if a number is odd or even. But it illustrates the idea that certain algorithms can be defined in terms of mutual recursion.
+是的，这个奇偶数的判断笨笨的。但也给我们提供了一些思路：某些算法可以根据相互递归来定义。
 
-Recall the binary recursive `fib(..)` from the previous section; we could instead have expressed it with mutual recursion:
+回顾下上节中的二分递归法 `fib(..)`；我们可以换成相互递归来表示：
 
 ```js
 function fib_(n) {
@@ -137,17 +137,17 @@ function fib(n) {
 }
 ```
 
-**Note:** This mutually recursive `fib(..)` implementation is adapted from research presented in "Fibonacci Numbers Using Mutual Recursion" (https://www.researchgate.net/publication/246180510_Fibonacci_Numbers_Using_Mutual_Recursion).
+**注意：** `fib(..)` 相互递归的实现方式改编自 “用相互递归来实现斐波纳契数列” 研究报告(https://www.researchgate.net/publication/246180510_Fibonacci_Numbers_Using_Mutual_Recursion) 。
 
-While these mutual recursion examples shown are rather contrived, there are more complex use cases where mutual recursion can be very helpful.
+虽然这些相互递归的示例有点不切实际，但是在更复杂的使用场景下，相互递归是非常有用的。
 
-### Why Recursion?
+### 为什么选择递归？
 
-Now that we've defined and illustrated recursion, we should examine why recursion is useful.
+现在我们已经给出了递归的定义和说明，下面来看下，为什么说递归是有用的。
 
-The most commonly cited reason that recursion fits the spirit of FP is because it trades (much of) the explicit tracking of state with implicit state on the call stack. Typically, recursion is most useful when the problem requires conditional branching and back-tracking, and managing that kind of state in a purely iterative environment can be quite tricky; at a minimum, the code is highly imperative and harder to read and verify. But tracking each level of branching as its own scope on the call stack often significantly cleans up the readability of the code.
+递归深谙函数式编程之精髓，最被广泛引证的原因是，在调用栈中，递归把(大部分)显式状态跟踪换为了隐式状态。通常，当问题需要条件分支和回溯计算时，递归非常有用，此外在纯迭代环境中管理这种状态，是相当棘手的；最起码，这些代码是不可或缺且晦涩难懂。但是在堆栈上调用每一级的分支作为其自己的作用域，很明显，这通常会影响到代码的可读性。
 
-Simple iterative algorithms can trivially be expressed as recursion:
+简单的迭代算法可以用递归来表达：
 
 ```js
 function sum(total,...nums) {
@@ -166,15 +166,16 @@ function sum(num1,...nums) {
 }
 ```
 
-It's not just that the `for`-loop is eliminated in favor of the call stack, but that the incremental partial sums (the intermittent state of `total`) are tracked implicitly across the `return`s of the call stack instead of reassigning `total` each iteration. FPers will often prefer to avoid reassignment of local variables where it's possible to avoid.
+我们不仅用调用栈代替了 `for` 循环，而且用 `return`s 的形式在回调栈中隐式地跟踪增量的求和（ `total` 的间歇状态），而非在每次迭代中重新分配 `total`。通常，FPer 倾向于尽可能地避免重新分配局部变量。
 
-In a basic algorithm like this kind of summation, this difference is minor and nuanced. But the more sophisticated your algorithm, the more you will likely see the payoff of recursion instead of imperative state tracking.
+像我们总结的那样，在基本算法里，这些差异是微乎其微的。但是，随着算法复杂度的提升，你将更加能体会到递归带来的收益，而不是这些命令式状态跟踪。
 
-## Declarative Recursion
+## 声明式递归
 
-Mathematicians use the **Σ** symbol as a placeholder to represent the summation of a list of numbers. The primary reason they do that is because it's more cumbersome (and less readable!) if they're working with more complex formulas and they have to write out the summation manually, like `1 + 3 + 5 + 7 + 9 + ..`. Using the notation is declarative math!
+数学家使用 **Σ** 符号来表示一列数字的总和。主要原因是，如果他们使用更复杂的公式而且不得不手动书写求和的话，会造成更多麻烦（而且会降低阅读性！），比如 
+ `1 + 3 + 5 + 7 + 9 + ..`。符号是数学的声明式语言！
 
-Recursion is declarative for algorithms in the same sense that **Σ** is declarative for mathematics. Recursion expresses that a problem solution exists, but doesn't necessarily require the reader of the code to understand how that solution works. Let's consider two approaches to finding the highest even number passed as an argument:
+正如 **Σ** 是为运算而声明，递归是为算法而声明。递归说明：一个问题存在解决方案，但并不一定要求阅读代码的人了解该解决方案的工作原理。我们来思考下找出入参最大偶数值的两种方法：
 
 ```js
 function maxEven(...nums) {
@@ -192,23 +193,23 @@ function maxEven(...nums) {
 }
 ```
 
-This implementation is not particulary intractable, but it's also not readily apparent what its nuances are. How obvious is it that `maxEven()`, `maxEven(1)`, and `maxEven(1,13)` all return `undefined`? Is it quickly clear why the final `if` statement is necessary?
+这种实现方式不是特别难处理，但它的一些细微的问题也不容忽视。很明显，运行 `maxEven()`，`maxEven(1)` 和 `maxEven(1,13)` 都将会返回 `undefined`？最终的 `if` 语句是必需的吗？
 
-Let's instead consider a recursive approach, to compare. We could notate the recursion this way:
+我们试着换一个递归的方法来对比下。我们用下面的符号来表示递归：
 
 ```
 maxEven( nums ):
 	maxEven( nums.0, maxEven( ...nums.1 ) )
 ```
 
-In other words, we can define the max-even of a list of numbers as the max-even of the first number compared to the max-even of the rest of the numbers. For example:
+换句话说，我们可以将数字列表的 max-even 定义为其余数字的 max-even 与第一个数字的 max-even 的结果。例如：
 
 ```
 maxEven( 1, 10, 3, 2 ):
 	maxEven( 1, maxEven( 10, maxEven( 3, maxEven( 2 ) ) )
 ```
 
-To implement this recursive definition in JS, one approach is:
+在 JS 中实现这个递归定义的方法之一是：
 
 ```js
 function maxEven(num1,...restNums) {
@@ -222,41 +223,41 @@ function maxEven(num1,...restNums) {
 }
 ```
 
-So what advantages does this approach have?
+那么这个方法有什么优点吗？
 
-First, the signature is a little different than before. I intentionally called out `num1` as the first argument name, collecting the rest of the arguments into `restNums`. But why? We could just have collected them all into a single `nums` array and then referred to `nums[0]`.
+首先，参数与之前不一样了。我专门把第一个参数叫作 `num1`，剩余的其它参数放在一起叫作 `restNums`。我们本可以把所有参数都放在 `nums` 数组中，并从 `nums[0]` 获取第一个参数。这是为什么呢？
 
-This function signature is an intentional hint at the recursive definition. It reads like this:
+函数的参数是专门为递归定义的。它看起来像这样：
 
 ```
 maxEven( num1, ...restNums ):
 	maxEven( num1, maxEven( ...restNums ) )
 ```
 
-Do you see the symmetry between the signature and the recursive definition?
+你有发现参数和递归之间的相似性吗？
 
-When we can make the recursive definition more apparent even in the function signature, we improve the declarativeness of the function. And if we can then mirror the recursive definition from the signature to the function body, it gets even better.
+当我们在函数体签名中进一步提升递归的定义，函数的声明也会得到提升。如果我们能够把递归的定义从参数反映到函数体中，那就更棒了。
 
-But I'd say the most obvious improvement is that the distraction of the imperative `for`-loop is suppressed. All the looping logic is abstracted into the recursive call stack, so that stuff doesn't clutter the code. We're free then to focus on the logic of finding a max-even by comparing two numbers at a time -- the important part anyway!
+但我想说最明显的改进是，`for` 循环造成的错乱感没有了。所有循环逻辑都被抽象为递归回调栈，所以这些东西不会造成代码混乱。我们可以轻松的把精力集中在一次比较两个数字来找到最大偶数值的逻辑中 —— 不管怎么说，这都是很重要的部分！
 
-Mentally, what's happening is similar to when a mathematician uses a **Σ** summation in a larger equation. We're saying, "the max-even of the rest of the list is calculated by `maxEven(...restNums)`, so we'll just assume that part and move on."
+从思想上来讲，这如同一位数学家在更庞大的方程中使用 **Σ** 求和一样。我们说，“数列中剩余值的最大偶数是通过 `maxEven(...restNums)` 计算出来的，所以我们只需要继续推断这一部分。”
 
-Additionally, we reinforce that notion with the `restNums.length > 0` guard, because if there are no more numbers to consider, the natural result is that `maxRest` would have to be `undefined`. We don't need to devote any extra mental attention to that part of the reasoning. This base condition (no more numbers to consider) is clearly evident.
+另外，我们用 `restNums.length > 0` 保证推断更加合理，因为当没有参数的情况下，返回的 `maxRest` 结果肯定是 `undefined`。我们不需要对这部分的推理投入额外的精力。这个基本条件（没有参数情况下）显而易见。
 
-Next, we turn our attention to checking `num1` against `maxRest` -- the main logic of the algorithm is how to determine which of two numbers, if any, is a max-even. If `num1` is not even (`num1 % 2 != 0`), or it's less than `maxRest`, then `maxRest` *has* to be `return`ed, even if it's `undefined`. Otherwise, `num1` is the answer.
+接下来，我们把精力放在对比 `num1` 和 `maxRest` 上 —— 算法的主要逻辑是如何确定两个数字中的哪一个（如果有的话）是最大偶数。如果 `num1` 不是偶数（`num1 % 2 != 0`），或着它小于 `maxRest`，那么，即使 `maxRest` 的值是 `undefined`，`maxRest` 会 `return` 掉。否则，返回结果会是 `num1`。
 
-The case I'm making is that this reasoning while reading an implementation is more straightforward, with fewer nuances or noise to distract us, than the imperative approach; it's **more declarative** than the `for`-loop with `-Infinity` approach.
+在阅读整个实现过程中，与命令式的方法相比，我所做这个例子的推理过程更加直接，核心点更加突出，少做无用功；比 `for` 循环中引用 `无穷数值` 这一方法 **更具有声明性**。 
 
-**Tip:** We should point out that another (likely better!) way to model this besides manual iteration or recursion would be with list operations like we discussed in Chapter 7. The list of numbers could first be `filter(..)`ed to include only evens, and then finding the max is a `reduce(..)` that simply compares two numbers and returns the bigger of the two. We only used this example to illustrate the more declarative nature of recursion over manual iteration.
+**小贴士：** 我们应该指出，除了手动迭代或递归之外，另一种（可能更好的）建模的方法是我们在在第7章中讨论的列表操作。我们先把数列中的偶数用 `filter(..)` 过滤出来，然后通过递归 `reduce(..)` 函数（对比两个数值并返回其中较大的数值）来找到最大值。在这里，我们只是使用这个例子来说明在手动迭代中递归的声明性更强。
 
-Here's another recursion example: calculating the depth of a binary tree. The depth of a binary tree is the longest path down (either left or right) through the nodes of the tree. Another way to define that is recursively: the depth of a tree at any node is 1 (the current node) plus the greater of depths from either its left or right child trees:
+还有一个递归的例子：计算二叉树的深度。二叉树的深度是指通过树的节点向下（左或右）的最长路径。还有另一种通过递归来定义的方式：任何树节点的深度为1（当前节点）加上来自其左侧或右侧子树的深度的最大值：
 
 ```
 depth( node ):
 	1 + max( depth( node.left ), depth( node.right ) )
 ```
 
-Translating that straightforwardly to a binary recursive function:
+直接转换为二分法递归函数：
 
 ```js
 function depth(node) {
@@ -270,13 +271,13 @@ function depth(node) {
 }
 ```
 
-I'm not going to list out the imperative form of this algorithm, but trust me, it's a lot messier and more imperative. This recursive approach is nicely and gracefully declarative. It follows the recursive definition of the algorithm very closely with very little distraction.
+我不打算列出这个算法的命令式形式，但请相信我，它太麻烦、过于命令式了。这种递归方法很不错，声明也很优雅。它遵循递归的定义，与递归定义的算法非常接近，省心。
 
-Not all problems are cleanly recursive. This is not some silver bullet that you should try to apply broadly. But recursion can be very effective at evolving the expression of a problem from more imperative to more declarative.
+并不是所有的问题都是完全可递归的。它不是你可以广泛应用的灵丹妙药。但是递归可以非常有效地将问题的表达，从更具必要性转变为更有声明性。
 
-## Stack
+## 栈、堆
 
-Let's revisit the `isOdd(..)` / `isEven(..)` recursion from earlier:
+一起看下之前的两个递归函数 `isOdd(..)` 和 `isEven(..)`：
 
 ```js
 function isOdd(v) {
@@ -290,19 +291,19 @@ function isEven(v) {
 }
 ```
 
-In most browsers, if you try this you'll get an error:
+如果你执行下面这行代码，在大多数浏览器里面都会报错：
 
 ```js
 isOdd( 33333 );			// RangeError: Maximum call stack size exceeded
 ```
 
-What's going on with this error? The engine throws this error because it's trying to protect your program from running the system out of memory. To explain that, we need to peek a little below the hood at what's going on in the JS engine when function calls happen.
+这个错误是什么情况？引擎抛出这个错误，是因为它试图保护系统内存不会被你的程序耗尽。为了解释这个问题，我们需要先看看当函数调用时JS引擎中发生了什么。
 
-Each function call sets aside a small chunk of memory called a stack frame. The stack frame holds certain important information about the current state of processing statements in a function, including the values in any variables. The reason this information needs to be stored in memory (in a stack frame) is because the function may call out to another function, which pauses the current function. When the other function finishes, the engine needs to resume the exact state from when it was paused.
+每个函数调用都将开辟出一小块称为堆栈帧的内存。堆栈帧中包含了函数语句当前状态的某些重要信息，包括任意变量的值。之所以这样，是因为一个函数暂停去执行另外一个函数，而另外一个函数运行结束后，引擎需要返回到之前暂停时候的状态继续执行。
 
-When the second function call starts, it needs a stack frame as well, bringing the count to 2. If that function calls another, we need a third stack frame. And so on. The word "stack" speaks to the notion that each time a function is called from the previous one, the next frame is *stacked* on top. When a function call finishes, its frame is popped off the stack.
+当第二个函数开始执行，堆栈帧增加到 2 个。如果第二个函数又调用了另外一个函数，堆栈帧将增加到 3 个，以此类推。“栈”的意思是，函数被它前一个函数调用时，这个函数帧会被“推”到最顶部。当这个函数调用结束后，它的帧会从堆栈中退出。
 
-Consider this program:
+看下这段程序：
 
 ```js
 function foo() {
@@ -322,95 +323,97 @@ function baz() {
 baz();
 ```
 
-Visualizing this program's stack frame step by step:
+来一步步想象下这个程序的堆栈帧：
 
 <p align="center">
 	<img src="fig15.png" width="600">
 </p>
 
-**Note:** If these functions didn't call each other, but were just called sequentially -- like `baz(); bar(); foo();`, where each one finishes before the next one starts -- the  frames won't stack up; each function call finishes and removes its frame from the stack before the next one is added.
+**注意：** 如果这些函数间没有相互调用，而只是依次执行 -- 比如前一个函数运行结束后才开始调用下一个函数 `baz(); bar(); foo();` -- 则堆栈帧并没有产生；因为在下一个函数开始之前，上一个函数运行结束并把它的帧从堆栈里面移除了。
 
-OK, so a little bit of memory is needed for each function call. No big deal under most normal program conditions, right? But it quickly becomes a big deal once you introduce recursion. While you'd almost certainly never manually stack thousands (or even hundreds!) of calls of different functions together in one call stack, you'll easily see tens of thousands or more recursive calls stack up.
+所以，每一个函数运行时候，都会占用一些内存。对多数程序来说，这没什么大不了的，不是吗？但是，一旦你引用了递归，问题就不一样了。
+虽然你几乎肯定不会在一个调用栈中手动调用成千（或数百）次不同的函数，但你很容易看到产生数万个或更多递归调用的堆栈。
 
-The `isOdd(..)` / `isEven(..)` pairing throws a `RangeError` because the engine steps in at an arbitrary limit when it thinks the call stack has grown too much and should be stopped. This is not likely a limit based on actual memory levels nearing zero, but rather a prediction by the engine that if this kind of program was left running, memory usage would be runaway. It is impossible to know or prove that a program will eventually stop, so the engine has to make an informed guess.
+当引擎认为调用栈增加的太多并且应该停止增加时候，它会以主观的限制来阻止当前步骤，所以 `isOdd(..)` 或 `isEven(..)` 函数抛出了 `RangeError` 未知错误。这不太可能是内存接近零时候产生的限制，而是引擎的预测，因为如果这种程序持续运行下去，内存会爆掉的。由于引擎无法判断一个程序最终是否会停止，所以它必须做出确定的猜测。
 
-This limit is implementation dependent. The specification doesn't say anything about it at all, so it's not *required*. But practically all JS engines do have a limit, because having no limit would create an unstable device that's susceptible to poorly written or malicious code. Each engine in each different device environment is going to enforce its own limits, so there's no way to predict or guarantee how far we can run up the function call stack.
+引擎的限制因情况而定。规范里面并没有任何说明，因此，它也不是 **必需的**。但如果没有限制的话，设备很容易遭到破坏或恶意代码攻击，故而几乎所有的JS引擎都有一个限制。不同的设备环境、不同的引擎，会有不同的限制，也就无法预测或保证函数调用栈能调用多少次。
 
-What this limit means to us as developers is that there's a practical limitation on the usefulness of recursion in solving problems on non-trivially sized data sets. In fact, I think this kind of limitation might be single biggest reason that recursion is a second-class citizen in the developer's toolbox. Regrettably, recursion is an after thought rather than a primary technique.
+在处理大数据量时候，这个限制对于开发人员来说，会对递归的性能有一定的要求。我认为，这种限制也可能是造成开发人员不喜欢使用递归编程的最大原因。
+遗憾的是，递归编程是一种编程思想而不是主流的编程技术。
 
-### Tail Calls
+### 尾调用
 
-Recursion far predates JS, and so do these memory limitations. Back in the 1960s, developers were wanting to use recursion and running up against hard limits of device memory of their powerful computers that were far lower than we have on our watches today.
+递归编程和内存限制都要比 JS 技术出现的早。追溯到上世纪 60 年代，当时开发人员想使用递归编程并希望运行在他们强大的计算机的设备，而所谓强大计算机的内存，尚远不如我们今天在手表上的内存。
 
-Fortunately, a powerful observation was made in those early days that still offers hope. The technique is called *tail calls*.
+幸运的是，在那个希望的原野上，进行了一个有力的观测。该技术称为 **尾调用**。
 
-The idea is that if a call from function `baz()` to function `bar()` happens at the very end of function `baz()`'s execution -- referred to as a tail call -- the stack frame for `baz()` isn't needed anymore. That means that either the memory can be reclaimed, or even better, simply reused to handle function `bar()`'s execution. Visualizing:
+它的思路是如果一个回调从函数 `baz()` 转到函数 `bar()` 时候，而回调是在函数 `baz()` 的最底部执行 -- 也就是尾调用 -- 那么 `baz()` 的堆栈帧就不再需要了。也就意谓着，内存可以被回收，或只需简单的执行 `bar()` 函数。 如图所示：
 
 <p align="center">
 	<img src="fig16.png" width="600">
 </p>
 
-Tail calls are not really directly related to recursion, per se; this notion holds for any function call. But your manual non-recursion call stacks are unlikely to go beyond maybe 10 levels deep in most cases, so the chances of tail calls impacting your program's memory footprint are pretty low.
+尾调用并不是递归特有的；它适用于任何函数调用。但是，在大多数情况下，你的手动非递归调用栈不太可能超过 10 级，因此尾调用对你程序内存的影响可能相当低。
 
-Tail calls really shine in the recursion case, because it means that a recursive stack could run "forever", and the only performance concern would be computation, not fixed memory limitations. Tail call recursion can run in `O(1)` fixed memory usage.
+在递归的情况下，尾调用作用很明显，因为这意味着递归堆栈可以“永远”运行下去，唯一的性能问题就是计算，而不再是固定的内存限制。在固定的内存中尾递归可以运行 `O(1)` （常数阶时间复杂度计算）。
 
-These sorts of techniques are often referred to as Tail Call Optimizations (TCO), but it's important to distinguish the ability to detect a tail call to run in fixed memory space, from the techniques that optimize this approach. Technically, tail calls themselves are not a performance optimization as most people would think, as they might actually run slower than normal calls. TCO is about optimizing tail calls to run more efficiently.
+这些技术通常被称为尾调用优化（TCO），但重点在于从优化技术中，区分出在固定内存空间中检测尾调用运行的能力。从技术上讲，尾调用并不像大多数人所想的那样，它们的运行速度可能比普通回调还慢。TCO 是关于把尾调用更加高效运行的一些优化技术。
 
-### Proper Tail Calls (PTC)
+### 正确的尾调用 (PTC)
 
-JavaScript has never required (nor forbidden) tail calls, until ES6. ES6 mandates recognition of tail calls, of a specific form referred to as Proper Tail Calls (PTC), and the guarantee that code in PTC form will run without unbounded stack memory growth. Practically speaking, this means we should not get `RangeError`s thrown if we adhere to PTC.
+在 ES6 出来之前，JavaScript 对尾调用一直没明确规定（也没有禁用）。ES6 明确规定了 PTC 的特定形式，在 ES6 中，只要使用尾调用，就不会发生栈溢出。实际上这也就意味着，只要正确的使用 PTC，就不会抛出 `RangeError` 这样的异常错误。
 
-First, PTC in JavaScript requires strict mode. You should already be using strict mode, but if you aren't, this is yet another reason you should already be using strict mode. Did I mention, yet, you should already be using strict mode!?
+首先，在 JavaScript 中应用 PTC，必须以严格模式书写代码。如果你以前没有用过严格模式，你得试着用用了。那么，您，应该已经在使用严格模式了吧！？
 
-Second, a *proper* tail call is exactly like this:
+其次，**正确** 的尾调用就像这个样子：
 
 ```js
 return foo( .. );
 ```
 
-In other words, the function call is the last thing to execute in the function, and whatever value it returns is explicitly `return`ed. In this way, JS can be absolutely guaranteed that the current stack frame won't be needed anymore.
+换句话说，函数调用应该放在最后一步去执行，并且不管返回什么东东，都得有返回（ `return` ）。这样的话，JS 就不再需要当前的堆栈帧了。
 
-These *are not* PTC:
+下面这些 **不能** 称之为 PTC：
 
 ```js
 foo();
 return;
 
-// or
+// 或
 
 var x = foo( .. );
 return x;
 
-// or
+// 或
 
 return 1 + foo( .. );
 ```
 
-**Note:** A JS engine *could* do some code reorganization to realize that `var x = foo(); return x;` is effectively the same as `return foo();`, which would then make it eligible as PTC. But that is not be required by the specification.
+**注意：** 一些 JS 引擎 **能够** 把 `var x = foo(); return x;` 自动识别为 `return foo();`，这样也可以达到 PTC 的效果。但这毕竟不符合规范。
 
-The `1 +` part is definitely processed *after* `foo(..)` finishes, so the stack frame has to be kept around.
+`foo(..)` 运行结束之后 `1+` 这部分才开始执行，所以此时的堆栈帧依然存在。
 
-However, this *is* PTC:
+不过，下面这个 **是** PTC：
 
 ```js
 return x ? foo( .. ) : bar( .. );
 ```
 
-After the `x` condition is computed, either `foo(..)` or `bar(..)` will run, and in either case, the return value will be always be `return`ed back. That's PTC form.
+`x` 进行条件判断之后，或执行 `foo(..)`，或执行 `bar(..)`，不论执行哪个，返回结果都会被 `return` 返回掉。这个例子符合 PTC 规范。
 
-Binary recursion -- two (or more!) recursive calls are made -- can never be effective PTC as-is, because all the recursion has to be in tail call position to avoid the stack growth. Earlier, we showed an example of refactoring from binary recursion to mutual recursion. It may be possible to achieve PTC from a multiple-recursive algorithm by splitting each into separate function calls, where each is expressed respectively in PTC form.
+为了避免堆栈增加，PTC 要求所有的递归必须是在尾部调用，因此，二分法递归 —— 两次（或以上）递归调用 —— 是不能实现 PTC 的。我们曾在文章的前面部分展示过把二分法递归转变为相互递归的例子。也许我们可以试着化整为零，把多重递归拆分成符合 PTC 规范的单个函数回调。
 
-## Rearranging Recursion
+## 重构递归
 
-If you want to use recursion but your problem set could grow enough eventually to exceed the stack limit of the JS engine, you're going to need to rearrange your recursive calls to take advantage of PTC (or avoid nested calls entirely). There are several refactoring strategies that can help, but there are of course tradeoffs to be aware of.
+如果你想用递归来处理问题，却又超出了 JS 引擎的内存堆栈，这时候就需要重构下你的递归调用，使它能够符合 PTC 规范（或着避免嵌套调用）。这里有一些重构方法也许可以用到，但需要根据实际情况权衡。
 
-As a word of caution, always keep in mind that code readability is our overall most important goal. If recursion along with some combination of these following strategies results in harder to read/understand code, **don't use recursion**; find another more readable approach.
+可读性强的代码，是我们的终级目标 —— 谨记，谨记。如果使用递归后会造成代码难以阅读/理解，那就 **不要使用递归**；换个容易理解的方法吧。
 
-### Replacing The Stack
+### 更换堆栈
 
-The main problem with recursion is its memory usage, keeping around the stack frames to track the state of a function call while it dispatches to the next recursive call iteration. If we can figure out how to rearrange our usage of recursion so that the stack frame doesn't need to be kept, then we can express recursion with PTC and take advantage of the JS engine's optimized handling of tail calls.
+对递归来说，最主要的问题是它的内存使用情况。保持堆栈帧跟踪函数调用的状态，并将其分派给下一个递归调用迭。如果我们弄清楚了如何重新排列我们的递归，就可以用 PTC 实现递归，并利用 JS 引擎对尾调用的优化处理，那么我们就不用在内存中保留当前的堆栈帧了。
 
-Let's recall the summation example from earlier:
+来回顾下之前用到的一个求和的例子：
 
 ```js
 function sum(num1,...nums) {
@@ -419,11 +422,11 @@ function sum(num1,...nums) {
 }
 ```
 
-This isn't in PTC form because after the recursive call to `sum(...nums)` is finished, the `total` variable is added to that result. So, the stack frame has to be preserved to keep track of the `total` partial result while the rest of the recursion proceeds.
+这个例子并不符合 PTC 规范。`sum(...nums)` 运行结束之后，`num1` 与 `sum(...nums)` 的运行结果进行了累加。这样的话，当其余参数 `...nums` 再次进行递归调用时候，为了得到其与 `num1` 累加的结果，必须要保留上一次递归调用的堆栈帧。
 
-The key recognition point for this refactoring strategy is that we could remove our dependence on the stack by doing the addition *now* instead of *after*, and then forward-passing that partial result as an argument to the recursive call. In other words, instead of keeping `total` in the current function's stack frame, push it into the stack frame of the next recursive call; that frees up the current stack frame to be removed/reused.
+重构策略的关键点在于，我们可以通过把 **置后** 处理累加改为 **提前** 处理，来消除对堆栈的依赖，然后将该部分结果作为参数传递到递归调用。换句话说，我们不用在当前运用函数的堆栈帧中保留 `num1 + sum(...num1)` 的总和，而是把它传递到下一个递归的堆栈帧中，这样就能释放当前递归的堆栈帧。
 
-To start, we could alter the signature our `sum(..)` function to have a new first parameter as the partial result:
+开始之前，我们做些改动：把部分结果作为一个新的第一个参数传入到函数 `sum(..)`：
 
 ```js
 function sum(result,num1,...nums) {
@@ -431,7 +434,7 @@ function sum(result,num1,...nums) {
 }
 ```
 
-Now, we should pre-calculate the addition of `result` and `num1`, and pass that along:
+这次我们先把 `result` 和 `num1` 提前计算，然后把 `result` 作为参数一起传入：
 
 ```js
 "use strict";
@@ -443,17 +446,17 @@ function sum(result,num1,...nums) {
 }
 ```
 
-Now our `sum(..)` is in PTC form! Yay!
+现在 `sum(..)` 已经符合 PTC 优化规范了！耶！
 
-But the downside is we now have altered the signature of the function that makes using it stranger. The caller essentially has to pass `0` as the first argument ahead of the rest of the numbers they want to sum.
+但是还有一个缺点，我们修改了函数的参数传递形式后，用法就跟以前不一样了。调用者不得不在需要求和的那些参数的前面，再传递一个 `0` 作为第一个参数。
 
 ```js
 sum( /*initialResult=*/0, 3, 1, 17, 94, 8 );		// 123
 ```
 
-That's unfortunate.
+这就尴尬了。
 
-Typically, people will solve this by naming their awkward-signature recursive function differently, then defining an interface function that hides the awkwardness:
+通常，大家的处理方式是，把这个尴尬的递归函数重新命名，然后定义一个接口函数把问题隐藏起来：
 
 ```js
 "use strict";
@@ -471,7 +474,7 @@ function sum(...nums) {
 sum( 3, 1, 17, 94, 8 );								// 123
 ```
 
-That's better. Still unfortunate that we've now created multiple functions instead of just one. Sometimes you'll see developers "hide" the recursive function as an inner function, like this:
+情况好了些。但依然有问题：之前只需要一个函数就能解决的事，现在我们用了两个。有时候你会发现，在处理这类问题上，有些开发者用内部函数把递归 “藏了起来”：
 
 ```js
 "use strict";
@@ -489,7 +492,7 @@ function sum(...nums) {
 sum( 3, 1, 17, 94, 8 );								// 123
 ```
 
-The downside here is that we'll recreate that inner `sumRec(..)` function each time the outer `sum(..)` is called. So, we can go back to them being side-by-side functions, but hide them both inside an IIFE, and expose just the one we want to:
+这个方法的缺点是，每次调用外部函数 `sum(..)`，我们都得重新创建内部函数 `sumRec(..)`。我们可以把他们平级放置在立即执行的函数中，只暴露出我们想要的那个的函数：
 
 ```js
 "use strict";
@@ -511,11 +514,11 @@ var sum = (function IIFE(){
 sum( 3, 1, 17, 94, 8 );								// 123
 ```
 
-OK, we've got PTC and we've got a nice clean signature for our `sum(..)` that doesn't require the caller to know about our implementation details. Yay!
+好啦，现在即符合了 PTC 规范，又保证了 `sum(..)` 参数的整洁性，调用者不需要了解函数的内部实现细节。完美！
 
-But... wow, our simple recursive function has a lot more noise now. The readability has definitely been reduced. That's unfortunate to say the least. Sometimes, that's just the best we can do.
+可是...天呐，本来是简单的递归函数，现在却出现了很多噪点。可读性已经明显降低。至少说，这是不成功的。有些时候，这只是我们能做的最好的。
 
-Luckily, in some other cases, like the present one, there's a better way. Let's reset back to this version:
+幸运的事，在一些其它的例子中，比如上一个例子，有一个比较好的方式。一起重新看下：
 
 ```js
 "use strict";
@@ -529,7 +532,7 @@ function sum(result,num1,...nums) {
 sum( /*initialResult=*/0, 3, 1, 17, 94, 8 );		// 123
 ```
 
-What you might observe is that `result` is a number just like `num1`, which means that we can always treat the first number in our list as our running total; that includes even the first call. All we need is to rename those params to make this clear:
+也许你会注意到，`result` 就像 `num1` 一样，也就是说，我们可以把列表中的第一个数字作为我们的运行总和；这甚至包括了第一次调用的情况。我们需要的是重新命名这些参数，使函数清晰可读：
 
 ```js
 "use strict";
@@ -543,20 +546,20 @@ function sum(num1,num2,...nums) {
 sum( 3, 1, 17, 94, 8 );								// 123
 ```
 
-Awesome. That's much better, huh!? I think this pattern achieves a good balance between declarative/reasonable and performant.
+帅呆了。比之前好了很多，嗯？！我认为这种模式在声明/合理和执行之间达到了很好的平衡。
 
-Let's try refactoring with PTC once more, revisiting our earlier `maxEven(..)` (currently not PTC). We'll observe that similar to keeping the sum as the first argument, we can narrow the list of numbers one at a time, keeping the first argument as the highest even we've come across thus far.
+让我们试着重构下前面的 `maxEven(..)`（目前还不符合 PTC 规范）。就像之前我们把参数的和作为第一个参数一样，我们可以依次减少列表中的数字，同时一直把遇到的最大偶数作为第一个参数。
 
-For clarity, the algorithm strategy (similar to what we discussed earlier) we might use:
+为了清楚起见，我们可能使用算法策略（类似于我们之前讨论过的）：
 
-1. Start by comparing the first two numbers, `num1` and `num2`.
-2. Is `num1` even, and is `num1` greater than `num2`? If so, keep `num1`.
-3. If `num2` is even, keep it (store in `num1`).
-4. Otherwise, fall back to `undefined` (store in `num1`).
-5. If there are more `nums` to consider, recursively compare them to `num1`.
-6. Finally, just return whatever value is left in `num1`.
+1. 首先对前两个参数 `num1` 和 `num2` 进行对比。
+2. 如果 `num1` 是偶数，并且 `num1` 大于 `num2`，`num1` 保持不变。
+3. 如果 `num2` 是偶数，把 `num2` 赋值给 `num1`。
+4. 否则的话，`num1` 等于 `undefined`。
+5. 如果除了这两个参数之外，还存在其它参数 `nums`，把它们与 `num1` 进行递归对比。
+6. 最后，不管是什么值，只需返回 `num1`。
 
-Our code can follow these steps almost exactly:
+依照上面的步骤，代码如下：
 
 ```js
 "use strict";
@@ -573,21 +576,21 @@ function maxEven(num1,num2,...nums) {
 }
 ```
 
-**Note:** The first `maxEven(..)` call is not in PTC position, but since it only passes in `num2`, it only recurses just that one level then returns right back out; this is only a trick to avoid repeating the `%` logic. As such, this call won't increase the growth of the recursive stack, any more than if that call was to an entirely different function. The second `maxEven(..)` call is the legitimate recursive call, and it is in fact in PTC position, meaning our stack won't grow as the recursion proceeds.
+**注意：** 函数第一次调用 `maxEven(..)` 并不是为了 PTC 优化，当它只传递 `num2` 时，只递归一级就返回了；它只是一个避免重复 `％` 逻辑的技巧。因此，只要该调用是完全不同的函数，就不会增加递归堆栈。第二次调用 `maxEven(..)` 是基于 PTC 优化角度的真正递归调用，因此不会随着递归的进行而造成堆栈的增加。
 
-It should be repeated that this example is only to illustrate the approach to moving recursion to the PTC form to optimize the stack (memory) usage. The more direct way to express a max-even algorithm might indeed be a filtering of the `nums` list for evens first, followed then by a max bubbling or even a sort.
+重申下，此示例仅用于说明将递归转化为符合 PTC 规范以优化堆栈（内存）使用的方法。求最大偶数值的更直接方法可能是，先对参数列表中的 `nums` 过滤，然后冒泡或排序处理。
 
-Refactoring recursion into PTC is admittedly a little intrusive on the simple declarative form, but it still gets the job done reasonably. Unfortunately, some kinds of recursion won't work well even with an interface function, so we'll need different strategies.
+基于 PTC 重构递归，固然对简单的声明形式有一些影响，但依然有理由去做这样的事。不幸的是，存在一些递归，即使我们使用了接口函数来扩展，也不会很好，因此，我们需要有不同的思路。
 
-### Continuation Passing Style (CPS)
+### 后继传递格式 （CPS）
 
-In JavaScript, the word *continuation* is often used to mean a function callback that specifies the next step(s) to execute after a certain function finishes its work. Organizing code so that each function receives another function to execute at its end, is referred to as Continuation Passing Style (CPS).
+在 JavaScript 中， *continuation* 一词通常用于表示在某个函数完成后指定需要执行的下一个步骤的回调函数。组织代码，使得每个函数在其结束时接收另一个执行函数，被称为后继传递格式（CPS）。
 
-Some forms of recursion cannot practically be refactored to pure PTC, especially multiple recursion. Recall the `fib(..)` function earlier, and even the mutual recursion form we derived. In both cases, there are multiple recursive calls, which effectively defeats PTC memory optimizations.
+有些形式的递归，实际上是无法按照纯粹的 PTC 规范重构的，特别是相互递归。我们之前提到过的 `fib(..)` 函数，以及我们派生出来的相互递归形式。这两个情况，皆是存在多个递归调用，这些递归调用阻碍了 PTC 内存优化。 
 
-However, you can perform the first recursive call, and wrap the subsequent recursive calls in a continuation function to pass into that first call. Even though this would mean ultimately many more functions will need to be executed in the stack, as long all of them, continuations included, are in PTC form, stack memory usage will not grow unbounded.
+但是，你可以执行第一个递归调用，并将后续递归调用包含在后续函数中并传递到第一个调用。尽管这意味着最终需要在堆栈中执行更多的函数，但由于后继函数所包含的都是 PTC 形式的，所以堆栈内存的使用情况不会无限增长。
 
-We could do this for `fib(..)`:
+把 `fib(..)` 做如下修改：
 
 ```js
 "use strict";
@@ -604,27 +607,27 @@ function fib(n,cont = identity) {
 }
 ```
 
-Pay close attention to what's happening here. First, we default the `cont(..)` continuation function as our `identity(..)` utility from Chapter 3; remember, it simply returns whatever is passed to it.
+仔细看下都做了哪些事情。首先，我们默认用了第三章中的 `cont(..)` 后继函数表示 `identity(..)`；记住，它只简单的返回传递给它的任何东西。
 
-Morever, not just one but two continuation functions are added to the mix. The first one receives the `n2` argument, which eventually receives the computation of the `fib(n-2)` value. The next inner continuation receives the `n1` argument, which eventually is the `fib(n-1)` value. Once both `n2` and `n1` values are known, they can be added together (`n2 + n1`), and that value is passed along to the next `cont(..)` continuation step.
+更重要的是，这里面增加了不仅仅是一个而是两个后续函数。第一个后续函数接收 `fib(n-2)` 的运行结果作为参数 `n2`。第二个内部后续函数接收 `fib(n-1)`的运行结果作为参数 `n1`。当得到 `n1` 和 `n2` 的值后，两者再相加 （`n2 + n1`），相加的运行结果会传入到下一个后续函数 `cont(..)`。 
 
-Perhaps this will help mentally sort out what's going on: just like in the previous discussion when we passed partial results along instead of returning them back after the recursive stack, we're doing the same here, but each step gets wrapped in a continuation, which defers its computation. That trick allows us to perform multiple steps where each is in PTC form.
+也许这将有助于我们梳理下流程：就像我们之前讨论的，在递归堆栈之后，当我们传递部分结果而不是返回它们时，每一步都被包含在一个后续函数中，这拖慢了计算速度。这个技巧允许我们执行多个符合 PTC 规范的步骤。
 
-In static languages, CPS is often an opportunity for tail calls the compiler can automatically identify and rearrange recursive code to take advantage of. Unfortunately, that doesn't really apply to the nature of JS.
+在静态语言中，CPS通常为尾调用提供了编译器可以自动识别并重新排列递归代码以利用的机会。很可惜，不能用在原生 JS 上。
 
-In JavaScript, you'd likely need to write the CPS form yourself. It's clunkier, for sure; the declarative notation-like form has certainly been obscured. But overall, this form is still more declarative than the `for`-loop imperative implementation.
+在 JavaScript 中，你得自己书写出符合 CPS 格式的代码。这并不是明智的做法；以命令符号声明的形式肯定会让内容有些不清楚。 但总的来说，这种形式仍然要比 `for` 循环更具有声明性。
 
-**Warning:** One major caveat that should be noted is that in CPS, creating the extra inner continuation functions still consumes memory, but of a different sort. Instead of piling up stack frames, the closures just consume free memory (typically, from the heap). Engines don't seem to apply the `RangeError` limits in these cases, but that doesn't mean your memory usage is fixed in scale.
+**警告：** 我们需要注意的一个比较重要的事项是，在 CPS 中，创建额外的内部后续函数仍然消耗内存，但有些不同。并不是之前的堆栈帧累积，闭包只是消耗多余的内存空间（一般情况下，是堆栈里面的多余内存空间）。在这些情况下，引擎似乎没有启动 `RangeError` 限制，但这并不意味着你的内存使用量是按比例固定好的。
 
-### Trampolines
+### 弹簧床
 
-Where CPS creates continuations and passes them along, another technique for alleviating memory pressure is called trampolines. In this style of code, CPS-like continuations are created, but instead of passed in, they are shallowly returned.
+除了 CPS 后续传递格式之外，另外一种内存优化的技术称为弹簧床。在弹簧床格式的代码中，同样的创建了类似 CPS 的后续函数，不同的是，它们没有被传递，而是被简单的返回了。
 
-Instead of functions calling functions, the stack never goes beyond depth of one, because each function just returns the next function that should be called. A loop simply keeps running each returned function until there are no more functions to run.
+不再是函数调用另外的函数，堆栈的深度也不会大于一层，因为每个函数只会返回下一个将调用的函数。循环只是继续运行每个返回的函数，直到再也没有函数可运行。
 
-One advantage with trampolines is you aren't limited to environments that support PTC; another is that each function call is regular, not PTC optimized, so it may run quicker.
+弹簧床的优点之一是在非 PTC 环境下你一样可以应用此技术。另一个优点是每个函数都是正常调用，而不是 PTC 优化，所以它可以运行得更快。
 
-Let's sketch out a `trampoline(..)` utility:
+一起来试下 `trampoline(..)`：
 
 ```js
 function trampoline(fn) {
@@ -640,9 +643,9 @@ function trampoline(fn) {
 }
 ```
 
-As long as a function is returned, the loop keeps going, executing that function and capturing its return, then checking its type. Once a non-function comes back, the trampoline assumes the function calling is complete, and just gives back the value.
+当返回一个函数时，循环继续，执行该函数并返回其运行结果，然后检查返回结果的类型。一旦返回的结果类型不是函数，弹簧床就认为函数调用完成了并返回结果值。
 
-Because each continuation needs to return another continuation, we likely we'll need to use the earlier trick of forward-passing the partial result as an argument. Here's how we could use this utility with our earlier example of summation of a list of numbers:
+所以我们可能需要使用前面讲到的，将部分结果作为参数传递的技巧。以下是我们在之前的数组求和中使用此技巧的示例：
 
 ```js
 var sum = trampoline(
@@ -661,18 +664,18 @@ for (let i=0; i<20000; i++) {
 sum( ...xs );					// 199990000
 ```
 
-The downside is that a trampoline requires you to wrap your recursive function in the trampoline driving function; moreover, just like CPS, closures are created for each continuation. However, unlike CPS, each continuation function returned runs and finishes right away, so the engine won't have to accumulate a growing amount of closure memory while the call stack depth of the problem is exhausted.
+缺点是你需要将递归函数包裹在执行弹簧床功能的函数中; 此外，就像 CPS 一样，需要为每个后续函数创建闭包。然而，与 CPS 不一样的地方是，每个返回的后续数数，运行并立即完成，所以，当调用堆栈的深度用尽时，引擎中不会累积越来越多的闭包。
 
-Beyond execution and memory performance, the advantage of trampolines over CPS is that they're less intrusive on the declarative recursion form, in that you don't have to change the function signature to receive a continuation function argument. Trampolines are not ideal, but they can be effective in your balancing act between imperative looping code and declarative recursion.
+除了执行和记忆性能之外，弹簧床技术优于CPS的优点是它们在声明递归形式上的侵入性更小，由于你不必为了接收后续函数的参数而更改函数参数，所以除了执行和内存性能之外，弹簧床技术优于 CPS 的地方还有，它们在声明递归形式上侵入性更小。虽然弹簧床技术并不是理想的，但它们可以有效地在命令循环代码和声明性递归之间达到平衡。
 
-## Summary
+## 总结
 
-Recursion is when a function recursively calls itself. Heh. A recursive definition for recursion. Get it!?
+递归，是指函数递归调用自身。呃，这就是递归的定义。明白了吧！？
 
-Direct recursion is a function that makes at least one call to itself, and it keeps dispatching to itself until it satisifies a base condition. Multiple recursion (like binary recursion) is when a function calls itself multiple times. Mutual recursion is when a two or more functions recursively loop by *mutually* calling each other.
+直递归是指对自身至少调用一次，直到满足基本条件才能停止调用。多重递归（像二分递归）是指对自身进行多次调用。相互递归是当两个或以上函数循环递归 **相互** 调用。而递归的优点是它更具声明性，因此通常更易于阅读。
 
-The upside of recursion is that it's more declarative and thus typically more readable. The downside is usually performance, but more memory constraints even than execution speed.
+递归的优点是它更具声明性，因此通常更易于阅读。缺点通常是性能方面，但是相比执行速度，更多的限制在于内存方面。
 
-Tail calls alleviate the memory pressure by reusing/discarding stack frames. JavaScript requires strict mode and proper tail calls (PTC) to take advantage of this "optimization". There are several techniques we can mix-n-match to refactor a non-PTC recursive function to PTC form, or at least avoid the memory constraints by flattening the stack.
+尾调用是通过减少或释放堆栈帧来节约内存空间。要在 JavaScript 中实现尾调用 “优化”，需要基于严格模式和适当的尾调用（ PTC ）。我们也可以混合几种技术来将非 PTC 递归函数重构为 PTC 格式，或者至少能通过平铺堆栈来节约内存空间。
 
-Remember: recursion should be used to make code more readable. If you misuse or abuse recursion, the readability will end up worse than the imperative form. Don't do that!
+谨记：递归应该使代码更容易读懂。如果你误用或滥用递归，代码的可读性将会比命令形式更糟。千万不要这样做。
