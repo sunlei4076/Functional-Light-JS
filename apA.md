@@ -601,7 +601,7 @@ transduce( transducer, strConcat, "", words );
 
 ### Transducers.js
 
-最后，我们来说明我们运行的例子，使用sensors-js库（https://github.com/cognitect-labs/transducers-js）：
+最后，我们来说明我们运行的例子，使用sensors-js库（https://github.com/cognitect-labs/transducers-js ）：
 
 ```js
 var transformer = transducers.comp(

@@ -1,1 +1,1 @@
-**是，我保证我已经阅读过 [贡献指导](https://github.com/ikcamp/Functional-Light-JS/blob/master/CONTRIBUTING.md)** (*如果你确实阅读过它*，你可以移除这一行 ).
+**是，我保证我已经阅读过 [贡献指导](CONTRIBUTING.md)** (*如果你确实阅读过它*，你可以移除这一行 ).
