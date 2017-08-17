@@ -2,7 +2,7 @@
 
 [![沪江Web前端团队](https://cdn.rawgit.com/Hujiang-FE/icons/fff32467/logo.svg)](https://github.com/hujiang-fe)
 
-> 参与者（排名不分先后）：[aximario](https://github.com/aximario)、[blueken](https://github.com/blueken)、[brucecham](https://github.com/brucecham)、[cfanlife](https://github.com/cfanlife)、[dail](https://github.com/dail)、[kyoko-df](https://github.com/kyoko-df)、[l3ve](https://github.com/l3ve)、[lilins](https://github.com/lilins)、[LittlePineapple](https://github.com/LittlePineapple)、[MatildaJin](https://github.com/MatildaJin)、[冬青](https://github.com/miaodongqing)、[pobusama](https://github.com/pobusama)、[Cherry](https://github.com/sunshine940326)、[萝卜](https://github.com/torrac12)、[vavd317](https://github.com/vavd317)、[vivaxy](https://github.com/vivaxy)、[萌萌](https://github.com/yanyixin)、[zhouyao](https://github.com/zhouyao)
+> 参与者（排名不分先后）：[阿希](https://github.com/aximario)、[blueken](https://github.com/blueken)、[brucecham](https://github.com/brucecham)、[cfanlife](https://github.com/cfanlife)、[dail](https://github.com/dail)、[kyoko-df](https://github.com/kyoko-df)、[l3ve](https://github.com/l3ve)、[lilins](https://github.com/lilins)、[LittlePineapple](https://github.com/LittlePineapple)、[MatildaJin](https://github.com/MatildaJin)、[冬青](https://github.com/miaodongqing)、[pobusama](https://github.com/pobusama)、[Cherry](https://github.com/sunshine940326)、[萝卜](https://github.com/torrac12)、[vavd317](https://github.com/vavd317)、[vivaxy](https://github.com/vivaxy)、[萌萌](https://github.com/yanyixin)、[zhouyao](https://github.com/zhouyao)
 
 > 关于译者：这是一个流淌着沪江血液的纯粹工程：认真，是 HTML 最坚实的梁柱；分享，是 CSS  里最闪耀的一瞥；总结，是 JavaScript 中最严谨的逻辑。经过捶打磨练，成就了本书的中文版。本书包含了函数式编程之精髓，希望可以帮助大家在函数式编程的学习道路上走的更顺畅。比心。
 
