@@ -564,8 +564,6 @@ keypresses.forEach( recordKeypress );
 
 对象状态数据的可见性让我们能更直接地使用它，而闭包遮掩状态让我们更艰难地处理它。
 
-#### Change Control
-
 #### 变更控制
 
 如果词法变量被隐藏在一个闭包中，只有闭包内部的代码才能自由的重新赋值，在外部修改 `x` 是不可能的。
@@ -660,7 +658,7 @@ student();
 // Kyle Simpson, Major: CS, GPA: 4.0
 ```
 
-内部函数 `printStudeng()` 封装了三个变量：`name`、`major` 和` gpa`。它维护这个状态无论我们是否传递引用给这个函数，在这个例子我们称它为 `student()`。
+内部函数 `printStudent()` 封装了三个变量：`name`、`major` 和` gpa`。它维护这个状态无论我们是否传递引用给这个函数，在这个例子我们称它为 `student()`。
 
 现在看对象（和 `this`）方式：
 
